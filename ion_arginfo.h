@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 9972b27bc2f7f20e59aae26777e1a674f1606c11 */
+ * Stub hash: 20996b59177d52516ad45582152909be017ba39d */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -51,9 +51,9 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Decimal_toInt, 0, 0, I
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Timestamp___construct, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(0, precision, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, format, IS_STRING, 0, "\"c\"")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, datetime, IS_STRING, 0, "\"now\"")
+	ZEND_ARG_OBJ_TYPE_MASK(0, precision, ion\\Timestamp\\Precision, MAY_BE_LONG, NULL)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, format, IS_STRING, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, datetime, IS_STRING, 1, "null")
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, timezone, DateTimeZone, 1, "null")
 ZEND_END_ARG_INFO()
 
@@ -591,6 +591,11 @@ static const zend_function_entry class_ion_Decimal_methods[] = {
 	ZEND_ME(ion_Decimal, __toString, arginfo_class_ion_Decimal___toString, ZEND_ACC_PUBLIC)
 	ZEND_MALIAS(ion_Decimal, toString, __toString, arginfo_class_ion_Decimal_toString, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Decimal, toInt, arginfo_class_ion_Decimal_toInt, ZEND_ACC_PUBLIC)
+	ZEND_FE_END
+};
+
+
+static const zend_function_entry class_ion_Timestamp_Precision_methods[] = {
 	ZEND_FE_END
 };
 
@@ -1153,6 +1158,37 @@ static zend_class_entry *register_class_ion_Decimal(void)
 	zend_string *property_context_name = zend_string_init("context", sizeof("context") - 1, 1);
 	zend_declare_typed_property(class_entry, property_context_name, &property_context_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_context_class_ion_Decimal_Context, 0, MAY_BE_NULL));
 	zend_string_release(property_context_name);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_ion_Timestamp_Precision(void)
+{
+	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Timestamp\\Precision", IS_LONG, class_ion_Timestamp_Precision_methods);
+
+	zval enum_case_Year_value;
+	ZVAL_LONG(&enum_case_Year_value, 1);
+	zend_enum_add_case_cstr(class_entry, "Year", &enum_case_Year_value);
+
+	zval enum_case_Month_value;
+	ZVAL_LONG(&enum_case_Month_value, 3);
+	zend_enum_add_case_cstr(class_entry, "Month", &enum_case_Month_value);
+
+	zval enum_case_Day_value;
+	ZVAL_LONG(&enum_case_Day_value, 7);
+	zend_enum_add_case_cstr(class_entry, "Day", &enum_case_Day_value);
+
+	zval enum_case_Min_value;
+	ZVAL_LONG(&enum_case_Min_value, 23);
+	zend_enum_add_case_cstr(class_entry, "Min", &enum_case_Min_value);
+
+	zval enum_case_Sec_value;
+	ZVAL_LONG(&enum_case_Sec_value, 55);
+	zend_enum_add_case_cstr(class_entry, "Sec", &enum_case_Sec_value);
+
+	zval enum_case_Frac_value;
+	ZVAL_LONG(&enum_case_Frac_value, 119);
+	zend_enum_add_case_cstr(class_entry, "Frac", &enum_case_Frac_value);
 
 	return class_entry;
 }

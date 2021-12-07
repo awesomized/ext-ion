@@ -151,6 +151,7 @@ static zend_class_entry
 	*ce_Symbol_System_SID,
 	*ce_Symbol_Table,
 	*ce_Timestamp,
+	*ce_Timestamp_Precision,
 	*ce_Type,
 	*ce_Writer,
 	*ce_Writer_Options,
@@ -430,26 +431,6 @@ static inline void php_ion_decimal_dtor(php_ion_decimal *obj)
 
 typedef php_date_obj php_ion_timestamp;
 
-static inline void php_ion_timestamp_ctor(php_ion_timestamp *obj, zend_long precision, zend_string *fmt, zend_string *dt, zval *tz)
-{
-	if (!obj->time) {
-		php_date_initialize(obj, dt ? dt->val : "now", dt ? dt->len : 3, fmt ? fmt->val : NULL, tz, PHP_DATE_INIT_CTOR);
-	}
-	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("precision"), precision);
-	if (fmt) {
-		zend_update_property_str(obj->std.ce, &obj->std, ZEND_STRL("format"), fmt);
-	} else {
-		zend_update_property_stringl(obj->std.ce, &obj->std, ZEND_STRL("format"), ZEND_STRL("c"));
-	}
-}
-
-static inline void php_ion_timestamp_dtor(php_ion_timestamp *obj)
-{
-	if (obj->time) {
-		timelib_time_dtor(obj->time);
-	}
-}
-
 static inline zend_long php_usec_from_ion(const decQuad *frac, decContext *ctx)
 {
 	decQuad microsecs, result;
@@ -463,6 +444,26 @@ static inline decQuad *ion_ts_frac_from_usec(decQuad *frac, zend_long usec, decC
  	return decQuadDivide(frac, decQuadFromInt32(&us, usec), decQuadFromInt32(&microsecs, 1000000), ctx);
 }
 
+static inline zend_string *php_dt_format_from_precision(uint8_t precision)
+{
+	switch (precision) {
+	case ION_TS_FRAC:
+		return zend_string_init(ZEND_STRL("c"), 0);
+	case ION_TS_SEC:
+		return zend_string_init(ZEND_STRL("Y-m-d\\TH:i:sP"), 0);
+	case ION_TS_MIN:
+		return zend_string_init(ZEND_STRL("Y-m-d\\TH:iP"), 0);
+	case ION_TS_DAY:
+		return zend_string_init(ZEND_STRL("Y-m-d\\T"), 0);
+	case ION_TS_MONTH:
+		return zend_string_init(ZEND_STRL("Y-m\\T"), 0);
+	case ION_TS_YEAR:
+		return zend_string_init(ZEND_STRL("Y\\T"), 0);
+	default:
+		return zend_string_init(ZEND_STRL("c"), 0);
+	}
+}
+
 static inline timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContext *ctx, zend_string **fmt)
 {
 	timelib_time *time = timelib_time_ctor();
@@ -470,34 +471,30 @@ static inline timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContex
 	switch (ts->precision) {
 	case ION_TS_FRAC:
 		time->us = php_usec_from_ion(&ts->fraction, ctx);
-		if (fmt) *fmt = zend_string_init(ZEND_STRL("c"), 0);
 		/* fallthrough */
 	case ION_TS_SEC:
 		time->s = ts->seconds;
-		if (fmt && !*fmt) *fmt = zend_string_init(ZEND_STRL("Y-m-d\\TH:i:sP"), 0);
 		/* fallthrough */
 	case ION_TS_MIN:
 		time->i = ts->minutes;
 		time->h = ts->hours;
-		if (fmt && !*fmt) *fmt = zend_string_init(ZEND_STRL("Y-m-d\\TH:iP"), 0);
 		/* fallthrough */
 	case ION_TS_DAY:
 		time->d = ts->day;
-		if (fmt && !*fmt) *fmt = zend_string_init(ZEND_STRL("Y-m-d\\T"), 0);
 		/* fallthrough */
 	case ION_TS_MONTH:
 		time->m = ts->month;
-		if (fmt && !*fmt) *fmt = zend_string_init(ZEND_STRL("Y-m\\T"), 0);
 		/* fallthrough */
 	case ION_TS_YEAR:
 		time->y = ts->year;
-		if (fmt && !*fmt) *fmt = zend_string_init(ZEND_STRL("Y\\T"), 0);
 		/* fallthrough */
 	default:
-		if (fmt && !*fmt) *fmt = zend_string_init(ZEND_STRL("c"), 0);
 		time->z = ts->tz_offset * 60;
 	}
 
+	if (fmt) {
+		fmt = php_dt_format_from_precision(ts->precision);
+	}
 	return time;
 }
 
@@ -536,6 +533,25 @@ static inline ION_TIMESTAMP *ion_timestamp_from_php(ION_TIMESTAMP *buf, php_ion_
 	}
 
 	return buf;
+}
+
+static inline void php_ion_timestamp_ctor(php_ion_timestamp *obj, zend_long precision, zend_string *fmt, zend_string *dt, zval *tz)
+{
+	if (!obj->time) {
+		php_date_initialize(obj, dt ? dt->val : "", dt ? dt->len : 0, fmt ? fmt->val : NULL, tz, PHP_DATE_INIT_CTOR);
+	}
+	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("precision"), precision);
+
+	fmt = php_dt_format_from_precision(precision);
+	zend_update_property_str(obj->std.ce, &obj->std, ZEND_STRL("format"), fmt);
+	zend_string_release(fmt);
+}
+
+static inline void php_ion_timestamp_dtor(php_ion_timestamp *obj)
+{
+	if (obj->time) {
+		timelib_time_dtor(obj->time);
+	}
 }
 
 typedef struct php_ion_catalog {

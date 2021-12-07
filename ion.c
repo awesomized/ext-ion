@@ -88,20 +88,24 @@ ZEND_METHOD(ion_Symbol, equals)
 }
 ZEND_METHOD(ion_Timestamp, __construct)
 {
-	zend_long precision;
-	zend_string *fmt = NULL, *dt = NULL;
-	zval *tz = NULL;
 	php_ion_timestamp *obj = php_ion_obj(timestamp, Z_OBJ_P(ZEND_THIS));
 	PTR_CHECK(obj);
 
+	zend_long precision;
+	zend_object *precision_obj;
+	zend_string *fmt = NULL, *dt = NULL;
+	zval *tz = NULL;
 	ZEND_PARSE_PARAMETERS_START(1, 4)
-		Z_PARAM_LONG(precision)
+		Z_PARAM_OBJ_OF_CLASS_OR_LONG(precision_obj, ce_Timestamp_Precision, precision)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_STR_OR_NULL(fmt)
-		Z_PARAM_STR(dt)
+		Z_PARAM_STR_OR_NULL(dt)
 		Z_PARAM_ZVAL(tz)
 	ZEND_PARSE_PARAMETERS_END();
 
+	if (precision_obj) {
+		precision = Z_LVAL_P(zend_enum_fetch_case_value(precision_obj));
+	}
 	php_ion_timestamp_ctor(obj, precision, fmt, dt, tz);
 }
 ZEND_METHOD(ion_Timestamp, __toString)
@@ -1472,6 +1476,7 @@ PHP_MINIT_FUNCTION(ion)
 	php_ion_register(decimal, Decimal);
 	php_ion_register(decimal_ctx, Decimal_Context);
 	php_ion_register(timestamp, Timestamp, php_date_get_date_ce());
+	ce_Timestamp_Precision = register_class_ion_Timestamp_Precision();
 	php_ion_register(catalog, Catalog);
 
 	ce_Reader = register_class_ion_Reader(spl_ce_RecursiveIterator);

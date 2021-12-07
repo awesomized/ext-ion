@@ -122,12 +122,24 @@ class Decimal {
     public function toInt() : int {}
 }
 
+namespace ion\Timestamp;
+enum Precision : int {
+    case Year           = 0x1;
+    case Month          = 0x1|0x2;
+    case Day            = 0x1|0x2|0x4;
+    case Min            = 0x1|0x2|0x4|0x10;
+    case Sec            = 0x1|0x2|0x4|0x10|0x20;
+    case Frac           = 0x1|0x2|0x4|0x10|0x20|0x40;
+}
 namespace ion;
 class Timestamp extends \DateTime {
+    public readonly int $precision;
+    public readonly string $format;
+
     public function __construct(
-        public readonly int $precision,
-        public readonly string $format = "c",
-        string $datetime = "now",
+        Timestamp\Precision|int $precision,
+        ?string $format = null,
+        ?string $datetime = null,
         ?\DateTimeZone $timezone = null,
     ) {}
 
