@@ -98,27 +98,29 @@ class Collection {
 
 }
 
+
+namespace ion\Decimal;
+class Context {
+    public function __construct(
+        public readonly int $bits = 128
+    ) {}
+}
+
 namespace ion;
 class Decimal {
     public function __construct(
-        string|int $number,
+        public readonly string|int $number,
         public readonly ?Decimal\Context $context = null,
     ) {}
 
     public function equals(Decimal $decimal) : bool {}
-    public function zero() : void {}
+    public function isInt() : bool {}
 
     public function __toString() : string {}
     /** @alias ion\Decimal::__toString */
     public function toString() : string {}
     public function toInt() : int {}
 }
-
-namespace ion\Decimal;
-class Context {
-
-}
-
 
 namespace ion;
 class Timestamp extends \DateTime {

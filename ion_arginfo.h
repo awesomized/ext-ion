@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 8858d757806dc0cbd811e4873c9770c8676c606b */
+ * Stub hash: 9972b27bc2f7f20e59aae26777e1a674f1606c11 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -26,6 +26,10 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Symbol_equals, 0, 1, _
 	ZEND_ARG_OBJ_INFO(0, symbol, ion\\Symbol, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Decimal_Context___construct, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bits, IS_LONG, 0, "128")
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Decimal___construct, 0, 0, 1)
 	ZEND_ARG_TYPE_MASK(0, number, MAY_BE_STRING|MAY_BE_LONG, NULL)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, context, ion\\Decimal\\Context, 1, "null")
@@ -35,7 +39,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Decimal_equals, 0, 1, 
 	ZEND_ARG_OBJ_INFO(0, decimal, ion\\Decimal, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Decimal_zero, 0, 0, IS_VOID, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Decimal_isInt, 0, 0, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Decimal___toString, 0, 0, IS_STRING, 0)
@@ -58,16 +62,15 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Reader_getType, 0, 0, ion\\Type, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_hasAnnotations, 0, 0, _IS_BOOL, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_class_ion_Reader_hasAnnotations arginfo_class_ion_Decimal_isInt
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_hasAnnotation, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO(0, annotation, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Reader_isNull arginfo_class_ion_Reader_hasAnnotations
+#define arginfo_class_ion_Reader_isNull arginfo_class_ion_Decimal_isInt
 
-#define arginfo_class_ion_Reader_isInStruct arginfo_class_ion_Reader_hasAnnotations
+#define arginfo_class_ion_Reader_isInStruct arginfo_class_ion_Decimal_isInt
 
 #define arginfo_class_ion_Reader_getFieldName arginfo_class_ion_Decimal___toString
 
@@ -91,7 +94,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_readNull arginfo_class_ion_Reader_getType
 
-#define arginfo_class_ion_Reader_readBool arginfo_class_ion_Reader_hasAnnotations
+#define arginfo_class_ion_Reader_readBool arginfo_class_ion_Decimal_isInt
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_class_ion_Reader_readInt, 0, 0, MAY_BE_LONG|MAY_BE_STRING)
 ZEND_END_ARG_INFO()
@@ -147,16 +150,17 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Options___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, skipCharacterValidation, _IS_BOOL, 0, "false")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Reader_Reader_hasChildren arginfo_class_ion_Reader_hasAnnotations
+#define arginfo_class_ion_Reader_Reader_hasChildren arginfo_class_ion_Decimal_isInt
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Reader_Reader_getChildren, 0, 0, ion\\Reader, 0)
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Reader_Reader_rewind arginfo_class_ion_Decimal_zero
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_Reader_rewind, 0, 0, IS_VOID, 0)
+ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Reader_Reader_next arginfo_class_ion_Decimal_zero
+#define arginfo_class_ion_Reader_Reader_next arginfo_class_ion_Reader_Reader_rewind
 
-#define arginfo_class_ion_Reader_Reader_valid arginfo_class_ion_Reader_hasAnnotations
+#define arginfo_class_ion_Reader_Reader_valid arginfo_class_ion_Decimal_isInt
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_Reader_key, 0, 0, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
@@ -165,13 +169,13 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_Reader_getType arginfo_class_ion_Reader_getType
 
-#define arginfo_class_ion_Reader_Reader_hasAnnotations arginfo_class_ion_Reader_hasAnnotations
+#define arginfo_class_ion_Reader_Reader_hasAnnotations arginfo_class_ion_Decimal_isInt
 
 #define arginfo_class_ion_Reader_Reader_hasAnnotation arginfo_class_ion_Reader_hasAnnotation
 
-#define arginfo_class_ion_Reader_Reader_isNull arginfo_class_ion_Reader_hasAnnotations
+#define arginfo_class_ion_Reader_Reader_isNull arginfo_class_ion_Decimal_isInt
 
-#define arginfo_class_ion_Reader_Reader_isInStruct arginfo_class_ion_Reader_hasAnnotations
+#define arginfo_class_ion_Reader_Reader_isInStruct arginfo_class_ion_Decimal_isInt
 
 #define arginfo_class_ion_Reader_Reader_getFieldName arginfo_class_ion_Decimal___toString
 
@@ -189,7 +193,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_Reader_readNull arginfo_class_ion_Reader_getType
 
-#define arginfo_class_ion_Reader_Reader_readBool arginfo_class_ion_Reader_hasAnnotations
+#define arginfo_class_ion_Reader_Reader_readBool arginfo_class_ion_Decimal_isInt
 
 #define arginfo_class_ion_Reader_Reader_readInt arginfo_class_ion_Reader_readInt
 
@@ -271,7 +275,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Options___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, allocationPageSize, IS_LONG, 0, "0x1000")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Writer_writeNull arginfo_class_ion_Decimal_zero
+#define arginfo_class_ion_Writer_writeNull arginfo_class_ion_Reader_Reader_rewind
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Writer_writeTypedNull, 0, 1, IS_VOID, 0)
 	ZEND_ARG_OBJ_INFO(0, type, ion\\Type, 0)
@@ -315,11 +319,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Writer_appendLob, 0, 1
 	ZEND_ARG_TYPE_INFO(0, data, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Writer_finishLob arginfo_class_ion_Decimal_zero
+#define arginfo_class_ion_Writer_finishLob arginfo_class_ion_Reader_Reader_rewind
 
 #define arginfo_class_ion_Writer_startContainer arginfo_class_ion_Writer_writeTypedNull
 
-#define arginfo_class_ion_Writer_finishContainer arginfo_class_ion_Decimal_zero
+#define arginfo_class_ion_Writer_finishContainer arginfo_class_ion_Reader_Reader_rewind
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Writer_writeFieldName, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
@@ -341,7 +345,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_writeAll arginfo_class_ion_Writer_writeOne
 
-#define arginfo_class_ion_Writer_Writer_writeNull arginfo_class_ion_Decimal_zero
+#define arginfo_class_ion_Writer_Writer_writeNull arginfo_class_ion_Reader_Reader_rewind
 
 #define arginfo_class_ion_Writer_Writer_writeTypedNull arginfo_class_ion_Writer_writeTypedNull
 
@@ -367,11 +371,11 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_Writer_appendLob arginfo_class_ion_Writer_appendLob
 
-#define arginfo_class_ion_Writer_Writer_finishLob arginfo_class_ion_Decimal_zero
+#define arginfo_class_ion_Writer_Writer_finishLob arginfo_class_ion_Reader_Reader_rewind
 
 #define arginfo_class_ion_Writer_Writer_startContainer arginfo_class_ion_Writer_writeTypedNull
 
-#define arginfo_class_ion_Writer_Writer_finishContainer arginfo_class_ion_Decimal_zero
+#define arginfo_class_ion_Writer_Writer_finishContainer arginfo_class_ion_Reader_Reader_rewind
 
 #define arginfo_class_ion_Writer_Writer_writeFieldName arginfo_class_ion_Writer_writeFieldName
 
@@ -433,9 +437,10 @@ ZEND_FUNCTION(ion_unserialize);
 ZEND_METHOD(ion_Symbol_ImportLocation, __construct);
 ZEND_METHOD(ion_Symbol, __construct);
 ZEND_METHOD(ion_Symbol, equals);
+ZEND_METHOD(ion_Decimal_Context, __construct);
 ZEND_METHOD(ion_Decimal, __construct);
 ZEND_METHOD(ion_Decimal, equals);
-ZEND_METHOD(ion_Decimal, zero);
+ZEND_METHOD(ion_Decimal, isInt);
 ZEND_METHOD(ion_Decimal, __toString);
 ZEND_METHOD(ion_Decimal, toInt);
 ZEND_METHOD(ion_Timestamp, __construct);
@@ -573,18 +578,19 @@ static const zend_function_entry class_ion_Collection_methods[] = {
 };
 
 
-static const zend_function_entry class_ion_Decimal_methods[] = {
-	ZEND_ME(ion_Decimal, __construct, arginfo_class_ion_Decimal___construct, ZEND_ACC_PUBLIC)
-	ZEND_ME(ion_Decimal, equals, arginfo_class_ion_Decimal_equals, ZEND_ACC_PUBLIC)
-	ZEND_ME(ion_Decimal, zero, arginfo_class_ion_Decimal_zero, ZEND_ACC_PUBLIC)
-	ZEND_ME(ion_Decimal, __toString, arginfo_class_ion_Decimal___toString, ZEND_ACC_PUBLIC)
-	ZEND_MALIAS(ion_Decimal, toString, __toString, arginfo_class_ion_Decimal_toString, ZEND_ACC_PUBLIC)
-	ZEND_ME(ion_Decimal, toInt, arginfo_class_ion_Decimal_toInt, ZEND_ACC_PUBLIC)
+static const zend_function_entry class_ion_Decimal_Context_methods[] = {
+	ZEND_ME(ion_Decimal_Context, __construct, arginfo_class_ion_Decimal_Context___construct, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
 
-static const zend_function_entry class_ion_Decimal_Context_methods[] = {
+static const zend_function_entry class_ion_Decimal_methods[] = {
+	ZEND_ME(ion_Decimal, __construct, arginfo_class_ion_Decimal___construct, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Decimal, equals, arginfo_class_ion_Decimal_equals, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Decimal, isInt, arginfo_class_ion_Decimal_isInt, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Decimal, __toString, arginfo_class_ion_Decimal___toString, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Decimal, toString, __toString, arginfo_class_ion_Decimal_toString, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Decimal, toInt, arginfo_class_ion_Decimal_toInt, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -1112,6 +1118,22 @@ static zend_class_entry *register_class_ion_Collection(void)
 	return class_entry;
 }
 
+static zend_class_entry *register_class_ion_Decimal_Context(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_NS_CLASS_ENTRY(ce, "ion\\Decimal", "Context", class_ion_Decimal_Context_methods);
+	class_entry = zend_register_internal_class_ex(&ce, NULL);
+
+	zval property_bits_default_value;
+	ZVAL_UNDEF(&property_bits_default_value);
+	zend_string *property_bits_name = zend_string_init("bits", sizeof("bits") - 1, 1);
+	zend_declare_typed_property(class_entry, property_bits_name, &property_bits_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_bits_name);
+
+	return class_entry;
+}
+
 static zend_class_entry *register_class_ion_Decimal(void)
 {
 	zend_class_entry ce, *class_entry;
@@ -1119,22 +1141,18 @@ static zend_class_entry *register_class_ion_Decimal(void)
 	INIT_NS_CLASS_ENTRY(ce, "ion", "Decimal", class_ion_Decimal_methods);
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
 
+	zval property_number_default_value;
+	ZVAL_UNDEF(&property_number_default_value);
+	zend_string *property_number_name = zend_string_init("number", sizeof("number") - 1, 1);
+	zend_declare_typed_property(class_entry, property_number_name, &property_number_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING|MAY_BE_LONG));
+	zend_string_release(property_number_name);
+
 	zend_string *property_context_class_ion_Decimal_Context = zend_string_init("ion\\Decimal\\Context", sizeof("ion\\Decimal\\Context")-1, 1);
 	zval property_context_default_value;
 	ZVAL_UNDEF(&property_context_default_value);
 	zend_string *property_context_name = zend_string_init("context", sizeof("context") - 1, 1);
 	zend_declare_typed_property(class_entry, property_context_name, &property_context_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_context_class_ion_Decimal_Context, 0, MAY_BE_NULL));
 	zend_string_release(property_context_name);
-
-	return class_entry;
-}
-
-static zend_class_entry *register_class_ion_Decimal_Context(void)
-{
-	zend_class_entry ce, *class_entry;
-
-	INIT_NS_CLASS_ENTRY(ce, "ion\\Decimal", "Context", class_ion_Decimal_Context_methods);
-	class_entry = zend_register_internal_class_ex(&ce, NULL);
 
 	return class_entry;
 }

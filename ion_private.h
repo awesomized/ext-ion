@@ -357,24 +357,32 @@ typedef struct php_ion_decimal_ctx {
 	zend_object std;
 } php_ion_decimal_ctx;
 
+static inline void php_ion_decimal_ctx_ctor(php_ion_decimal_ctx *obj) {
+	zval tmp, *zbits = zend_read_property(obj->std.ce, &obj->std, ZEND_STRL("bits"), 1, &tmp);
+
+	int bits = 128;
+	if (zbits != &EG(uninitialized_zval)) {
+		bits = Z_LVAL_P(zbits);
+	} else {
+		zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("bits"), bits);
+	}
+	switch (bits) {
+	case 32:
+	case 64:
+	case 128:
+		decContextDefault(&obj->ctx, bits);
+		break;
+	default:
+		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
+				"Decimal context only allows 32, 64 or 128 bits");
+	}
+
+}
+
 typedef struct php_ion_decimal {
 	ION_DECIMAL dec;
 	zend_object *ctx, std;
 } php_ion_decimal;
-
-static inline void php_ion_decimal_ctor(php_ion_decimal *obj)
-{
-	if (obj->ctx) {
-		update_property_obj(&obj->std, ZEND_STRL("context"), obj->ctx);
-	} else {
-		zend_update_property_null(obj->std.ce, &obj->std, ZEND_STRL("context"));
-	}
-}
-
-static inline void php_ion_decimal_dtor(php_ion_decimal *obj)
-{
-	ion_decimal_free(&obj->dec);
-}
 
 static inline zend_string *php_ion_decimal_to_string(ION_DECIMAL *dec)
 {
@@ -383,20 +391,41 @@ static inline zend_string *php_ion_decimal_to_string(ION_DECIMAL *dec)
 	return zend_string_truncate(zstr, strlen(zstr->val), 0);
 }
 
-static zend_array *php_ion_decimal_get_props_for(zend_object *object, zend_prop_purpose purpose)
+static inline void php_ion_decimal_to_int(ION_DECIMAL *dec, decContext *ctx, zend_long *l)
 {
-	php_ion_decimal *obj = php_ion_obj(decimal, object);
+	ION_INT *ii = NULL;
+	ION_CHECK(ion_int_alloc(NULL, &ii));
+	ION_CHECK(ion_decimal_to_ion_int(dec, ctx, ii), ion_int_free(ii));
+	int64_t i64;
+	ION_CHECK(ion_int_to_int64(ii, &i64), ion_int_free(ii));
+	*l = i64;
+	ion_int_free(ii);
+}
 
-	switch (purpose) {
-		case ZEND_PROP_PURPOSE_DEBUG:
-			zend_array *arr = zend_new_array(1);
-			zval *zv = zend_hash_str_add_empty_element(arr, ZEND_STRL("value"));
-			ZVAL_STR(zv, php_ion_decimal_to_string(&obj->dec));
-			return arr;
-
-		default:
-			return zend_std_get_properties_for(object, purpose);
+static inline void php_ion_decimal_ctor(php_ion_decimal *obj)
+{
+	if (!obj->ctx) {
+		zval zdc;
+		object_init_ex(&zdc, ce_Decimal_Context);
+		obj->ctx = Z_OBJ(zdc);
+		php_ion_decimal_ctx_ctor(php_ion_obj(decimal_ctx, obj->ctx));
 	}
+	update_property_obj(&obj->std, ZEND_STRL("context"), obj->ctx);
+
+	if (ion_decimal_is_integer(&obj->dec)) {
+		zend_long l;
+		php_ion_decimal_to_int(&obj->dec, &php_ion_obj(decimal_ctx, obj->ctx)->ctx, &l);
+		zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("number"), l);
+	} else {
+		zend_string *zstr = php_ion_decimal_to_string(&obj->dec);
+		zend_update_property_str(obj->std.ce, &obj->std, ZEND_STRL("number"), zstr);
+		zend_string_release(zstr);
+	}
+}
+
+static inline void php_ion_decimal_dtor(php_ion_decimal *obj)
+{
+	ion_decimal_free(&obj->dec);
 }
 
 typedef php_date_obj php_ion_timestamp;
@@ -1171,7 +1200,7 @@ static inline void php_ion_unserialize_hash(php_ion_reader *obj, zval *return_va
 			break;
 		}
 
-		add_assoc_zval_ex(return_value, key->val, key->len, &zvalue);
+		zend_symtable_update(HASH_OF(return_value), key, &zvalue);
 		zend_string_release(key);
 	}
 

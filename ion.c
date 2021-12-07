@@ -116,6 +116,20 @@ ZEND_METHOD(ion_Timestamp, __toString)
 	zend_call_method_with_1_params(&obj->std, obj->std.ce, NULL, "format", return_value,
 		zend_read_property(obj->std.ce, &obj->std, ZEND_STRL("format"), 0, &fmt));
 }
+ZEND_METHOD(ion_Decimal_Context, __construct)
+{
+	php_ion_decimal_ctx *obj = php_ion_obj(decimal_ctx, Z_OBJ_P(ZEND_THIS));
+	PTR_CHECK(obj);
+
+	zend_long bits = 128;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG(bits)
+	ZEND_PARSE_PARAMETERS_END();
+
+	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("bits"), bits);
+	php_ion_decimal_ctx_ctor(obj);
+}
 ZEND_METHOD(ion_Decimal, __construct)
 {
 	php_ion_decimal *obj = php_ion_obj(decimal, Z_OBJ_P(ZEND_THIS));
@@ -128,6 +142,15 @@ ZEND_METHOD(ion_Decimal, __construct)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->ctx, ce_Decimal_Context)
 	ZEND_PARSE_PARAMETERS_END();
+
+	if (obj->ctx) {
+		GC_ADDREF(obj->ctx);
+	} else {
+		zval zdc;
+		object_init_ex(&zdc, ce_Decimal_Context);
+		obj->ctx = Z_OBJ(zdc);
+		php_ion_decimal_ctx_ctor(php_ion_obj(decimal_ctx, obj->ctx));
+	}
 
 	if (zstr) {
 		ION_CHECK(ion_decimal_from_string(&obj->dec, zstr->val,
@@ -143,6 +166,7 @@ ZEND_METHOD(ion_Decimal, __construct)
 	}
 
 	php_ion_decimal_ctor(obj);
+	OBJ_RELEASE(obj->ctx);
 }
 ZEND_METHOD(ion_Decimal, equals)
 {
@@ -158,15 +182,6 @@ ZEND_METHOD(ion_Decimal, equals)
 	ION_CHECK(ion_decimal_equals(&obj->dec, &php_ion_obj(decimal, dec_obj)->dec,
 		obj->ctx ? &php_ion_obj(decimal_ctx, obj->ctx)->ctx : NULL, &is));
 	RETURN_BOOL(is);
-}
-ZEND_METHOD(ion_Decimal, zero)
-{
-	php_ion_decimal *obj = php_ion_obj(decimal, Z_OBJ_P(ZEND_THIS));
-	PTR_CHECK(obj);
-
-	ZEND_PARSE_PARAMETERS_NONE();
-
-	ION_CHECK(ion_decimal_zero(&obj->dec));
 }
 ZEND_METHOD(ion_Decimal, __toString)
 {
@@ -184,21 +199,18 @@ ZEND_METHOD(ion_Decimal, toInt)
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
-	int32_t i32 = 0;
-	iERR err = ion_decimal_to_int32(&obj->dec,
-		obj->ctx ? &php_ion_obj(decimal_ctx, obj->ctx)->ctx : NULL, &i32);
-	if (IERR_OK == err) {
-		RETURN_LONG(i32);
-	}
-	if (!ion_decimal_is_negative(&obj->dec)) {
-		uint32_t u32 = 0;
-		err = ion_decimal_to_uint32(&obj->dec,
-			obj->ctx ? &php_ion_obj(decimal_ctx, obj->ctx)->ctx : NULL, &u32);
-		if (IERR_OK == err) {
-			RETURN_LONG(u32);
-		}
-	}
-	ION_CHECK(err);
+	zend_long l;
+	php_ion_decimal_to_int(&obj->dec, &php_ion_obj(decimal_ctx, obj->ctx)->ctx, &l);
+	RETURN_LONG(l);
+}
+ZEND_METHOD(ion_Decimal, isInt)
+{
+	php_ion_decimal *obj = php_ion_obj(decimal, Z_OBJ_P(ZEND_THIS));
+	PTR_CHECK(obj);
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	RETURN_BOOL(ion_decimal_is_integer(&obj->dec));
 }
 ZEND_METHOD(ion_Reader_Options, __construct)
 {
@@ -1458,7 +1470,6 @@ PHP_MINIT_FUNCTION(ion)
 	ce_Collection = register_class_ion_Collection();
 
 	php_ion_register(decimal, Decimal);
-	oh_decimal.get_properties_for = php_ion_decimal_get_props_for;
 	php_ion_register(decimal_ctx, Decimal_Context);
 	php_ion_register(timestamp, Timestamp, php_date_get_date_ce());
 	php_ion_register(catalog, Catalog);
