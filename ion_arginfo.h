@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 5f1798e701fcd53837ee41a601cc70e8cb962316 */
+ * Stub hash: 8858d757806dc0cbd811e4873c9770c8676c606b */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -902,6 +902,11 @@ static zend_class_entry *register_class_ion_Annotation(void)
 	zend_string *enum_case_OBJECT_value_str = zend_string_init("o", sizeof("o") - 1, 1);
 	ZVAL_STR(&enum_case_OBJECT_value, enum_case_OBJECT_value_str);
 	zend_enum_add_case_cstr(class_entry, "OBJECT", &enum_case_OBJECT_value);
+
+	zval enum_case_CLASS_OBJ_value;
+	zend_string *enum_case_CLASS_OBJ_value_str = zend_string_init("c", sizeof("c") - 1, 1);
+	ZVAL_STR(&enum_case_CLASS_OBJ_value, enum_case_CLASS_OBJ_value_str);
+	zend_enum_add_case_cstr(class_entry, "CLASS_OBJ", &enum_case_CLASS_OBJ_value);
 
 	zval enum_case_MAGIC_OBJ_value;
 	zend_string *enum_case_MAGIC_OBJ_value_str = zend_string_init("O", sizeof("O") - 1, 1);

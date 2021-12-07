@@ -1383,7 +1383,7 @@ ZEND_FUNCTION(ion_serialize)
 	php_ion_writer *obj = php_ion_obj(writer, Z_OBJ(zwriter));
 	obj->opt = zo_opt;
 	obj->type = BUFFER_WRITER;
-
+	obj->php.call_magic_serialize = true;
 	php_ion_writer_ctor(obj);
 
 	php_ion_serialize(obj, zv, return_value);
@@ -1406,7 +1406,7 @@ ZEND_FUNCTION(ion_unserialize)
 	obj->opt = zo_opt;
 	obj->type = BUFFER_READER;
 	obj->buffer = zend_string_copy(zstr);
-
+	obj->php.call_magic_unserialize = true;
 	php_ion_reader_ctor(obj);
 	php_ion_unserialize(obj, NULL, return_value);
 	zval_ptr_dtor(&zreader);

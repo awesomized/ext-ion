@@ -30,6 +30,7 @@ enum Annotation : string {
     case BACKREF        = "r";
 
     case OBJECT         = "o";
+    case CLASS_OBJ      = "c";
     case MAGIC_OBJ      = "O";
     case CUSTOM_OBJ     = "C";
     case SERIALIZABLE   = "S";
