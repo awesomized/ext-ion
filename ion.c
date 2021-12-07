@@ -38,11 +38,10 @@
 
 ZEND_METHOD(ion_Symbol_ImportLocation, __construct)
 {
-	zend_long location;
 	php_ion_symbol_iloc *obj = php_ion_obj(symbol_iloc, Z_OBJ_P(ZEND_THIS));
-
 	PTR_CHECK(obj);
 
+	zend_long location;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(obj->name)
 		Z_PARAM_LONG(location)
@@ -53,14 +52,13 @@ ZEND_METHOD(ion_Symbol_ImportLocation, __construct)
 }
 ZEND_METHOD(ion_Symbol, __construct)
 {
-	zend_long sid = -1;
 	php_ion_symbol *obj = php_ion_obj(symbol, Z_OBJ_P(ZEND_THIS));
-
 	PTR_CHECK(obj);
 
-	ZEND_PARSE_PARAMETERS_START(1, 3)
-		Z_PARAM_STR(obj->value)
+	zend_long sid = -1;
+	ZEND_PARSE_PARAMETERS_START(0, 3)
 		Z_PARAM_OPTIONAL
+		Z_PARAM_STR_OR_NULL(obj->value)
 		Z_PARAM_LONG(sid)
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->iloc, ce_Symbol_ImportLocation)
 	ZEND_PARSE_PARAMETERS_END();
@@ -70,11 +68,10 @@ ZEND_METHOD(ion_Symbol, __construct)
 }
 ZEND_METHOD(ion_Symbol, equals)
 {
-	zend_object *other_obj;
 	php_ion_symbol *sym = php_ion_obj(symbol, Z_OBJ_P(ZEND_THIS));
-
 	OBJ_CHECK(sym);
 
+	zend_object *other_obj;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJ_OF_CLASS(other_obj, ce_Symbol)
 	ZEND_PARSE_PARAMETERS_END();
@@ -85,6 +82,18 @@ ZEND_METHOD(ion_Symbol, equals)
 		&php_ion_obj(symbol, other_obj)->sym, &eq);
 	ION_CHECK(err);
 	RETVAL_BOOL(eq);
+}
+ZEND_METHOD(ion_Symbol, __toString)
+{
+	php_ion_symbol *sym = php_ion_obj(symbol, Z_OBJ_P(ZEND_THIS));
+	OBJ_CHECK(sym);
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	if (!sym->value) {
+		RETURN_EMPTY_STRING();
+	}
+	RETURN_STR(sym->value);
 }
 ZEND_METHOD(ion_Timestamp, __construct)
 {

@@ -242,8 +242,8 @@ static inline ION_STRING *ion_string_from_cstr(ION_STRING *is, const char *s, si
 
 static inline ION_STRING *ion_string_from_zend(ION_STRING *is, const zend_string *zs)
 {
-	is->length = ZSTR_LEN(zs);
-	is->value = (BYTE *) ZSTR_VAL(zs);
+	is->length = zs ? zs->len : 0;
+	is->value = (BYTE *) (zs ? zs->val : NULL);
 	return is;
 }
 
@@ -312,7 +312,11 @@ static inline void php_ion_symbol_ctor(php_ion_symbol *obj)
 {
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("sid"),
 		obj->sym.sid);
-	zend_update_property_str(obj->std.ce, &obj->std, ZEND_STRL("value"), obj->value);
+	if (obj->value) {
+		zend_update_property_str(obj->std.ce, &obj->std, ZEND_STRL("value"), obj->value);
+	} else{
+		zend_update_property_null(obj->std.ce, &obj->std, ZEND_STRL("value"));
+	}
 	ion_string_from_zend(&obj->sym.value, obj->value);
 	if (obj->iloc) {
 		update_property_obj(&obj->std, ZEND_STRL("importLocation"), obj->iloc);
@@ -324,7 +328,9 @@ static inline void php_ion_symbol_ctor(php_ion_symbol *obj)
 
 static inline void php_ion_symbol_dtor(php_ion_symbol *obj)
 {
-	zend_string_release(obj->value);
+	if (obj->value) {
+		zend_string_release(obj->value);
+	}
 }
 
 static inline void php_ion_symbol_zval(ION_SYMBOL *sym_ptr, zval *return_value)
@@ -493,7 +499,7 @@ static inline timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContex
 	}
 
 	if (fmt) {
-		fmt = php_dt_format_from_precision(ts->precision);
+		*fmt = php_dt_format_from_precision(ts->precision);
 	}
 	return time;
 }

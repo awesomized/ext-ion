@@ -76,12 +76,15 @@ enum SID : int {
 namespace ion;
 class Symbol {
     public function __construct(
-        public readonly string $value,
+        public readonly ?string $value = null,
         public readonly int $sid = -1,
         public readonly ?Symbol\ImportLocation $importLocation = null,
     ) {}
 
-    public function equals(Symbol $symbol): bool { }
+    public function equals(Symbol $symbol): bool {}
+    public function __toString() : string {}
+    /** @alias ion\Symbol::__toString */
+    public function toString() : string {}
 }
 
 namespace ion\Symbol;
