@@ -433,32 +433,44 @@ class Writer extends \ion\Writer\Writer implements \ion\Writer\Stream {
     public function getStream() {}
 }
 
-namespace ion\PHP;
-class Serializer {
+namespace ion;
+interface Serializer {
+    public function __invoke(mixed $data) : string;
+    // protected function serialize(mixed $data) : string;
+}
+namespace ion;
+interface Unserializer {
+    /** @param string|resource $data */
+    public function __invoke($data) : mixed;
+    // /** @param string|resource $data */
+    // protected function unserialize($data) : mixed;
+}
+
+namespace ion\Serializer;
+class PHP implements \ion\Serializer {
     public function __construct(
-        public readonly \ion\Writer $writer,
+        public readonly ?\ion\Writer\Options $writerOptions = null,
         public readonly bool $callMagicSerialize = true,
         public readonly ?string $callCustomSerialize = null,
     ) {}
-    public function __invoke(mixed $data) : void {}
-    protected function serialize(mixed $data) : void {}
+    public function __invoke(mixed $data) : string {}
+    protected function serialize(mixed $data) : string {}
 }
 
-namespace ion\PHP;
-class Unserializer {
+namespace ion\Unserializer;
+class PHP implements \ion\Unserializer {
     public function __construct(
-        public readonly \ion\Reader $reader,
+        public readonly ?\ion\Reader\Options $readerOptions = null,
         public readonly bool $callMagicUnserialize = true,
         public readonly ?string $callCustomUnserialize = null,
     ){}
-    public function __invoke() : mixed {}
-    protected function unserialize() : mixed {}
+    /** @param string|resource $data */
+    public function __invoke($data) : mixed {}
+    /** @param string|resource $data */
+    protected function unserialize($data) : mixed {}
 }
 
 namespace ion;
-function serialize(mixed $data, Writer\Options $options = null) : string {}
-function unserialize(mixed $serialized, Reader\Options $options = null) : mixed {}
-
-
-
-
+function serialize(mixed $data, ?Serializer $serializer = null) : string {}
+/** @param string|resource $data */
+function unserialize(mixed $data, ?Unserializer $unserializer = null) : mixed {}
