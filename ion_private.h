@@ -191,7 +191,6 @@ static zend_class_entry
 		zend_object_std_init(&o->std, ce); \
 		object_properties_init(&o->std, ce); \
 		o->std.handlers = &oh_ ## cname; \
-		fprintf(stderr, "create %s: %p\n", ce->name->val, o); \
 		return &o->std; \
 	} \
 	static inline void free_ion_ ## cname(zend_object *std) \
