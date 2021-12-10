@@ -448,6 +448,7 @@ static inline void php_ion_decimal_ctor(php_ion_decimal *obj)
 		object_init_ex(&zdc, ce_Decimal_Context);
 		obj->ctx = Z_OBJ(zdc);
 		php_ion_decimal_ctx_ctor(php_ion_obj(decimal_ctx, obj->ctx));
+		GC_DELREF(obj->ctx);
 	}
 	update_property_obj(&obj->std, ZEND_STRL("context"), obj->ctx);
 
