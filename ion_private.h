@@ -1718,19 +1718,13 @@ static inline void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *ret
 		ZVAL_DEREF(return_value);
 	}
 
-	BOOL bval;
-	ION_CHECK(ion_reader_is_null(ser->reader, &bval));
-	if (bval) {
-		goto read_null;
-	}
-
 	switch (ION_TYPE_INT(*typ)) {
 	case tid_NULL_INT:
-read_null: ;
 		ION_CHECK(ion_reader_read_null(ser->reader, typ));
 		RETURN_NULL();
 
 	case tid_BOOL_INT:
+		BOOL bval;
 		ION_CHECK(ion_reader_read_bool(ser->reader, &bval));
 		RETURN_BOOL(bval);
 
