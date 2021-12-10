@@ -225,6 +225,22 @@ ZEND_METHOD(ion_Decimal, isInt)
 
 	RETURN_BOOL(ion_decimal_is_integer(&obj->dec));
 }
+ZEND_METHOD(ion_LOB, __construct)
+{
+	zend_string *value;
+	zend_object *type = NULL;
+	ZEND_PARSE_PARAMETERS_START(1, 2)
+		Z_PARAM_STR(value)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_OBJ_OF_CLASS(type, ce_Type)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!type) {
+		type = zend_enum_get_case_cstr(ce_Type, "CLob");
+	}
+	update_property_obj(Z_OBJ_P(ZEND_THIS), ZEND_STRL("type"), type);
+	zend_update_property_str(Z_OBJCE_P(ZEND_THIS), Z_OBJ_P(ZEND_THIS), ZEND_STRL("value"), value);
+}
 ZEND_METHOD(ion_Reader_Options, __construct)
 {
 	php_ion_reader_options *opt = php_ion_obj(reader_options, Z_OBJ_P(ZEND_THIS));
@@ -1442,6 +1458,7 @@ PHP_MINIT_FUNCTION(ion)
 	ce_Symbol_System_SID = register_class_ion_Symbol_System_SID();
 
 	ce_Collection = register_class_ion_Collection();
+	ce_LOB = register_class_ion_LOB();
 
 	php_ion_register(decimal, Decimal);
 	php_ion_register(decimal_ctx, Decimal_Context);

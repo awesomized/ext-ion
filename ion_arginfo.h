@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 13de1401ca779d900a35c7be3ac484c8d4dde44d */
+ * Stub hash: f2b34e7e90a3fcb65ad470c6acce7cc31b804716 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -30,6 +30,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Symbol___toString, 0, 
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Symbol_toString arginfo_class_ion_Symbol___toString
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_LOB___construct, 0, 0, 1)
+	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, type, ion\\Type, 0, "ion\\Type::CLob")
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Decimal_Context___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bits, IS_LONG, 0, "128")
@@ -448,6 +453,7 @@ ZEND_METHOD(ion_Symbol_ImportLocation, __construct);
 ZEND_METHOD(ion_Symbol, __construct);
 ZEND_METHOD(ion_Symbol, equals);
 ZEND_METHOD(ion_Symbol, __toString);
+ZEND_METHOD(ion_LOB, __construct);
 ZEND_METHOD(ion_Decimal_Context, __construct);
 ZEND_METHOD(ion_Decimal, __construct);
 ZEND_METHOD(ion_Decimal, equals);
@@ -587,6 +593,12 @@ static const zend_function_entry class_ion_Catalog_methods[] = {
 
 
 static const zend_function_entry class_ion_Collection_methods[] = {
+	ZEND_FE_END
+};
+
+
+static const zend_function_entry class_ion_LOB_methods[] = {
+	ZEND_ME(ion_LOB, __construct, arginfo_class_ion_LOB___construct, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -1144,6 +1156,29 @@ static zend_class_entry *register_class_ion_Collection(void)
 
 	INIT_NS_CLASS_ENTRY(ce, "ion", "Collection", class_ion_Collection_methods);
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_ion_LOB(void)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_NS_CLASS_ENTRY(ce, "ion", "LOB", class_ion_LOB_methods);
+	class_entry = zend_register_internal_class_ex(&ce, NULL);
+
+	zval property_value_default_value;
+	ZVAL_UNDEF(&property_value_default_value);
+	zend_string *property_value_name = zend_string_init("value", sizeof("value") - 1, 1);
+	zend_declare_typed_property(class_entry, property_value_name, &property_value_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING));
+	zend_string_release(property_value_name);
+
+	zend_string *property_type_class_ion_Type = zend_string_init("ion\\Type", sizeof("ion\\Type")-1, 1);
+	zval property_type_default_value;
+	ZVAL_UNDEF(&property_type_default_value);
+	zend_string *property_type_name = zend_string_init("type", sizeof("type") - 1, 1);
+	zend_declare_typed_property(class_entry, property_type_name, &property_type_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_type_class_ion_Type, 0, 0));
+	zend_string_release(property_type_name);
 
 	return class_entry;
 }

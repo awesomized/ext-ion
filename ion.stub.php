@@ -101,6 +101,14 @@ class Collection {
 
 }
 
+namespace ion;
+class LOB {
+    public function __construct(
+        public readonly string $value,
+        public readonly Type $type = Type::CLob,
+    ) {
+    }
+}
 
 namespace ion\Decimal;
 class Context {

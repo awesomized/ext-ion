@@ -170,6 +170,7 @@ static zend_class_entry
 	*ce_Collection,
 	*ce_Decimal,
 	*ce_Decimal_Context,
+	*ce_LOB,
 	*ce_Reader,
 	*ce_Reader_Options,
 	*ce_Reader_Reader,
@@ -1050,6 +1051,24 @@ static inline void php_ion_serialize_object_std(php_ion_serializer *ser, zend_ob
 	}
 }
 
+static inline void php_ion_serialize_object_lob(php_ion_serializer *ser, zend_object *zobject)
+{
+	zval tmp_type, *type = zend_read_property(NULL, zobject, ZEND_STRL("type"), 0, &tmp_type);
+	zval tmp_value, *value = zend_read_property(NULL, zobject, ZEND_STRL("value"), 0, &tmp_value);
+	switch (Z_LVAL_P(zend_enum_fetch_case_value(Z_OBJ_P(type)))) {
+	case tid_BLOB_INT:
+		ION_CHECK(ion_writer_write_blob(ser->writer, (BYTE *) Z_STRVAL_P(value), Z_STRLEN_P(value)));
+		break;
+	case tid_CLOB_INT:
+		ION_CHECK(ion_writer_write_clob(ser->writer, (BYTE *) Z_STRVAL_P(value), Z_STRLEN_P(value)));
+		break;
+	default:
+		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
+				"Unsupported LOB type: ion\\Type::%s", Z_STRVAL_P(zend_enum_fetch_case_name(Z_OBJ_P(type))));
+		break;
+	}
+}
+
 static inline bool can_call_magic_serialize(php_ion_serializer *ser, zend_class_entry *ce)
 {
 	return ce->__serialize && ser->call_magic;
@@ -1097,6 +1116,8 @@ static inline void php_ion_serialize_object(php_ion_serializer *ser, zend_object
 		php_ion_timestamp *pts = php_ion_obj(timestamp, zobject);
 		decContext *ctx = ser->options ? ser->options->decimal_context : NULL;
 		ION_CHECK(ion_writer_write_timestamp(ser->writer, ion_timestamp_from_php(&its, pts, ctx)));
+	} else if (ce == ce_LOB) {
+		php_ion_serialize_object_lob(ser, zobject);
 	} else {
 		php_ion_serialize_object_std(ser, zobject);
 	}
@@ -1524,6 +1545,7 @@ again:
 	}
 	ION_CHECK(err, zend_string_release(zstr));
 	if (zstr->len > read) {
+		zstr->val[read] = 0;
 		zstr = zend_string_truncate(zstr, read, 0);
 	}
 	RETURN_STR(zstr);
