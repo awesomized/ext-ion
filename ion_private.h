@@ -1016,18 +1016,6 @@ static inline void php_ion_serialize_object_magic(php_ion_serializer *ser, zend_
 	}
 }
 
-static inline zend_string *fq_enum_case(zend_object *zobject)
-{
-	zval *cn = zend_enum_fetch_case_name(zobject);
-	zend_string *en = zend_string_alloc(zobject->ce->name->len + Z_STRLEN_P(cn) + strlen("::"), 0);
-	memcpy(en->val, zobject->ce->name->val, zobject->ce->name->len);
-	en->val[zobject->ce->name->len] = ':';
-	en->val[zobject->ce->name->len + 1] = ':';
-	memcpy(&en->val[zobject->ce->name->len + 2], Z_STRVAL_P(cn), Z_STRLEN_P(cn));
-	en->val[en->len] = 0;
-	return en;
-}
-
 static inline void php_ion_serialize_object_enum(php_ion_serializer *ser, zend_object *zobject)
 {
 	ION_STRING is;
