@@ -36,7 +36,7 @@ enum Annotation : string {
     case SERIALIZABLE   = "S";
     case ENUM           = "E";
 
-    case FIELD_NAME_INT = "i";
+    case PROPERTY       = "p";
 }
 
 namespace ion\Symbol;

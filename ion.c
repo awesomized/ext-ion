@@ -93,7 +93,7 @@ ZEND_METHOD(ion_Symbol, __toString)
 	if (!sym->value) {
 		RETURN_EMPTY_STRING();
 	}
-	RETURN_STR(sym->value);
+	RETURN_STR_COPY(sym->value);
 }
 ZEND_METHOD(ion_Timestamp, __construct)
 {

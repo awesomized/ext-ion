@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: dbe7b15e163236e988ca574dafe2004a3f2f9b5b */
+ * Stub hash: 13de1401ca779d900a35c7be3ac484c8d4dde44d */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -964,10 +964,10 @@ static zend_class_entry *register_class_ion_Annotation(void)
 	ZVAL_STR(&enum_case_ENUM_value, enum_case_ENUM_value_str);
 	zend_enum_add_case_cstr(class_entry, "ENUM", &enum_case_ENUM_value);
 
-	zval enum_case_FIELD_NAME_INT_value;
-	zend_string *enum_case_FIELD_NAME_INT_value_str = zend_string_init("i", sizeof("i") - 1, 1);
-	ZVAL_STR(&enum_case_FIELD_NAME_INT_value, enum_case_FIELD_NAME_INT_value_str);
-	zend_enum_add_case_cstr(class_entry, "FIELD_NAME_INT", &enum_case_FIELD_NAME_INT_value);
+	zval enum_case_PROPERTY_value;
+	zend_string *enum_case_PROPERTY_value_str = zend_string_init("p", sizeof("p") - 1, 1);
+	ZVAL_STR(&enum_case_PROPERTY_value, enum_case_PROPERTY_value_str);
+	zend_enum_add_case_cstr(class_entry, "PROPERTY", &enum_case_PROPERTY_value);
 
 	return class_entry;
 }
