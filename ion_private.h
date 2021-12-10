@@ -1277,12 +1277,12 @@ static inline void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *ret
 
 static inline bool can_call_magic_unserialize(php_ion_unserializer *ser, zend_class_entry *ce)
 {
-	return (ce->__unserialize && ser->call_magic);
+	return (ce && ce->__unserialize && ser->call_magic);
 }
 
 static inline bool can_call_iface_unserialize(php_ion_unserializer *ser, zend_class_entry *ce)
 {
-	return !!ce->unserialize;
+	return (ce && ce->unserialize);
 }
 
 static inline bool can_call_custom_unserialize(php_ion_unserializer *ser, zend_object *zobject, zend_function **fn)
@@ -1330,27 +1330,22 @@ static inline void php_ion_unserialize_object_enum(php_ion_unserializer *ser, zv
 
 static inline void php_ion_unserialize_object_iface(php_ion_unserializer *ser, zval *return_value)
 {
-	zend_string *s = zval_get_string(return_value);
-	ION_CATCH();
-
-	zval *backref = php_ion_unserialize_class(ser, return_value);
-	ION_CATCH(zend_string_release(s));
-
-	zend_class_entry *ce = Z_OBJCE_P(return_value);
+	zend_class_entry *ce = zend_lookup_class(ser->annotations.object_class);
 	if (can_call_iface_unserialize(ser, ce)) {
+		zend_string *s = zval_get_string(return_value);
+		ZVAL_NULL(return_value);
+		zval *backref = zend_hash_next_index_insert(ser->ids, return_value);
 		if (SUCCESS == ce->unserialize(backref, ce, (BYTE *) s->val, s->len, NULL)) {
-			// remove all this Serializable crap in PHP-9
-			zval_ptr_dtor(return_value);
-			ZVAL_COPY_VALUE(return_value, backref);
+			RETVAL_ZVAL(backref, 0, 0);
 		} else if (!EG(exception)) {
 			zend_throw_exception_ex(spl_ce_UnexpectedValueException, IERR_INTERNAL_ERROR,
 					"Failed to unserialize class %s", ce->name->val);
 		}
+		zend_string_release(s);
 	} else {
 		zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_TOKEN,
 				"Class %s does not implement Serializable", ser->annotations.object_class->val);
 	}
-	zend_string_release(s);
 }
 
 static void php_ion_unserialize_props(php_ion_unserializer *ser, zval *return_value)

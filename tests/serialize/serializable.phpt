@@ -14,11 +14,6 @@ class test implements Serializable {
 		$this->data = $data;
 	}
 }
-$t = new test;
-$s = ion\serialize($t);
-echo $s, "\n";
-$c = ion\unserialize($s);
-var_dump($c);
 
 class recursive implements Serializable {
 	private $id;
@@ -42,24 +37,41 @@ class recursive implements Serializable {
 		}
 	}
 }
+
+echo "\n";
+
+$t = new test;
+$s = ion\serialize([$t, $t]);
+echo $s, "\n";
+$c = ion\unserialize($s);
+debug_zval_dump($c);
 $tree = new recursive(new recursive(null));
 var_dump($tree);
 $s = ion\serialize($tree);
 echo $s,"\n";
-var_dump(ion\unserialize($s));
+debug_zval_dump(ion\unserialize($s));
 ?>
 DONE
 --EXPECTF--
 TEST
 
 Deprecated: test implements the Serializable interface, which is deprecated. Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary) in %sserialize/serializable.php on line %d
-PHP::S::test::"foobar"
-object(test)#5 (1) {
-  ["data":protected]=>
-  string(6) "foobar"
-}
 
 Deprecated: recursive implements the Serializable interface, which is deprecated. Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary) in %sserialize/serializable.php on line %d
+
+PHP::[S::test::"foobar",r::1]
+array(2) refcount(2){
+  [0]=>
+  object(test)#%d (1) refcount(2){
+    ["data":protected]=>
+    string(6) "foobar" refcount(1)
+  }
+  [1]=>
+  object(test)#%d (1) refcount(2){
+    ["data":protected]=>
+    string(6) "foobar" refcount(1)
+  }
+}
 object(recursive)#%d (2) {
   ["id":"recursive":private]=>
   NULL
@@ -72,13 +84,13 @@ object(recursive)#%d (2) {
   }
 }
 PHP::S::recursive::"node:S::recursive::\"leaf\""
-object(recursive)#%d (2) {
+object(recursive)#%d (2) refcount(1){
   ["id":"recursive":private]=>
-  string(4) "node"
+  string(4) "node" refcount(1)
   ["r":protected]=>
-  object(recursive)#%d (2) {
+  object(recursive)#10 (2) refcount(1){
     ["id":"recursive":private]=>
-    string(4) "leaf"
+    string(4) "leaf" refcount(1)
     ["r":protected]=>
     NULL
   }
