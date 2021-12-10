@@ -1402,6 +1402,10 @@ static inline void php_ion_unserialize_hash(php_ion_unserializer *ser, zval *ret
 		ION_TYPE typ;
 		ION_CHECK(ion_reader_next(ser->reader, &typ));
 
+		if (typ == tid_EOF) {
+			break;
+		}
+
 		ION_STRING name;
 		ION_CHECK(ion_reader_get_field_name(ser->reader, &name));
 		zend_string *key = zend_string_from_ion(&name);
@@ -1409,11 +1413,6 @@ static inline void php_ion_unserialize_hash(php_ion_unserializer *ser, zval *ret
 		zval zvalue;
 		php_ion_unserialize_zval(ser, &zvalue, &typ);
 		ION_CATCH(zend_string_release(key));
-
-		if (typ == tid_EOF) {
-			zend_string_release(key);
-			break;
-		}
 
 		zend_symtable_update(HASH_OF(return_value), key, &zvalue);
 
@@ -1519,13 +1518,13 @@ static inline void php_ion_unserialize_list(php_ion_unserializer *ser, zval *ret
 		ION_TYPE typ;
 		ION_CHECK(ion_reader_next(ser->reader, &typ));
 
-		zval next;
-		php_ion_unserialize_zval(ser, &next, &typ);
-		ION_CATCH();
-
 		if (typ == tid_EOF) {
 			break;
 		}
+
+		zval next;
+		php_ion_unserialize_zval(ser, &next, &typ);
+		ION_CATCH();
 
 		zend_hash_next_index_insert(Z_ARRVAL_P(return_value), &next);
 	}
