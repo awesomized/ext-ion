@@ -1891,23 +1891,24 @@ void php_ion_unserialize(php_ion_unserializer *ser, zval *zdata, zval *return_va
 	zend_object *zo_reader;
 	php_ion_reader *reader;
 	ZVAL_DEREF(zdata);
-	switch (Z_TYPE_P(zdata)) {
-	case IS_STRING:
-		zo_reader = create_ion_Reader_Reader(ce_Reader_Buffer_Reader);
-		reader = php_ion_obj(reader, zo_reader);
-		reader->type = BUFFER_READER;
-		reader->buffer = zend_string_copy(Z_STR_P(zdata));
-		break;
 
-	case IS_RESOURCE:
+	if (Z_TYPE_P(zdata) == IS_RESOURCE) {
 		zo_reader = create_ion_Reader_Reader(ce_Reader_Stream_Reader);
 		reader = php_ion_obj(reader, zo_reader);
 		reader->type = STREAM_READER;
 		php_stream_from_zval_no_verify(reader->stream.ptr, zdata);
-		break;
-
-	default:
-		ZEND_ASSERT(!IS_STRING && !IS_RESOURCE);
+	} else if (Z_TYPE_P(zdata) <= IS_STRING) {
+		zo_reader = create_ion_Reader_Reader(ce_Reader_Buffer_Reader);
+		reader = php_ion_obj(reader, zo_reader);
+		reader->type = BUFFER_READER;
+		reader->buffer = zval_get_string(zdata);
+	} else {
+		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
+				"Invalid source to unserialize; expected string or resource");
+		if (zo_ser) {
+			OBJ_RELEASE(zo_ser);
+		}
+		return;
 	}
 
 	if (ser->options) {

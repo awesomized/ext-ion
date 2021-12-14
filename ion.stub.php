@@ -481,4 +481,4 @@ class PHP implements \ion\Unserializer {
 namespace ion;
 function serialize(mixed $data, ?Serializer $serializer = null) : string {}
 /** @param string|resource $data */
-function unserialize(mixed $data, ?Unserializer $unserializer = null) : mixed {}
+function unserialize($data, ?Unserializer $unserializer = null) : mixed {}
