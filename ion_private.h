@@ -1667,7 +1667,7 @@ static inline void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 		ION_STRING ann_str;
 		ION_CHECK(ion_reader_get_an_annotation(ser->reader, i, &ann_str));
 
-		if (ann_str.length > 1) {
+		if (ann_str.length != 1) {
 			continue;
 		}
 
