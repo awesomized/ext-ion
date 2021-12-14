@@ -442,6 +442,27 @@ static inline void php_ion_decimal_to_int(ION_DECIMAL *dec, decContext *ctx, zen
 	ion_int_free(ii);
 }
 
+static inline bool php_ion_decimal_fits_zend_long(php_ion_decimal *obj)
+{
+	int32_t result;
+
+	if (!ion_decimal_is_integer(&obj->dec)) {
+		return false;
+	}
+
+	result  = 1;
+	ion_decimal_compare(&obj->dec, &g_ion_dec_zend_max, &g_dec_ctx, &result);
+	if (result == 1) {
+		return false;
+	}
+	result = -1;
+	ion_decimal_compare(&obj->dec, &g_ion_dec_zend_min, &g_dec_ctx, &result);
+	if (result == -1) {
+		return false;
+	}
+	return true;
+}
+
 static inline void php_ion_decimal_ctor(php_ion_decimal *obj)
 {
 	if (!obj->ctx) {
@@ -453,7 +474,7 @@ static inline void php_ion_decimal_ctor(php_ion_decimal *obj)
 	}
 	update_property_obj(&obj->std, ZEND_STRL("context"), obj->ctx);
 
-	if (ion_decimal_is_integer(&obj->dec)) {
+	if (php_ion_decimal_fits_zend_long(obj)) {
 		zend_long l;
 		php_ion_decimal_to_int(&obj->dec, &php_ion_obj(decimal_ctx, obj->ctx)->ctx, &l);
 		zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("number"), l);

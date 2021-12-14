@@ -30,6 +30,10 @@
 #define DECNUMDIGITS 34 /* DECQUAD_Pmax */
 #include "ionc/ion.h"
 
+static decContext g_dec_ctx;
+static ION_INT *g_ion_int_zend_max, *g_ion_int_zend_min;
+static ION_DECIMAL g_ion_dec_zend_max, g_ion_dec_zend_min;
+
 #include "php_ion.h"
 #define ZEND_ARG_VARIADIC_OBJ_TYPE_MASK(pass_by_ref, name, classname, type_mask, default_value) \
 	{ #name, ZEND_TYPE_INIT_CLASS_CONST_MASK(#classname, type_mask | _ZEND_ARG_INFO_FLAGS(pass_by_ref, 1, 0)), default_value },
@@ -1447,6 +1451,18 @@ PHP_RSHUTDOWN_FUNCTION(ion)
 
 PHP_MINIT_FUNCTION(ion)
 {
+	if (!g_ion_int_zend_max) {
+		decContextDefault(&g_dec_ctx, DEC_INIT_DECIMAL64);
+
+		ion_int_alloc(NULL, &g_ion_int_zend_max);
+		ion_int_from_long(g_ion_int_zend_max, ZEND_LONG_MAX);
+		ion_decimal_from_ion_int(&g_ion_dec_zend_max, &g_dec_ctx, g_ion_int_zend_max);
+
+		ion_int_alloc(NULL, &g_ion_int_zend_min);
+		ion_int_from_long(g_ion_int_zend_min, ZEND_LONG_MIN);
+		ion_decimal_from_ion_int(&g_ion_dec_zend_min, &g_dec_ctx, g_ion_int_zend_min);
+	}
+
 	ce_Annotation = register_class_ion_Annotation();
 
 	php_ion_register(type, Type);
@@ -1494,6 +1510,14 @@ PHP_MINIT_FUNCTION(ion)
 	return SUCCESS;
 }
 
+PHP_MSHUTDOWN_FUNCTION(ion)
+{
+	if (g_ion_int_zend_max) {
+		ion_int_free(g_ion_int_zend_max);
+		ion_int_free(g_ion_int_zend_min);
+	}
+	return SUCCESS;
+}
 PHP_MINFO_FUNCTION(ion)
 {
 	php_info_print_table_start();
@@ -1521,7 +1545,7 @@ zend_module_entry ion_module_entry = {
 	"ion",					/* Extension name */
 	ext_functions,			/* zend_function_entry */
 	PHP_MINIT(ion),			/* PHP_MINIT - Module initialization */
-	NULL,					/* PHP_MSHUTDOWN - Module shutdown */
+	PHP_MSHUTDOWN(ion),		/* PHP_MSHUTDOWN - Module shutdown */
 	PHP_RINIT(ion),			/* PHP_RINIT - Request initialization */
 	PHP_RSHUTDOWN(ion),		/* PHP_RSHUTDOWN - Request shutdown */
 	PHP_MINFO(ion),			/* PHP_MINFO - Module info */
