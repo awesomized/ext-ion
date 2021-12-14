@@ -88,7 +88,7 @@ object(recursive)#%d (2) refcount(1){
   ["id":"recursive":private]=>
   string(4) "node" refcount(1)
   ["r":protected]=>
-  object(recursive)#10 (2) refcount(1){
+  object(recursive)#%d (2) refcount(1){
     ["id":"recursive":private]=>
     string(4) "leaf" refcount(1)
     ["r":protected]=>
