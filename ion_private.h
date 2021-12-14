@@ -1630,10 +1630,10 @@ static inline void php_ion_reader_read_int(ION_READER *reader, zval *return_valu
 	case IERR_NUMERIC_OVERFLOW:
 		SIZE max, len;
 		ION_CHECK(ion_int_char_length(num, &max));
-		zend_string *zs = zend_string_alloc(max-1, 0);
+		zend_string *zs = zend_string_alloc(max, 0);
 
 		err = ion_int_to_char(num, (BYTE *) zs->val, max, &len);
-		ZEND_ASSERT(len == zs->len);
+		zs->val[zs->len = len] = 0;
 		RETVAL_STR(zs);
 		/* fall through */
 
