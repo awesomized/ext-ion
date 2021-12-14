@@ -381,6 +381,10 @@ static inline void php_ion_symbol_zval(ION_SYMBOL *sym_ptr, zval *return_value)
 	}
 
 	php_ion_symbol_ctor(sym);
+
+	if (!ION_SYMBOL_IMPORT_LOCATION_IS_NULL(sym_ptr)) {
+		GC_DELREF(sym->iloc);
+	}
 }
 
 php_ion_decl(symbol, Symbol, php_ion_symbol_dtor(obj));
@@ -1379,6 +1383,27 @@ static inline void php_ion_unserialize_object_iface(php_ion_unserializer *ser, z
 	}
 }
 
+static inline void php_ion_unserialize_field_name(php_ion_unserializer *ser, zend_string **key)
+{
+	// FIXME: symbol table
+	ION_STRING name;
+	ION_CHECK(ion_reader_get_field_name(ser->reader, &name));
+	if (!name.length) {
+		ION_SYMBOL *is_ptr;
+		ION_CHECK(ion_reader_get_field_name_symbol(ser->reader, &is_ptr));
+		if (!ION_SYMBOL_IS_NULL(is_ptr) && is_ptr->value.length) {
+			name = is_ptr->value;
+		} else if (is_ptr) {
+			char buf[MAX_LENGTH_OF_LONG + 1 + 1] = {0}, *end = buf + sizeof(buf) - 1, *ptr;
+			ptr = zend_print_long_to_buf(end, is_ptr->sid);
+			*--ptr = '$';
+			*key = zend_string_init(ptr, end - ptr, 0);
+			return;
+		}
+	}
+	*key = zend_string_from_ion(&name);
+}
+
 static void php_ion_unserialize_props(php_ion_unserializer *ser, zval *return_value)
 {
 	zend_hash_next_index_insert(ser->ids, return_value);
@@ -1393,9 +1418,9 @@ static void php_ion_unserialize_props(php_ion_unserializer *ser, zval *return_va
 			break;
 		}
 
-		ION_STRING is;
-		ION_CHECK(ion_reader_get_field_name(ser->reader, &is));
-		zend_string *key = zend_string_from_ion(&is);
+		zend_string *key;
+		php_ion_unserialize_field_name(ser, &key);
+		ION_CATCH();
 
 		zval zvalue;
 		php_ion_unserialize_zval(ser, &zvalue, &typ);
@@ -1427,9 +1452,9 @@ static inline void php_ion_unserialize_hash(php_ion_unserializer *ser, zval *ret
 			break;
 		}
 
-		ION_STRING name;
-		ION_CHECK(ion_reader_get_field_name(ser->reader, &name));
-		zend_string *key = zend_string_from_ion(&name);
+		zend_string *key;
+		php_ion_unserialize_field_name(ser, &key);
+		ION_CATCH();
 
 		zval zvalue;
 		php_ion_unserialize_zval(ser, &zvalue, &typ);
