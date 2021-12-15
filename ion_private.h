@@ -257,13 +257,6 @@ static zend_class_entry
 	PTR_CHECK(*((void **)obj)); \
 } while (0)
 
-static inline ION_STRING *ion_string_from_cstr(ION_STRING *is, const char *s, size_t l)
-{
-	is->length = l;
-	is->value = (BYTE *) s;
-	return is;
-}
-
 static inline ION_STRING *ion_string_from_zend(ION_STRING *is, const zend_string *zs)
 {
 	is->length = zs ? zs->len : 0;
@@ -959,17 +952,17 @@ static inline void php_ion_serialize_struct(php_ion_serializer *ser, zend_array 
 			size_t prop_len;
 			const char *class_name, *prop_name;
 			if (props && (SUCCESS == zend_unmangle_property_name_ex(k, &class_name, &prop_name, &prop_len)) && class_name) {
-				ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_cstr(&is, ZEND_STRL("p"))));
-				ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_cstr(&is, class_name, prop_name - class_name - 1)));
+				ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("p"))));
+				ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, (char *) class_name, prop_name - class_name - 1)));
 			} else {
 				prop_name = k->val;
 				prop_len = k->len;
 			}
-			ION_CHECK(ion_writer_write_field_name(ser->writer, ion_string_from_cstr(&is, prop_name, prop_len)));
+			ION_CHECK(ion_writer_write_field_name(ser->writer, ion_string_assign_cstr(&is, (char *) prop_name, prop_len)));
 		} else {
 			char buf[MAX_LENGTH_OF_LONG + 1], *end = buf + sizeof(buf) - 1;
 			char *ptr = zend_print_long_to_buf(end, (zend_long) h);
-			ION_CHECK(ion_writer_write_field_name(ser->writer, ion_string_from_cstr(&is, ptr, end - ptr)));
+			ION_CHECK(ion_writer_write_field_name(ser->writer, ion_string_assign_cstr(&is, ptr, end - ptr)));
 		}
 
 		php_ion_serialize_zval(ser, v);
@@ -1010,9 +1003,9 @@ static inline void php_ion_serialize_object_iface(php_ion_serializer *ser, zend_
 	ZVAL_OBJ(&tmp, zobject);
 	if (SUCCESS == zobject->ce->serialize(&tmp, &buf, &len, NULL)) {
 		ION_STRING is;
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_cstr(&is, ZEND_STRL("S"))));
+		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("S"))));
 		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_zend(&is, zobject->ce->name)));
-		ION_CHECK(ion_writer_write_string(ser->writer, ion_string_from_cstr(&is, (char *) buf, len)));
+		ION_CHECK(ion_writer_write_string(ser->writer, ion_string_assign_cstr(&is, (char *) buf, len)));
 		efree(buf);
 	} else if (!EG(exception)){
 		zend_throw_exception_ex(spl_ce_UnexpectedValueException, IERR_INTERNAL_ERROR,
@@ -1030,7 +1023,7 @@ static inline void php_ion_serialize_object_magic(php_ion_serializer *ser, zend_
 
 	if (IS_ARRAY == Z_TYPE(rv)) {
 		ION_STRING is;
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_cstr(&is, fn ? "C" : "O", 1)));
+		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, fn ? "C" : "O", 1)));
 		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_zend(&is, zobject->ce->name)));
 		php_ion_serialize_zval(ser, &rv);
 		zval_ptr_dtor(&rv);
@@ -1045,7 +1038,7 @@ static inline void php_ion_serialize_object_magic(php_ion_serializer *ser, zend_
 static inline void php_ion_serialize_object_enum(php_ion_serializer *ser, zend_object *zobject)
 {
 	ION_STRING is;
-	ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_cstr(&is, ZEND_STRL("E"))));
+	ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("E"))));
 
 	ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_zend(&is, zobject->ce->name)));
 	zval *z_cname = zend_enum_fetch_case_name(zobject);
@@ -1057,10 +1050,10 @@ static inline void php_ion_serialize_object_std(php_ion_serializer *ser, zend_ob
 	ION_STRING is;
 
 	if (zobject->ce != zend_standard_class_def) {
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_cstr(&is, ZEND_STRL("c"))));
+		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("c"))));
 		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_zend(&is, zobject->ce->name)));
 	} else {
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_cstr(&is, ZEND_STRL("o"))));
+		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("o"))));
 	}
 
 	zval zobj;
@@ -1156,7 +1149,7 @@ static inline void php_ion_serialize_refcounted(php_ion_serializer *ser, zval *z
 	if (zend_hash_index_exists(ser->ids, idx)) {
 		zval *num = zend_hash_index_find(ser->ids, idx);
 
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_cstr(&is, ZEND_STRL("r"))));
+		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("r"))));
 		ION_CHECK(ion_writer_write_int64(ser->writer, Z_LVAL_P(num)));
 	} else {
 		zval num;
@@ -1181,7 +1174,7 @@ static inline void php_ion_serialize_refcounted(php_ion_serializer *ser, zval *z
 			break;
 
 		case IS_REFERENCE:
-			ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_cstr(&is, ZEND_STRL("R"))));
+			ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("R"))));
 			php_ion_serialize_zval(ser, Z_REFVAL_P(zv));
 			break;
 		}
@@ -1252,7 +1245,7 @@ void php_ion_serialize(php_ion_serializer *ser, zval *zv, zval *return_value)
 	/* start off with a global PHP annotation instead of repeating it all over the place */
 	if (0 == php_ion_globals_serializer_step()) {
 		ION_STRING is;
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_cstr(&is, ZEND_STRL("PHP"))),
+		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("PHP"))),
 				if (zo_ser) OBJ_RELEASE(zo_ser));
 	}
 	php_ion_serialize_zval(ser, zv);
@@ -1918,6 +1911,7 @@ void php_ion_unserialize(php_ion_unserializer *ser, zval *zdata, zval *return_va
 
 	php_ion_reader_ctor(reader);
 	ser->reader = reader->reader;
+	ION_CATCH();
 
 	php_ion_globals_unserializer_step();
 	php_ion_unserialize_zval(ser, return_value, NULL);
