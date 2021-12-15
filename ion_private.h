@@ -332,6 +332,27 @@ typedef struct php_ion_symbol {
 	zend_object *iloc, std;
 } php_ion_symbol;
 
+static inline int php_ion_symbol_zval_compare(zval *zv1, zval *zv2) {
+	zend_string *zs1 = zval_get_string(zv1);
+	zend_string *zs2 = zval_get_string(zv2);
+
+	if (EG(exception)) {
+		return 0;
+	}
+
+	int result;
+	if (zs1->len > zs2->len) {
+		result = 1;
+	} else if (zs2->len > zs1->len) {
+		result = -1;
+	} else {
+		result = memcmp(zs1->val, zs2->val, zs1->len);
+	}
+	zend_string_release(zs1);
+	zend_string_release(zs2);
+	return result;
+}
+
 static inline void php_ion_symbol_ctor(php_ion_symbol *obj)
 {
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("sid"),
@@ -1492,6 +1513,7 @@ static void php_ion_unserialize_props(php_ion_unserializer *ser, zval *return_va
 }
 
 /**
+ * @link https://amzn.github.io/ion-docs/docs/spec.html#struct
  * When two fields in the same struct have the same name [...] Implementations must preserve all such fields,
  * i.e., they may not discard fields that have repeated names. However, implementations may reorder fields
  * (the binary format identifies structs that are sorted by symbolID), so certain operations may lead to

@@ -1532,6 +1532,7 @@ PHP_MINIT_FUNCTION(ion)
 
 	// Symbol
 	php_ion_register(symbol, Symbol);
+	oh_Symbol.compare = php_ion_symbol_zval_compare;
 	php_ion_register(symbol_iloc, Symbol_ImportLocation);
 	php_ion_register(symbol_table, Symbol_Table);
 	ce_Symbol_System = register_class_ion_Symbol_System();
