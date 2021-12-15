@@ -169,17 +169,12 @@ ZEND_METHOD(ion_Decimal, __construct)
 		php_ion_decimal_ctx_ctor(php_ion_obj(decimal_ctx, obj->ctx));
 	}
 
+	decContext *ctx = &php_ion_obj(decimal_ctx, obj->ctx)->ctx;
+
 	if (zstr) {
-		ION_CHECK(ion_decimal_from_string(&obj->dec, zstr->val,
-			obj->ctx ? &php_ion_obj(decimal_ctx, obj->ctx)->ctx : NULL));
-	} else if (num <= INT32_MAX && num >= INT32_MIN) {
-		ION_CHECK(ion_decimal_from_int32(&obj->dec, num));
-	} else if (num > 0 && num <= UINT32_MAX) {
-		ION_CHECK(ion_decimal_from_uint32(&obj->dec, num));
+		ION_CHECK(ion_decimal_from_string(&obj->dec, zstr->val, ctx), OBJ_RELEASE(obj->ctx));
 	} else {
-		zend_throw_exception_ex(spl_ce_OverflowException, 0,
-			"Integer value out of bounds: " ZEND_LONG_FMT " (INT32_MIN < n < UINT32_MAX)", num);
-		return;
+		php_ion_decimal_from_zend_long(&obj->dec, ctx, num);
 	}
 
 	php_ion_decimal_ctor(obj);
@@ -217,7 +212,7 @@ ZEND_METHOD(ion_Decimal, toInt)
 	ZEND_PARSE_PARAMETERS_NONE();
 
 	zend_long l;
-	php_ion_decimal_to_int(&obj->dec, &php_ion_obj(decimal_ctx, obj->ctx)->ctx, &l);
+	php_ion_decimal_to_zend_long(&obj->dec, &php_ion_obj(decimal_ctx, obj->ctx)->ctx, &l);
 	RETURN_LONG(l);
 }
 ZEND_METHOD(ion_Decimal, isInt)
@@ -1451,17 +1446,17 @@ PHP_RSHUTDOWN_FUNCTION(ion)
 
 PHP_MINIT_FUNCTION(ion)
 {
-	if (!g_ion_int_zend_max) {
-		decContextDefault(&g_dec_ctx, DEC_INIT_DECIMAL64);
+	decContextDefault(&g_dec_ctx, DEC_INIT_DECIMAL64);
 
-		ion_int_alloc(NULL, &g_ion_int_zend_max);
-		ion_int_from_long(g_ion_int_zend_max, ZEND_LONG_MAX);
-		ion_decimal_from_ion_int(&g_ion_dec_zend_max, &g_dec_ctx, g_ion_int_zend_max);
+	ion_int_alloc(NULL, &g_ion_int_zend_max);
+	ion_int_from_long(g_ion_int_zend_max, ZEND_LONG_MAX);
+	g_ion_dec_zend_max.type = ION_DECIMAL_TYPE_QUAD;
+	ion_decimal_from_ion_int(&g_ion_dec_zend_max, &g_dec_ctx, g_ion_int_zend_max);
 
-		ion_int_alloc(NULL, &g_ion_int_zend_min);
-		ion_int_from_long(g_ion_int_zend_min, ZEND_LONG_MIN);
-		ion_decimal_from_ion_int(&g_ion_dec_zend_min, &g_dec_ctx, g_ion_int_zend_min);
-	}
+	ion_int_alloc(NULL, &g_ion_int_zend_min);
+	ion_int_from_long(g_ion_int_zend_min, ZEND_LONG_MIN);
+	g_ion_dec_zend_min.type = ION_DECIMAL_TYPE_QUAD;
+	ion_decimal_from_ion_int(&g_ion_dec_zend_min, &g_dec_ctx, g_ion_int_zend_min);
 
 	ce_Annotation = register_class_ion_Annotation();
 
@@ -1512,10 +1507,8 @@ PHP_MINIT_FUNCTION(ion)
 
 PHP_MSHUTDOWN_FUNCTION(ion)
 {
-	if (g_ion_int_zend_max) {
-		ion_int_free(g_ion_int_zend_max);
-		ion_int_free(g_ion_int_zend_min);
-	}
+	ion_int_free(g_ion_int_zend_max);
+	ion_int_free(g_ion_int_zend_min);
 	return SUCCESS;
 }
 PHP_MINFO_FUNCTION(ion)

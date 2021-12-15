@@ -421,6 +421,25 @@ typedef struct php_ion_decimal {
 	zend_object *ctx, std;
 } php_ion_decimal;
 
+static inline void php_ion_decimal_from_zend_long(ION_DECIMAL *dec, decContext *ctx, zend_long num)
+{
+	if (num <= INT32_MAX && num >= INT32_MIN) {
+		ION_CHECK(ion_decimal_from_int32(dec, num));
+	} else if (num > 0 && num <= UINT32_MAX) {
+		ION_CHECK(ion_decimal_from_uint32(dec, num));
+	} else {
+		ION_INT *iint;
+		ION_CHECK(ion_int_alloc(NULL, &iint));
+		ION_CHECK(ion_int_from_long(iint, num),
+				ion_int_free(iint));
+		/* WATCH OUT: BS API */
+		dec->type = ION_DECIMAL_TYPE_QUAD;
+		ION_CHECK(ion_decimal_from_ion_int(dec, ctx, iint),
+				ion_int_free(iint));
+		ion_int_free(iint);
+	}
+}
+
 static inline zend_string *php_ion_decimal_to_string(ION_DECIMAL *dec)
 {
 	zend_string *zstr = zend_string_alloc(ION_DECIMAL_STRLEN(dec), 0);
@@ -428,7 +447,7 @@ static inline zend_string *php_ion_decimal_to_string(ION_DECIMAL *dec)
 	return zend_string_truncate(zstr, strlen(zstr->val), 0);
 }
 
-static inline void php_ion_decimal_to_int(ION_DECIMAL *dec, decContext *ctx, zend_long *l)
+static inline void php_ion_decimal_to_zend_long(ION_DECIMAL *dec, decContext *ctx, zend_long *l)
 {
 	ION_INT *ii = NULL;
 	ION_CHECK(ion_int_alloc(NULL, &ii));
@@ -473,7 +492,7 @@ static inline void php_ion_decimal_ctor(php_ion_decimal *obj)
 
 	if (php_ion_decimal_fits_zend_long(obj)) {
 		zend_long l;
-		php_ion_decimal_to_int(&obj->dec, &php_ion_obj(decimal_ctx, obj->ctx)->ctx, &l);
+		php_ion_decimal_to_zend_long(&obj->dec, &php_ion_obj(decimal_ctx, obj->ctx)->ctx, &l);
 		zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("number"), l);
 	} else {
 		zend_string *zstr = php_ion_decimal_to_string(&obj->dec);
