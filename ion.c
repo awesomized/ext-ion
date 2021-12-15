@@ -1311,9 +1311,12 @@ ZEND_METHOD(ion_Serializer_PHP, __construct)
 	php_ion_serializer_php *obj = php_ion_obj(serializer_php, Z_OBJ_P(ZEND_THIS));
 	PTR_CHECK(obj);
 
+	obj->serializer.call_magic = true;
+
 	ZEND_PARSE_PARAMETERS_START(0, 3)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->opt, ce_Writer_Options)
+		Z_PARAM_BOOL(obj->serializer.multi_seq)
 		Z_PARAM_BOOL(obj->serializer.call_magic)
 		Z_PARAM_STR_OR_NULL(obj->serializer.call_custom)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1370,10 +1373,14 @@ ZEND_METHOD(ion_Serializer_PHP, serialize)
 ZEND_METHOD(ion_Unserializer_PHP, __construct)
 {
 	php_ion_unserializer_php *obj = php_ion_obj(unserializer_php, Z_OBJ_P(ZEND_THIS));
+	PTR_CHECK(obj);
+
+	obj->unserializer.call_magic = true;
 
 	ZEND_PARSE_PARAMETERS_START(0, 3)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->opt, ce_Reader_Options)
+		Z_PARAM_BOOL(obj->unserializer.multi_seq)
 		Z_PARAM_BOOL(obj->unserializer.call_magic)
 		Z_PARAM_STR_OR_NULL(obj->unserializer.call_custom)
 	ZEND_PARSE_PARAMETERS_END();

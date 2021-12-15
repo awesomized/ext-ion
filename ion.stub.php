@@ -458,6 +458,7 @@ namespace ion\Serializer;
 class PHP implements \ion\Serializer {
     public function __construct(
         public readonly ?\ion\Writer\Options $writerOptions = null,
+        public readonly bool $multiSequence = false,
         public readonly bool $callMagicSerialize = true,
         public readonly ?string $callCustomSerialize = null,
     ) {}
@@ -469,6 +470,7 @@ namespace ion\Unserializer;
 class PHP implements \ion\Unserializer {
     public function __construct(
         public readonly ?\ion\Reader\Options $readerOptions = null,
+        public readonly bool $multiSequence = true,
         public readonly bool $callMagicUnserialize = true,
         public readonly ?string $callCustomUnserialize = null,
     ){}

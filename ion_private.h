@@ -22,6 +22,7 @@ typedef struct php_ion_serializer {
 
 	zend_string *call_custom;
 	zend_bool call_magic;
+	zend_bool multi_seq;
 
 	uint32_t level;
 	HashTable *ids;
@@ -44,6 +45,7 @@ typedef struct php_ion_unserializer {
 
 	zend_string *call_custom;
 	zend_bool call_magic;
+	zend_bool multi_seq;
 
 	uint32_t level;
 	HashTable *ids;
@@ -1234,6 +1236,41 @@ static inline void php_ion_serialize_zval(php_ion_serializer *ser, zval *zv)
 
 php_ion_decl(serializer_php, Serializer_PHP, php_ion_serializer_php_dtor(obj));
 
+static inline void php_ion_serialize_ex(php_ion_serializer *ser, zval *zv)
+{
+	HashPosition pos;
+	HashTable *arr = NULL;
+
+	if (ser->multi_seq) {
+		if (Z_TYPE_P(zv) != IS_ARRAY || !zend_array_is_list(Z_ARRVAL_P(zv))) {
+			zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
+					"Expected a packed, consecutively numerically indexed array as argument to the multi sequence serializer");
+			return;
+		}
+
+		arr = Z_ARRVAL_P(zv);
+
+		zend_hash_internal_pointer_reset_ex(arr, &pos);
+		zv = zend_hash_get_current_data_ex(arr, &pos);
+	}
+
+	while (zv) {
+		/* start off with a global PHP annotation instead of repeating it all over the place */
+		if (0 == php_ion_globals_serializer_step()) {
+			ION_STRING is;
+			ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("PHP"))));
+		}
+		php_ion_serialize_zval(ser, zv);
+		php_ion_globals_serializer_exit();
+
+		if (!ser->multi_seq) {
+			break;
+		}
+		zend_hash_move_forward_ex(arr, &pos);
+		zv = zend_hash_get_current_data_ex(arr, &pos);
+	}
+}
+
 void php_ion_serialize(php_ion_serializer *ser, zval *zv, zval *return_value)
 {
 	zend_object *zo_opt = NULL, *zo_ser = NULL;
@@ -1261,14 +1298,9 @@ void php_ion_serialize(php_ion_serializer *ser, zval *zv, zval *return_value)
 	ser->writer = writer->writer;
 	ser->buffer = &writer->buffer.str;
 
-	/* start off with a global PHP annotation instead of repeating it all over the place */
-	if (0 == php_ion_globals_serializer_step()) {
-		ION_STRING is;
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("PHP"))),
-				if (zo_ser) OBJ_RELEASE(zo_ser));
+	if (!EG(exception)) {
+		php_ion_serialize_ex(ser, zv);
 	}
-	php_ion_serialize_zval(ser, zv);
-	php_ion_globals_serializer_exit();
 
 	/* make sure to flush when done, else str.s might not contain everything until the writer is closed */
 	ion_writer_flush(ser->writer, NULL);
@@ -1886,6 +1918,28 @@ unserialize_struct: ;
 
 php_ion_decl(unserializer_php, Unserializer_PHP, php_ion_unserializer_php_dtor(obj));
 
+static inline void php_ion_unserialize_ex(php_ion_unserializer *ser, zval *return_value)
+{
+	if (ser->multi_seq) {
+		array_init(return_value);
+	}
+
+	do {
+		zval tmp;
+		ZVAL_NULL(&tmp);
+		php_ion_globals_unserializer_step();
+		php_ion_unserialize_zval(ser, &tmp, NULL);
+		php_ion_globals_unserializer_exit();
+		ION_CATCH(zval_ptr_dtor(&tmp));
+
+		if (!ser->multi_seq) {
+			RETURN_COPY_VALUE(&tmp);
+		} else if (ser->type != tid_EOF) {
+			zend_hash_next_index_insert(Z_ARRVAL_P(return_value), &tmp);
+		}
+	} while (ser->type != tid_EOF);
+}
+
 void php_ion_unserialize(php_ion_unserializer *ser, zval *zdata, zval *return_value)
 {
 	zend_object *zo_opt = NULL, *zo_ser = NULL;
@@ -1930,11 +1984,10 @@ void php_ion_unserialize(php_ion_unserializer *ser, zval *zdata, zval *return_va
 
 	php_ion_reader_ctor(reader);
 	ser->reader = reader->reader;
-	ION_CATCH();
 
-	php_ion_globals_unserializer_step();
-	php_ion_unserialize_zval(ser, return_value, NULL);
-	php_ion_globals_unserializer_exit();
+	if (!EG(exception)) {
+		php_ion_unserialize_ex(ser, return_value);
+	}
 
 	OBJ_RELEASE(zo_reader);
 	if (zo_opt)  {

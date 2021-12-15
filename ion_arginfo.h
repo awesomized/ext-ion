@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 5dc8abb809cd14ed4c542ca5114bd4ceda42d70b */
+ * Stub hash: 4c467ccb7b924c30cc5471b9212f4bffe0b0ba31 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -428,6 +428,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Serializer_PHP___construct, 0, 0, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, writerOptions, ion\\Writer\\Options, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiSequence, _IS_BOOL, 0, "false")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callMagicSerialize, _IS_BOOL, 0, "true")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callCustomSerialize, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
@@ -438,6 +439,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Unserializer_PHP___construct, 0, 0, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, readerOptions, ion\\Reader\\Options, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiSequence, _IS_BOOL, 0, "true")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callMagicUnserialize, _IS_BOOL, 0, "true")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callCustomUnserialize, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
@@ -1643,6 +1645,12 @@ static zend_class_entry *register_class_ion_Serializer_PHP(zend_class_entry *cla
 	zend_declare_typed_property(class_entry, property_writerOptions_name, &property_writerOptions_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_writerOptions_class_ion_Writer_Options, 0, MAY_BE_NULL));
 	zend_string_release(property_writerOptions_name);
 
+	zval property_multiSequence_default_value;
+	ZVAL_UNDEF(&property_multiSequence_default_value);
+	zend_string *property_multiSequence_name = zend_string_init("multiSequence", sizeof("multiSequence") - 1, 1);
+	zend_declare_typed_property(class_entry, property_multiSequence_name, &property_multiSequence_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
+	zend_string_release(property_multiSequence_name);
+
 	zval property_callMagicSerialize_default_value;
 	ZVAL_UNDEF(&property_callMagicSerialize_default_value);
 	zend_string *property_callMagicSerialize_name = zend_string_init("callMagicSerialize", sizeof("callMagicSerialize") - 1, 1);
@@ -1672,6 +1680,12 @@ static zend_class_entry *register_class_ion_Unserializer_PHP(zend_class_entry *c
 	zend_string *property_readerOptions_name = zend_string_init("readerOptions", sizeof("readerOptions") - 1, 1);
 	zend_declare_typed_property(class_entry, property_readerOptions_name, &property_readerOptions_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_readerOptions_class_ion_Reader_Options, 0, MAY_BE_NULL));
 	zend_string_release(property_readerOptions_name);
+
+	zval property_multiSequence_default_value;
+	ZVAL_UNDEF(&property_multiSequence_default_value);
+	zend_string *property_multiSequence_name = zend_string_init("multiSequence", sizeof("multiSequence") - 1, 1);
+	zend_declare_typed_property(class_entry, property_multiSequence_name, &property_multiSequence_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
+	zend_string_release(property_multiSequence_name);
 
 	zval property_callMagicUnserialize_default_value;
 	ZVAL_UNDEF(&property_callMagicUnserialize_default_value);
