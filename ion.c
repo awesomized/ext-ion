@@ -31,7 +31,6 @@
 #include "ionc/ion.h"
 
 static decContext g_dec_ctx;
-static ION_INT *g_ion_int_zend_max, *g_ion_int_zend_min;
 static ION_DECIMAL g_ion_dec_zend_max, g_ion_dec_zend_min;
 
 #include "php_ion.h"

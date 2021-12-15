@@ -1491,6 +1491,12 @@ static void php_ion_unserialize_props(php_ion_unserializer *ser, zval *return_va
 	ION_CHECK(ion_reader_step_out(ser->reader));
 }
 
+/**
+ * When two fields in the same struct have the same name [...] Implementations must preserve all such fields,
+ * i.e., they may not discard fields that have repeated names. However, implementations may reorder fields
+ * (the binary format identifies structs that are sorted by symbolID), so certain operations may lead to
+ * nondeterministic behavior.
+ */
 static inline void php_ion_unserialize_hash(php_ion_unserializer *ser, zval *return_value)
 {
 	zend_hash_next_index_insert(ser->ids, return_value);
@@ -1513,8 +1519,19 @@ static inline void php_ion_unserialize_hash(php_ion_unserializer *ser, zval *ret
 		php_ion_unserialize_zval(ser, &zvalue, &typ);
 		ION_CATCH(zend_string_release(key));
 
-		zend_symtable_update(HASH_OF(return_value), key, &zvalue);
-
+		// FIXME:: too naive; b0rked if the previous value is an array
+		if (zend_symtable_exists(HASH_OF(return_value), key)) {
+			zval tmp, *prev = zend_hash_find(HASH_OF(return_value), key);
+			if (Z_TYPE_P(prev) != IS_ARRAY) {
+				array_init(&tmp);
+				Z_TRY_ADDREF_P(prev);
+				zend_hash_next_index_insert(Z_ARRVAL(tmp), prev);
+				prev = zend_hash_update(HASH_OF(return_value), key, &tmp);
+			}
+			zend_hash_next_index_insert(Z_ARRVAL_P(prev), &zvalue);
+		} else {
+			zend_symtable_update(HASH_OF(return_value), key, &zvalue);
+		}
 		zend_string_release(key);
 	}
 
