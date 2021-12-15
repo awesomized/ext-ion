@@ -5,18 +5,60 @@ ion
 --FILE--
 TEST
 <?php
-var_dump(new ion\Decimal\Context);
-var_dump(new ion\Decimal\Context(32));
+var_dump(ion\Decimal\Context::Dec32());
+var_dump(ion\Decimal\Context::Dec64());
+var_dump(ion\Decimal\Context::Dec128());
+var_dump(ion\Decimal\Context::DecMax());
 ?>
 DONE
 --EXPECTF--
 TEST
-object(ion\Decimal\Context)#1 (1) {
-  ["bits"]=>
-  int(128)
+object(ion\Decimal\Context)#%d (5) {
+  ["digits"]=>
+  int(7)
+  ["eMax"]=>
+  int(96)
+  ["eMin"]=>
+  int(-95)
+  ["round"]=>
+  int(3)
+  ["clamp"]=>
+  bool(true)
 }
-object(ion\Decimal\Context)#1 (1) {
-  ["bits"]=>
-  int(32)
+object(ion\Decimal\Context)#%d (5) {
+  ["digits"]=>
+  int(16)
+  ["eMax"]=>
+  int(384)
+  ["eMin"]=>
+  int(-383)
+  ["round"]=>
+  int(3)
+  ["clamp"]=>
+  bool(true)
+}
+object(ion\Decimal\Context)#%d (5) {
+  ["digits"]=>
+  int(34)
+  ["eMax"]=>
+  int(6144)
+  ["eMin"]=>
+  int(-6143)
+  ["round"]=>
+  int(3)
+  ["clamp"]=>
+  bool(true)
+}
+object(ion\Decimal\Context)#%d (5) {
+  ["digits"]=>
+  int(999999999)
+  ["eMax"]=>
+  int(999999999)
+  ["eMin"]=>
+  int(-999999999)
+  ["round"]=>
+  int(3)
+  ["clamp"]=>
+  bool(false)
 }
 DONE

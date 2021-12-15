@@ -17,7 +17,7 @@ new Decimal("123");
 new Decimal(123.123);
 new Decimal("123.123");
 new Decimal(1, null);
-new Decimal(1, new Decimal\Context);
+new Decimal(1, Decimal\Context::Dec64());
 ?>
 DONE
 --EXPECTF--

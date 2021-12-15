@@ -172,6 +172,7 @@ static zend_class_entry
 	*ce_Collection,
 	*ce_Decimal,
 	*ce_Decimal_Context,
+	*ce_Decimal_Context_Rounding,
 	*ce_LOB,
 	*ce_Reader,
 	*ce_Reader_Options,
@@ -395,25 +396,33 @@ typedef struct php_ion_decimal_ctx {
 	zend_object std;
 } php_ion_decimal_ctx;
 
-static inline void php_ion_decimal_ctx_ctor(php_ion_decimal_ctx *obj) {
-	zval tmp, *zbits = zend_read_property(obj->std.ce, &obj->std, ZEND_STRL("bits"), 1, &tmp);
+#define php_ion_decimal_ctx_init_max(c, rounding) \
+	php_ion_decimal_ctx_init((c), DEC_MAX_DIGITS, DEC_MAX_EMAX, DEC_MIN_EMIN, (rounding), false)
+static inline void php_ion_decimal_ctx_init(decContext *ctx,
+		zend_long digits, zend_long emax, zend_long emin, zend_long round, zend_bool clamp)
+{
+	memset(ctx, 0, sizeof(*ctx));
+	ctx->digits = digits;
+	ctx->emax = emax;
+	ctx->emin = emin;
+	ctx->round = round;
+	ctx->clamp = clamp;
+}
 
-	int bits = 128;
-	if (zbits != &EG(uninitialized_zval)) {
-		bits = Z_LVAL_P(zbits);
+static inline void php_ion_decimal_ctx_ctor(php_ion_decimal_ctx *obj, zend_object *o_round)
+{
+	if (!obj->ctx.digits) {
+		php_ion_decimal_ctx_init_max(&obj->ctx, DEC_ROUND_HALF_EVEN);
+	}
+	if (o_round) {
+		update_property_obj(&obj->std, ZEND_STRL("round"), o_round);
 	} else {
-		zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("bits"), bits);
+		zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("round"), obj->ctx.round);
 	}
-	switch (bits) {
-	case 32:
-	case 64:
-	case 128:
-		decContextDefault(&obj->ctx, bits);
-		break;
-	default:
-		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
-				"Decimal context only allows 32, 64 or 128 bits");
-	}
+	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("digits"), obj->ctx.digits);
+	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("eMax"), obj->ctx.emax);
+	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("eMin"), obj->ctx.emin);
+	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("clamp"), obj->ctx.clamp);
 }
 
 php_ion_decl(decimal_ctx, Decimal_Context);
@@ -487,7 +496,7 @@ static inline void php_ion_decimal_ctor(php_ion_decimal *obj)
 		zval zdc;
 		object_init_ex(&zdc, ce_Decimal_Context);
 		obj->ctx = Z_OBJ(zdc);
-		php_ion_decimal_ctx_ctor(php_ion_obj(decimal_ctx, obj->ctx));
+		php_ion_decimal_ctx_ctor(php_ion_obj(decimal_ctx, obj->ctx), NULL);
 		GC_DELREF(obj->ctx);
 	}
 	update_property_obj(&obj->std, ZEND_STRL("context"), obj->ctx);

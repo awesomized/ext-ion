@@ -138,14 +138,60 @@ ZEND_METHOD(ion_Decimal_Context, __construct)
 	php_ion_decimal_ctx *obj = php_ion_obj(decimal_ctx, Z_OBJ_P(ZEND_THIS));
 	PTR_CHECK(obj);
 
-	zend_long bits = 128;
-	ZEND_PARSE_PARAMETERS_START(0, 1)
-		Z_PARAM_OPTIONAL
-		Z_PARAM_LONG(bits)
+	zend_bool clamp;
+	zend_object *o_round = NULL;
+	zend_long digits, emax, emin, round;
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_LONG(digits)
+		Z_PARAM_LONG(emax)
+		Z_PARAM_LONG(emin)
+		Z_PARAM_OBJ_OF_CLASS_OR_LONG(o_round, ce_Decimal_Context_Rounding, round)
+		Z_PARAM_BOOL(clamp)
 	ZEND_PARSE_PARAMETERS_END();
 
-	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("bits"), bits);
-	php_ion_decimal_ctx_ctor(obj);
+	if (o_round) {
+		round = Z_LVAL_P(zend_enum_fetch_case_value(o_round));
+	}
+	php_ion_decimal_ctx_init(&obj->ctx, digits, emax, emin, round, clamp);
+	php_ion_decimal_ctx_ctor(obj, o_round);
+}
+static inline void make_decimal_ctx(INTERNAL_FUNCTION_PARAMETERS, int kind)
+{
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	object_init_ex(return_value, ce_Decimal_Context);
+	php_ion_decimal_ctx *obj = php_ion_obj(decimal_ctx, Z_OBJ_P(return_value));
+	decContextDefault(&obj->ctx, kind);
+	php_ion_decimal_ctx_ctor(obj, NULL);
+}
+ZEND_METHOD(ion_Decimal_Context, Dec32)
+{
+	make_decimal_ctx(INTERNAL_FUNCTION_PARAM_PASSTHRU, DEC_INIT_DECIMAL32);
+}
+ZEND_METHOD(ion_Decimal_Context, Dec64)
+{
+	make_decimal_ctx(INTERNAL_FUNCTION_PARAM_PASSTHRU, DEC_INIT_DECIMAL64);
+}
+ZEND_METHOD(ion_Decimal_Context, Dec128)
+{
+	make_decimal_ctx(INTERNAL_FUNCTION_PARAM_PASSTHRU, DEC_INIT_DECIMAL128);
+}
+ZEND_METHOD(ion_Decimal_Context, DecMax)
+{
+	zend_object *o_round = NULL;
+	zend_long round = DEC_ROUND_HALF_EVEN;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_OBJ_OF_CLASS_OR_LONG(o_round, ce_Decimal_Context_Rounding, round)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (o_round) {
+		round = Z_LVAL_P(zend_enum_fetch_case_value(o_round));
+	}
+	object_init_ex(return_value, ce_Decimal_Context);
+	php_ion_decimal_ctx *obj = php_ion_obj(decimal_ctx, Z_OBJ_P(return_value));
+	php_ion_decimal_ctx_init_max(&obj->ctx, round);
+	php_ion_decimal_ctx_ctor(obj, o_round);
 }
 ZEND_METHOD(ion_Decimal, __construct)
 {
@@ -166,7 +212,7 @@ ZEND_METHOD(ion_Decimal, __construct)
 		zval zdc;
 		object_init_ex(&zdc, ce_Decimal_Context);
 		obj->ctx = Z_OBJ(zdc);
-		php_ion_decimal_ctx_ctor(php_ion_obj(decimal_ctx, obj->ctx));
+		php_ion_decimal_ctx_ctor(php_ion_obj(decimal_ctx, obj->ctx), NULL);
 	}
 
 	decContext *ctx = &php_ion_obj(decimal_ctx, obj->ctx)->ctx;
@@ -1453,59 +1499,63 @@ PHP_RSHUTDOWN_FUNCTION(ion)
 
 PHP_MINIT_FUNCTION(ion)
 {
-	decContextDefault(&g_dec_ctx, DEC_INIT_DECIMAL64);
+	// globals
+	php_ion_decimal_ctx_init_max(&g_dec_ctx, DEC_ROUND_HALF_EVEN);
+	php_ion_decimal_from_zend_long(&g_ion_dec_zend_max, &g_dec_ctx, ZEND_LONG_MAX);
+	php_ion_decimal_from_zend_long(&g_ion_dec_zend_min, &g_dec_ctx, ZEND_LONG_MIN);
 
-	ion_int_alloc(NULL, &g_ion_int_zend_max);
-	ion_int_from_long(g_ion_int_zend_max, ZEND_LONG_MAX);
-	g_ion_dec_zend_max.type = ION_DECIMAL_TYPE_QUAD;
-	ion_decimal_from_ion_int(&g_ion_dec_zend_max, &g_dec_ctx, g_ion_int_zend_max);
-
-	ion_int_alloc(NULL, &g_ion_int_zend_min);
-	ion_int_from_long(g_ion_int_zend_min, ZEND_LONG_MIN);
-	g_ion_dec_zend_min.type = ION_DECIMAL_TYPE_QUAD;
-	ion_decimal_from_ion_int(&g_ion_dec_zend_min, &g_dec_ctx, g_ion_int_zend_min);
-
+	// Annotation
 	ce_Annotation = register_class_ion_Annotation();
 
-	php_ion_register(type, Type);
-	php_ion_register(symbol, Symbol);
-	php_ion_register(symbol_iloc, Symbol_ImportLocation);
-	php_ion_register(symbol_table, Symbol_Table);
-
-	ce_Symbol_System = register_class_ion_Symbol_System();
-	ce_Symbol_System_SID = register_class_ion_Symbol_System_SID();
-
+	// Collection
 	ce_Collection = register_class_ion_Collection();
-	ce_LOB = register_class_ion_LOB();
 
+	// Decimal
 	php_ion_register(decimal, Decimal);
 	php_ion_register(decimal_ctx, Decimal_Context);
-	php_ion_register(timestamp, Timestamp, php_date_get_date_ce());
-	ce_Timestamp_Precision = register_class_ion_Timestamp_Precision();
-	php_ion_register(catalog, Catalog);
+	ce_Decimal_Context_Rounding = register_class_ion_Decimal_Context_Rounding();
 
+	// LOB
+	ce_LOB = register_class_ion_LOB();
+
+	// Reader
 	ce_Reader = register_class_ion_Reader(spl_ce_RecursiveIterator);
-
 	php_ion_register(reader_options, Reader_Options);
 	php_ion_register(reader, Reader_Reader, ce_Reader);
-
 	ce_Reader_Buffer = register_class_ion_Reader_Buffer(ce_Reader);
 	ce_Reader_Buffer_Reader = register_class_ion_Reader_Buffer_Reader(ce_Reader_Reader, ce_Reader_Buffer);
 	ce_Reader_Stream = register_class_ion_Reader_Stream(ce_Reader);
 	ce_Reader_Stream_Reader = register_class_ion_Reader_Stream_Reader(ce_Reader_Reader, ce_Reader_Stream);
 
-	ce_Writer = register_class_ion_Writer();
+	// Serializer
+	ce_Serializer = register_class_ion_Serializer();
+	php_ion_register(serializer_php, Serializer_PHP, ce_Serializer);
 
+	// Symbol
+	php_ion_register(symbol, Symbol);
+	php_ion_register(symbol_iloc, Symbol_ImportLocation);
+	php_ion_register(symbol_table, Symbol_Table);
+	ce_Symbol_System = register_class_ion_Symbol_System();
+	ce_Symbol_System_SID = register_class_ion_Symbol_System_SID();
+
+	// Timestamp
+	php_ion_register(timestamp, Timestamp, php_date_get_date_ce());
+	ce_Timestamp_Precision = register_class_ion_Timestamp_Precision();
+	php_ion_register(catalog, Catalog);
+
+	// Type
+	php_ion_register(type, Type);
+
+	// Writer
+	ce_Writer = register_class_ion_Writer();
 	php_ion_register(writer_options, Writer_Options);
 	php_ion_register(writer, Writer_Writer, ce_Writer);
-
 	ce_Writer_Buffer = register_class_ion_Writer_Buffer(ce_Writer);
 	ce_Writer_Buffer_Writer = register_class_ion_Writer_Buffer_Writer(ce_Writer_Writer, ce_Writer_Buffer);
 	ce_Writer_Stream = register_class_ion_Writer_Stream(ce_Writer);
 	ce_Writer_Stream_Writer = register_class_ion_Writer_Stream_Writer(ce_Writer_Writer, ce_Writer_Stream);
 
-	ce_Serializer = register_class_ion_Serializer();
-	php_ion_register(serializer_php, Serializer_PHP, ce_Serializer);
+	// Unserializer
 	ce_Unserializer = register_class_ion_Unserializer();
 	php_ion_register(unserializer_php, Unserializer_PHP, ce_Unserializer);
 
@@ -1514,8 +1564,6 @@ PHP_MINIT_FUNCTION(ion)
 
 PHP_MSHUTDOWN_FUNCTION(ion)
 {
-	ion_int_free(g_ion_int_zend_max);
-	ion_int_free(g_ion_int_zend_min);
 	return SUCCESS;
 }
 PHP_MINFO_FUNCTION(ion)

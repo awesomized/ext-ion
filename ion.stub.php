@@ -110,11 +110,32 @@ class LOB {
     }
 }
 
+namespace ion\Decimal\Context;
+enum Rounding : int {
+    case Ceiling    = 0;
+    case Up         = 1;
+    case HalfUp     = 2;
+    case HalfEven   = 3;
+    case HalfDown   = 4;
+    case Down       = 5;
+    case Floor      = 6;
+    case Down05Up   = 7;
+}
+
 namespace ion\Decimal;
 class Context {
     public function __construct(
-        public readonly int $bits = 128
+        public readonly int $digits,
+        public readonly int $eMax,
+        public readonly int $eMin,
+        public readonly Context\Rounding|int $round,
+        public readonly bool $clamp,
     ) {}
+
+    public static function Dec32() : Context {}
+    public static function Dec64() : Context {}
+    public static function Dec128() : Context {}
+    public static function DecMax(Context\Rounding|int $round = Context\Rounding::HalfEven) : Context {}
 }
 
 namespace ion;

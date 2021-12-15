@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 4c467ccb7b924c30cc5471b9212f4bffe0b0ba31 */
+ * Stub hash: 3639336622da610f8866722b870d87563646465f */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -36,8 +36,23 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_LOB___construct, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, type, ion\\Type, 0, "ion\\Type::CLob")
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Decimal_Context___construct, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, bits, IS_LONG, 0, "128")
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Decimal_Context___construct, 0, 0, 5)
+	ZEND_ARG_TYPE_INFO(0, digits, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, eMax, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, eMin, IS_LONG, 0)
+	ZEND_ARG_OBJ_TYPE_MASK(0, round, ion\\Decimal\\Context\\Rounding, MAY_BE_LONG, NULL)
+	ZEND_ARG_TYPE_INFO(0, clamp, _IS_BOOL, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Decimal_Context_Dec32, 0, 0, ion\\Decimal\\Context, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_class_ion_Decimal_Context_Dec64 arginfo_class_ion_Decimal_Context_Dec32
+
+#define arginfo_class_ion_Decimal_Context_Dec128 arginfo_class_ion_Decimal_Context_Dec32
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Decimal_Context_DecMax, 0, 0, ion\\Decimal\\Context, 0)
+	ZEND_ARG_OBJ_TYPE_MASK(0, round, ion\\Decimal\\Context\\Rounding, MAY_BE_LONG, "ion\\Decimal\\Context\\Rounding::HalfEven")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Decimal___construct, 0, 0, 1)
@@ -457,6 +472,10 @@ ZEND_METHOD(ion_Symbol, equals);
 ZEND_METHOD(ion_Symbol, __toString);
 ZEND_METHOD(ion_LOB, __construct);
 ZEND_METHOD(ion_Decimal_Context, __construct);
+ZEND_METHOD(ion_Decimal_Context, Dec32);
+ZEND_METHOD(ion_Decimal_Context, Dec64);
+ZEND_METHOD(ion_Decimal_Context, Dec128);
+ZEND_METHOD(ion_Decimal_Context, DecMax);
 ZEND_METHOD(ion_Decimal, __construct);
 ZEND_METHOD(ion_Decimal, equals);
 ZEND_METHOD(ion_Decimal, isInt);
@@ -605,8 +624,17 @@ static const zend_function_entry class_ion_LOB_methods[] = {
 };
 
 
+static const zend_function_entry class_ion_Decimal_Context_Rounding_methods[] = {
+	ZEND_FE_END
+};
+
+
 static const zend_function_entry class_ion_Decimal_Context_methods[] = {
 	ZEND_ME(ion_Decimal_Context, __construct, arginfo_class_ion_Decimal_Context___construct, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Decimal_Context, Dec32, arginfo_class_ion_Decimal_Context_Dec32, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_ME(ion_Decimal_Context, Dec64, arginfo_class_ion_Decimal_Context_Dec64, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_ME(ion_Decimal_Context, Dec128, arginfo_class_ion_Decimal_Context_Dec128, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	ZEND_ME(ion_Decimal_Context, DecMax, arginfo_class_ion_Decimal_Context_DecMax, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_FE_END
 };
 
@@ -1185,6 +1213,45 @@ static zend_class_entry *register_class_ion_LOB(void)
 	return class_entry;
 }
 
+static zend_class_entry *register_class_ion_Decimal_Context_Rounding(void)
+{
+	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Decimal\\Context\\Rounding", IS_LONG, class_ion_Decimal_Context_Rounding_methods);
+
+	zval enum_case_Ceiling_value;
+	ZVAL_LONG(&enum_case_Ceiling_value, 0);
+	zend_enum_add_case_cstr(class_entry, "Ceiling", &enum_case_Ceiling_value);
+
+	zval enum_case_Up_value;
+	ZVAL_LONG(&enum_case_Up_value, 1);
+	zend_enum_add_case_cstr(class_entry, "Up", &enum_case_Up_value);
+
+	zval enum_case_HalfUp_value;
+	ZVAL_LONG(&enum_case_HalfUp_value, 2);
+	zend_enum_add_case_cstr(class_entry, "HalfUp", &enum_case_HalfUp_value);
+
+	zval enum_case_HalfEven_value;
+	ZVAL_LONG(&enum_case_HalfEven_value, 3);
+	zend_enum_add_case_cstr(class_entry, "HalfEven", &enum_case_HalfEven_value);
+
+	zval enum_case_HalfDown_value;
+	ZVAL_LONG(&enum_case_HalfDown_value, 4);
+	zend_enum_add_case_cstr(class_entry, "HalfDown", &enum_case_HalfDown_value);
+
+	zval enum_case_Down_value;
+	ZVAL_LONG(&enum_case_Down_value, 5);
+	zend_enum_add_case_cstr(class_entry, "Down", &enum_case_Down_value);
+
+	zval enum_case_Floor_value;
+	ZVAL_LONG(&enum_case_Floor_value, 6);
+	zend_enum_add_case_cstr(class_entry, "Floor", &enum_case_Floor_value);
+
+	zval enum_case_Down05Up_value;
+	ZVAL_LONG(&enum_case_Down05Up_value, 7);
+	zend_enum_add_case_cstr(class_entry, "Down05Up", &enum_case_Down05Up_value);
+
+	return class_entry;
+}
+
 static zend_class_entry *register_class_ion_Decimal_Context(void)
 {
 	zend_class_entry ce, *class_entry;
@@ -1192,11 +1259,36 @@ static zend_class_entry *register_class_ion_Decimal_Context(void)
 	INIT_NS_CLASS_ENTRY(ce, "ion\\Decimal", "Context", class_ion_Decimal_Context_methods);
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
 
-	zval property_bits_default_value;
-	ZVAL_UNDEF(&property_bits_default_value);
-	zend_string *property_bits_name = zend_string_init("bits", sizeof("bits") - 1, 1);
-	zend_declare_typed_property(class_entry, property_bits_name, &property_bits_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
-	zend_string_release(property_bits_name);
+	zval property_digits_default_value;
+	ZVAL_UNDEF(&property_digits_default_value);
+	zend_string *property_digits_name = zend_string_init("digits", sizeof("digits") - 1, 1);
+	zend_declare_typed_property(class_entry, property_digits_name, &property_digits_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_digits_name);
+
+	zval property_eMax_default_value;
+	ZVAL_UNDEF(&property_eMax_default_value);
+	zend_string *property_eMax_name = zend_string_init("eMax", sizeof("eMax") - 1, 1);
+	zend_declare_typed_property(class_entry, property_eMax_name, &property_eMax_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_eMax_name);
+
+	zval property_eMin_default_value;
+	ZVAL_UNDEF(&property_eMin_default_value);
+	zend_string *property_eMin_name = zend_string_init("eMin", sizeof("eMin") - 1, 1);
+	zend_declare_typed_property(class_entry, property_eMin_name, &property_eMin_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_eMin_name);
+
+	zend_string *property_round_class_ion_Decimal_Context_Rounding = zend_string_init("ion\\Decimal\\Context\\Rounding", sizeof("ion\\Decimal\\Context\\Rounding")-1, 1);
+	zval property_round_default_value;
+	ZVAL_UNDEF(&property_round_default_value);
+	zend_string *property_round_name = zend_string_init("round", sizeof("round") - 1, 1);
+	zend_declare_typed_property(class_entry, property_round_name, &property_round_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_round_class_ion_Decimal_Context_Rounding, 0, MAY_BE_LONG));
+	zend_string_release(property_round_name);
+
+	zval property_clamp_default_value;
+	ZVAL_UNDEF(&property_clamp_default_value);
+	zend_string *property_clamp_name = zend_string_init("clamp", sizeof("clamp") - 1, 1);
+	zend_declare_typed_property(class_entry, property_clamp_name, &property_clamp_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
+	zend_string_release(property_clamp_name);
 
 	return class_entry;
 }
