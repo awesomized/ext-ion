@@ -57,6 +57,8 @@ typedef struct php_ion_unserializer {
 
 ZEND_BEGIN_MODULE_GLOBALS(ion)
 
+	decContext decimal_ctx;
+
 	php_ion_serializer serializer;
 	php_ion_unserializer unserializer;
 
@@ -499,12 +501,12 @@ static inline bool php_ion_decimal_fits_zend_long(php_ion_decimal *obj)
 	}
 
 	result  = 1;
-	ion_decimal_compare(&obj->dec, &g_ion_dec_zend_max, &g_dec_ctx, &result);
+	ion_decimal_compare(&obj->dec, &g_ion_dec_zend_max, &php_ion_globals.decimal_ctx, &result);
 	if (result == 1) {
 		return false;
 	}
 	result = -1;
-	ion_decimal_compare(&obj->dec, &g_ion_dec_zend_min, &g_dec_ctx, &result);
+	ion_decimal_compare(&obj->dec, &g_ion_dec_zend_min, &php_ion_globals.decimal_ctx, &result);
 	if (result == -1) {
 		return false;
 	}
@@ -545,7 +547,7 @@ typedef php_date_obj php_ion_timestamp;
 static inline zend_long php_usec_from_ion(const decQuad *frac, decContext *ctx)
 {
 	if (!ctx) {
-		ctx = &g_dec_ctx;
+		ctx = &php_ion_globals.decimal_ctx;
 	}
 	decQuad microsecs, result;
 	decQuadMultiply(&result, decQuadFromInt32(&microsecs, 1000000), frac, ctx);
@@ -555,7 +557,7 @@ static inline zend_long php_usec_from_ion(const decQuad *frac, decContext *ctx)
 static inline decQuad *ion_ts_frac_from_usec(decQuad *frac, zend_long usec, decContext *ctx)
 {
 	if (!ctx) {
-		ctx = &g_dec_ctx;
+		ctx = &php_ion_globals.decimal_ctx;
 	}
 	decQuad microsecs, us;
  	return decQuadDivide(frac, decQuadFromInt32(&us, usec), decQuadFromInt32(&microsecs, 1000000), ctx);

@@ -1498,8 +1498,7 @@ PHP_RSHUTDOWN_FUNCTION(ion)
 
 PHP_MINIT_FUNCTION(ion)
 {
-	// globals
-	php_ion_decimal_ctx_init_max(&g_dec_ctx, DEC_ROUND_HALF_EVEN);
+	// true globals
 	php_ion_decimal_from_zend_long(&g_ion_dec_zend_max, &g_dec_ctx, ZEND_LONG_MAX);
 	php_ion_decimal_from_zend_long(&g_ion_dec_zend_min, &g_dec_ctx, ZEND_LONG_MIN);
 
@@ -1578,6 +1577,8 @@ PHP_MINFO_FUNCTION(ion)
 PHP_GINIT_FUNCTION(ion)
 {
 	memset(ion_globals, 0, sizeof(*ion_globals));
+
+	php_ion_decimal_ctx_init_max(&ion_globals->decimal_ctx, DEC_ROUND_HALF_EVEN);
 }
 PHP_GSHUTDOWN_FUNCTION(ion)
 {
