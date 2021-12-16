@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 3639336622da610f8866722b870d87563646465f */
+ * Stub hash: 31c610f8d923117a4e69635ba3eb9387087f66fd */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -1343,6 +1343,18 @@ static zend_class_entry *register_class_ion_Timestamp_Precision(void)
 	zval enum_case_Frac_value;
 	ZVAL_LONG(&enum_case_Frac_value, 119);
 	zend_enum_add_case_cstr(class_entry, "Frac", &enum_case_Frac_value);
+
+	zval enum_case_MinTZ_value;
+	ZVAL_LONG(&enum_case_MinTZ_value, 151);
+	zend_enum_add_case_cstr(class_entry, "MinTZ", &enum_case_MinTZ_value);
+
+	zval enum_case_SecTZ_value;
+	ZVAL_LONG(&enum_case_SecTZ_value, 183);
+	zend_enum_add_case_cstr(class_entry, "SecTZ", &enum_case_SecTZ_value);
+
+	zval enum_case_FracTZ_value;
+	ZVAL_LONG(&enum_case_FracTZ_value, 247);
+	zend_enum_add_case_cstr(class_entry, "FracTZ", &enum_case_FracTZ_value);
 
 	return class_entry;
 }

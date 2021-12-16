@@ -544,6 +544,9 @@ typedef php_date_obj php_ion_timestamp;
 
 static inline zend_long php_usec_from_ion(const decQuad *frac, decContext *ctx)
 {
+	if (!ctx) {
+		ctx = &g_dec_ctx;
+	}
 	decQuad microsecs, result;
 	decQuadMultiply(&result, decQuadFromInt32(&microsecs, 1000000), frac, ctx);
 	return (zend_long) decQuadToUInt32(&result, ctx, DEC_ROUND_HALF_EVEN);
@@ -551,13 +554,16 @@ static inline zend_long php_usec_from_ion(const decQuad *frac, decContext *ctx)
 
 static inline decQuad *ion_ts_frac_from_usec(decQuad *frac, zend_long usec, decContext *ctx)
 {
+	if (!ctx) {
+		ctx = &g_dec_ctx;
+	}
 	decQuad microsecs, us;
  	return decQuadDivide(frac, decQuadFromInt32(&us, usec), decQuadFromInt32(&microsecs, 1000000), ctx);
 }
 
-static inline zend_string *php_dt_format_from_precision(uint8_t precision)
+static inline zend_string *php_dt_format_from_precision(int precision)
 {
-	switch (precision) {
+	switch (precision & 0x7f) {
 	case ION_TS_FRAC:
 		return zend_string_init(ZEND_STRL("c"), 0);
 	case ION_TS_SEC:
@@ -579,7 +585,9 @@ static inline timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContex
 {
 	timelib_time *time = timelib_time_ctor();
 
-	switch (ts->precision) {
+	int precision = ION_TS_FRAC;
+	ion_timestamp_get_precision(ts,  &precision);
+	switch (precision) {
 	case ION_TS_FRAC:
 		time->us = php_usec_from_ion(&ts->fraction, ctx);
 		/* fallthrough */
@@ -601,10 +609,16 @@ static inline timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContex
 		/* fallthrough */
 	default:
 		time->z = ts->tz_offset * 60;
+		if (time->z) {
+			time->zone_type = TIMELIB_ZONETYPE_OFFSET;
+		} else {
+			time->zone_type = TIMELIB_ZONETYPE_ID;
+			time->tz_info = get_timezone_info();
+		}
 	}
 
 	if (fmt) {
-		*fmt = php_dt_format_from_precision(ts->precision);
+		*fmt = php_dt_format_from_precision(precision);
 	}
 	return time;
 }
@@ -614,11 +628,11 @@ static inline ION_TIMESTAMP *ion_timestamp_from_php(ION_TIMESTAMP *buf, php_ion_
 	memset(buf, 0, sizeof(*buf));
 
 	zval tmp;
-	uint8_t precision = Z_LVAL_P(zend_read_property(ts->std.ce, &ts->std, ZEND_STRL("precision"), 0, &tmp));
+	int precision = Z_LVAL_P(zend_read_property(ts->std.ce, &ts->std, ZEND_STRL("precision"), 0, &tmp));
 
 	if (!precision || precision > ION_TS_FRAC) {
 		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
-				"Invalid precision (%u) of ion\\Timestamp", (unsigned) precision);
+				"Invalid precision (%d) of ion\\Timestamp", precision);
 	} else switch ((buf->precision = precision)) {
 	case ION_TS_FRAC:
 		ion_ts_frac_from_usec(&buf->fraction, ts->time->us, ctx);
@@ -641,6 +655,9 @@ static inline ION_TIMESTAMP *ion_timestamp_from_php(ION_TIMESTAMP *buf, php_ion_
 		/* fallthrough */
 	default:
 		buf->tz_offset = ts->time->z / 60;
+		if (buf->tz_offset) {
+			buf->precision |= 0x80;
+		}
 	}
 
 	return buf;
@@ -657,15 +674,6 @@ static inline void php_ion_timestamp_ctor(php_ion_timestamp *obj, zend_long prec
 	zend_update_property_str(obj->std.ce, &obj->std, ZEND_STRL("format"), fmt);
 	zend_string_release(fmt);
 }
-
-static inline void php_ion_timestamp_dtor(php_ion_timestamp *obj)
-{
-	if (obj->time) {
-		timelib_time_dtor(obj->time);
-	}
-}
-
-php_ion_decl(timestamp, Timestamp, php_ion_timestamp_dtor(obj));
 
 typedef struct php_ion_catalog {
 	ION_CATALOG *cat;

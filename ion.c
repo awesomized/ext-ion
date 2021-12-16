@@ -1506,6 +1506,9 @@ PHP_MINIT_FUNCTION(ion)
 	// Annotation
 	ce_Annotation = register_class_ion_Annotation();
 
+	// Catalog
+	php_ion_register(catalog, Catalog);
+
 	// Collection
 	ce_Collection = register_class_ion_Collection();
 
@@ -1539,9 +1542,8 @@ PHP_MINIT_FUNCTION(ion)
 	ce_Symbol_System_SID = register_class_ion_Symbol_System_SID();
 
 	// Timestamp
-	php_ion_register(timestamp, Timestamp, php_date_get_date_ce());
+	ce_Timestamp = register_class_ion_Timestamp(php_date_get_date_ce());
 	ce_Timestamp_Precision = register_class_ion_Timestamp_Precision();
-	php_ion_register(catalog, Catalog);
 
 	// Type
 	php_ion_register(type, Type);
@@ -1582,6 +1584,7 @@ PHP_GSHUTDOWN_FUNCTION(ion)
 }
 
 static zend_module_dep ion_module_deps[] = {
+	ZEND_MOD_REQUIRED("date")
 	ZEND_MOD_REQUIRED("spl")
 	ZEND_MOD_END
 };
