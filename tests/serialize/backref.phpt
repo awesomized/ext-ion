@@ -45,10 +45,10 @@ array(6) refcount(2){
     [1]=>
     string(1) "a" refcount(3)
     [2]=>
-    object(stdClass)#4 (0) refcount(3){
+    object(stdClass)#%d (0) refcount(3){
     }
     [3]=>
-    object(stdClass)#4 (0) refcount(3){
+    object(stdClass)#%d (0) refcount(3){
     }
     [4]=>
     array(3) refcount(3){
@@ -76,10 +76,10 @@ array(6) refcount(2){
     [1]=>
     string(1) "a" refcount(3)
     [2]=>
-    object(stdClass)#4 (0) refcount(3){
+    object(stdClass)#%d (0) refcount(3){
     }
     [3]=>
-    object(stdClass)#4 (0) refcount(3){
+    object(stdClass)#%d (0) refcount(3){
     }
     [4]=>
     array(3) refcount(3){
@@ -103,7 +103,7 @@ array(6) refcount(2){
   [3]=>
   string(1) "a" refcount(3)
   [4]=>
-  object(stdClass)#4 (0) refcount(3){
+  object(stdClass)#%d (0) refcount(3){
   }
   [5]=>
   array(3) refcount(3){
