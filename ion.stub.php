@@ -1,6 +1,10 @@
 <?php
 
-/** @generate-class-entries */
+/**
+ * @generate-class-entries static
+ * @generate-function-entries static
+ */
+
 
 namespace ion;
 enum Type : int {
@@ -23,22 +27,6 @@ enum Type : int {
     case NONE       =-0x200;
 }
 
-enum Annotation : string {
-    case PHP            = "PHP";
-
-    case REFERENCE      = "R";
-    case BACKREF        = "r";
-
-    case OBJECT         = "o";
-    case CLASS_OBJ      = "c";
-    case MAGIC_OBJ      = "O";
-    case CUSTOM_OBJ     = "C";
-    case SERIALIZABLE   = "S";
-    case ENUM           = "E";
-
-    case PROPERTY       = "p";
-}
-
 namespace ion\Symbol;
 class ImportLocation {
     public function __construct(
@@ -48,7 +36,14 @@ class ImportLocation {
 }
 
 namespace ion\Symbol;
-enum System : string {
+interface Enum {
+    public function toSymbol() : \ion\Symbol;
+    public function toSID() : int;
+    public function toString() : string;
+}
+
+namespace ion\Symbol\Table;
+enum System : string implements \ion\Symbol\Enum {
     case Ion                = '$ion';
     case Ivm_1_0            = '$ion_1_0';
     case IonSymbolTable     = '$ion_symbol_table';
@@ -58,19 +53,34 @@ enum System : string {
     case Symbols            = 'symbols';
     case MaxId              = 'max_id';
     case SharedSymbolTable  = '$ion_shared_symbol_table';
+
+    /** @alias ion\Symbol\Enum::toSymbol */
+    public function toSymbol() : \ion\Symbol {}
+    /** @alias ion\Symbol\Enum::toSID */
+    public function toSID() : int {}
+    /** @alias ion\Symbol\Enum::toString */
+    public function toString() : string {}
 }
 
-namespace ion\Symbol\System;
-enum SID : int {
-    case Ion                = 1;
-    case Ivm_1_0            = 2;
-    case IonSymbolTable     = 3;
-    case Name               = 4;
-    case Version            = 5;
-    case Imports            = 6;
-    case Symbols            = 7;
-    case MaxId              = 8;
-    case SharedSymbolTable  = 9;
+namespace ion\Symbol\Table;
+enum PHP : string implements \ion\Symbol\Enum {
+    case PHP            = 'PHP';
+    case Reference      = 'R';
+    case Backref        = 'r';
+    case Property       = 'p';
+    case Object         = 'o';
+    case ClassObject    = 'c';
+    case MagicObject    = 'O';
+    case CustomObject   = 'C';
+    case Enum           = 'E';
+    case Serializable   = 'S';
+
+    /** @alias ion\Symbol\Enum::toSymbol */
+    public function toSymbol() : \ion\Symbol {}
+    /** @alias ion\Symbol\Enum::toSID */
+    public function toSID() : int {}
+    /** @alias ion\Symbol\Enum::toString */
+    public function toString() : string {}
 }
 
 namespace ion;
@@ -88,17 +98,70 @@ class Symbol {
 }
 
 namespace ion\Symbol;
-class Table {
+interface Table {
+    public function getMaxId() : int;
 
+    public function add(\ion\Symbol|string $symbol) : int;
+    public function find(string|int $id) : ?\ion\Symbol;
+    public function findLocal(string|int $id) : ?\ion\Symbol;
+}
+
+namespace ion\Symbol\Table;
+function PHP() : \ion\Symbol\Table {}
+function System() : \ion\Symbol\Table {}
+
+namespace ion\Symbol\Table;
+class Local implements \ion\Symbol\Table {
+    private array $imports = [];
+    private array $symbols = [];
+
+    public function __construct() {}
+    public function import(\ion\Symbol\Table $table) : void {}
+
+    /** @alias ion\Symbol\Table::getMaxId */
+    public function getMaxId() : int {}
+
+    /** @alias ion\Symbol\Table::add */
+    public function add(\ion\Symbol|string $symbol) : int {}
+    /** @alias ion\Symbol\Table::find */
+    public function find(string|int $id) : ?\ion\Symbol {}
+    /** @alias ion\Symbol\Table::findLocal */
+    public function findLocal(string|int $id) : ?\ion\Symbol {}
+}
+
+namespace ion\Symbol\Table;
+class Shared implements \ion\Symbol\Table {
+    private array $symbols = [];
+
+    public function __construct(
+        public readonly string $name,
+        public readonly int $version = 1,
+    ) {}
+
+    /** @alias ion\Symbol\Table::getMaxId */
+    public function getMaxId() : int {}
+
+    /** @alias ion\Symbol\Table::add */
+    public function add(\ion\Symbol|string $symbol) : int {}
+    /** @alias ion\Symbol\Table::find */
+    public function find(string|int $id) : ?\ion\Symbol {}
+    /** @alias ion\Symbol\Table::findLocal */
+    public function findLocal(string|int $id) : ?\ion\Symbol {}
 }
 
 namespace ion;
-class Catalog {
-}
+class Catalog implements Countable {
+    private array $symbolTables = [];
 
-namespace ion;
-class Collection {
+    public function __construct() {}
 
+    public function count() : int {}
+
+    public function add(Symbol\Table $table) : void {}
+    public function remove(Symbol\Table|string $table) : bool {}
+
+    public function find(string $name, int $version = 0) : ?Symbol\Table {}
+    public function findBest(string $name, int $version = 0) : ?Symbol\Table {}
 }
 
 namespace ion;

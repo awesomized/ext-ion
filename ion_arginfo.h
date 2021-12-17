@@ -1,5 +1,10 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 31c610f8d923117a4e69635ba3eb9387087f66fd */
+ * Stub hash: 943d369644718978b3b990f4345d51bed5f71366 */
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_ion_Symbol_Table_PHP, 0, 0, ion\\Symbol\\Table, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_ion_Symbol_Table_System arginfo_ion_Symbol_Table_PHP
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -16,6 +21,27 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Symbol_ImportLocation___construct, 0, 0
 	ZEND_ARG_TYPE_INFO(0, location, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Symbol_Enum_toSymbol, 0, 0, ion\\Symbol, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Symbol_Enum_toSID, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Symbol_Enum_toString, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_class_ion_Symbol_Table_System_toSymbol arginfo_class_ion_Symbol_Enum_toSymbol
+
+#define arginfo_class_ion_Symbol_Table_System_toSID arginfo_class_ion_Symbol_Enum_toSID
+
+#define arginfo_class_ion_Symbol_Table_System_toString arginfo_class_ion_Symbol_Enum_toString
+
+#define arginfo_class_ion_Symbol_Table_PHP_toSymbol arginfo_class_ion_Symbol_Enum_toSymbol
+
+#define arginfo_class_ion_Symbol_Table_PHP_toSID arginfo_class_ion_Symbol_Enum_toSID
+
+#define arginfo_class_ion_Symbol_Table_PHP_toString arginfo_class_ion_Symbol_Enum_toString
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Symbol___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, value, IS_STRING, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, sid, IS_LONG, 0, "-1")
@@ -26,10 +52,66 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Symbol_equals, 0, 1, _
 	ZEND_ARG_OBJ_INFO(0, symbol, ion\\Symbol, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Symbol___toString, 0, 0, IS_STRING, 0)
+#define arginfo_class_ion_Symbol___toString arginfo_class_ion_Symbol_Enum_toString
+
+#define arginfo_class_ion_Symbol_toString arginfo_class_ion_Symbol_Enum_toString
+
+#define arginfo_class_ion_Symbol_Table_getMaxId arginfo_class_ion_Symbol_Enum_toSID
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Symbol_Table_add, 0, 1, IS_LONG, 0)
+	ZEND_ARG_OBJ_TYPE_MASK(0, symbol, ion\\Symbol, MAY_BE_STRING, NULL)
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Symbol_toString arginfo_class_ion_Symbol___toString
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Symbol_Table_find, 0, 1, ion\\Symbol, 1)
+	ZEND_ARG_TYPE_MASK(0, id, MAY_BE_STRING|MAY_BE_LONG, NULL)
+ZEND_END_ARG_INFO()
+
+#define arginfo_class_ion_Symbol_Table_findLocal arginfo_class_ion_Symbol_Table_find
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Symbol_Table_Local___construct, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Symbol_Table_Local_import, 0, 1, IS_VOID, 0)
+	ZEND_ARG_OBJ_INFO(0, table, ion\\Symbol\\Table, 0)
+ZEND_END_ARG_INFO()
+
+#define arginfo_class_ion_Symbol_Table_Local_getMaxId arginfo_class_ion_Symbol_Enum_toSID
+
+#define arginfo_class_ion_Symbol_Table_Local_add arginfo_class_ion_Symbol_Table_add
+
+#define arginfo_class_ion_Symbol_Table_Local_find arginfo_class_ion_Symbol_Table_find
+
+#define arginfo_class_ion_Symbol_Table_Local_findLocal arginfo_class_ion_Symbol_Table_find
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Symbol_Table_Shared___construct, 0, 0, 1)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, version, IS_LONG, 0, "1")
+ZEND_END_ARG_INFO()
+
+#define arginfo_class_ion_Symbol_Table_Shared_getMaxId arginfo_class_ion_Symbol_Enum_toSID
+
+#define arginfo_class_ion_Symbol_Table_Shared_add arginfo_class_ion_Symbol_Table_add
+
+#define arginfo_class_ion_Symbol_Table_Shared_find arginfo_class_ion_Symbol_Table_find
+
+#define arginfo_class_ion_Symbol_Table_Shared_findLocal arginfo_class_ion_Symbol_Table_find
+
+#define arginfo_class_ion_Catalog___construct arginfo_class_ion_Symbol_Table_Local___construct
+
+#define arginfo_class_ion_Catalog_count arginfo_class_ion_Symbol_Enum_toSID
+
+#define arginfo_class_ion_Catalog_add arginfo_class_ion_Symbol_Table_Local_import
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Catalog_remove, 0, 1, _IS_BOOL, 0)
+	ZEND_ARG_OBJ_TYPE_MASK(0, table, ion\\Symbol\\Table, MAY_BE_STRING, NULL)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Catalog_find, 0, 1, ion\\Symbol\\Table, 1)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, version, IS_LONG, 0, "0")
+ZEND_END_ARG_INFO()
+
+#define arginfo_class_ion_Catalog_findBest arginfo_class_ion_Catalog_find
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_LOB___construct, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
@@ -67,12 +149,11 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Decimal_isInt, 0, 0, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Decimal___toString arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Decimal___toString arginfo_class_ion_Symbol_Enum_toString
 
-#define arginfo_class_ion_Decimal_toString arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Decimal_toString arginfo_class_ion_Symbol_Enum_toString
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Decimal_toInt, 0, 0, IS_LONG, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_class_ion_Decimal_toInt arginfo_class_ion_Symbol_Enum_toSID
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Timestamp___construct, 0, 0, 1)
 	ZEND_ARG_OBJ_TYPE_MASK(0, precision, ion\\Timestamp\\Precision, MAY_BE_LONG, NULL)
@@ -81,7 +162,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Timestamp___construct, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, timezone, DateTimeZone, 1, "null")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Timestamp___toString arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Timestamp___toString arginfo_class_ion_Symbol_Enum_toString
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Reader_getType, 0, 0, ion\\Type, 0)
 ZEND_END_ARG_INFO()
@@ -96,17 +177,16 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_isInStruct arginfo_class_ion_Decimal_isInt
 
-#define arginfo_class_ion_Reader_getFieldName arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Reader_getFieldName arginfo_class_ion_Symbol_Enum_toString
 
-ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Reader_getFieldNameSymbol, 0, 0, ion\\Symbol, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_class_ion_Reader_getFieldNameSymbol arginfo_class_ion_Symbol_Enum_toSymbol
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_getAnnotations, 0, 0, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_getAnnotationSymbols arginfo_class_ion_Reader_getAnnotations
 
-#define arginfo_class_ion_Reader_countAnnotations arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Reader_countAnnotations arginfo_class_ion_Symbol_Enum_toSID
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_getAnnotation, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, index, IS_LONG, 0)
@@ -132,31 +212,31 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Reader_readTimestamp, 0, 0, ion\\Timestamp, 0)
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Reader_readSymbol arginfo_class_ion_Reader_getFieldNameSymbol
+#define arginfo_class_ion_Reader_readSymbol arginfo_class_ion_Symbol_Enum_toSymbol
 
-#define arginfo_class_ion_Reader_readString arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Reader_readString arginfo_class_ion_Symbol_Enum_toString
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_readStringPart, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_INFO(1, string)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, length, IS_LONG, 0, "0x1000")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Reader_readLob arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Reader_readLob arginfo_class_ion_Symbol_Enum_toString
 
 #define arginfo_class_ion_Reader_readLobPart arginfo_class_ion_Reader_readStringPart
 
-#define arginfo_class_ion_Reader_getPosition arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Reader_getPosition arginfo_class_ion_Symbol_Enum_toSID
 
-#define arginfo_class_ion_Reader_getDepth arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Reader_getDepth arginfo_class_ion_Symbol_Enum_toSID
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_seek, 0, 1, IS_VOID, 0)
 	ZEND_ARG_TYPE_INFO(0, offset, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, length, IS_LONG, 0, "-1")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Reader_getValueOffset arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Reader_getValueOffset arginfo_class_ion_Symbol_Enum_toSID
 
-#define arginfo_class_ion_Reader_getValueLength arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Reader_getValueLength arginfo_class_ion_Symbol_Enum_toSID
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Options___construct, 0, 0, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, catalog, ion\\Catalog, 1, "null")
@@ -201,15 +281,15 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_Reader_isInStruct arginfo_class_ion_Decimal_isInt
 
-#define arginfo_class_ion_Reader_Reader_getFieldName arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Reader_Reader_getFieldName arginfo_class_ion_Symbol_Enum_toString
 
-#define arginfo_class_ion_Reader_Reader_getFieldNameSymbol arginfo_class_ion_Reader_getFieldNameSymbol
+#define arginfo_class_ion_Reader_Reader_getFieldNameSymbol arginfo_class_ion_Symbol_Enum_toSymbol
 
 #define arginfo_class_ion_Reader_Reader_getAnnotations arginfo_class_ion_Reader_getAnnotations
 
 #define arginfo_class_ion_Reader_Reader_getAnnotationSymbols arginfo_class_ion_Reader_getAnnotations
 
-#define arginfo_class_ion_Reader_Reader_countAnnotations arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Reader_Reader_countAnnotations arginfo_class_ion_Symbol_Enum_toSID
 
 #define arginfo_class_ion_Reader_Reader_getAnnotation arginfo_class_ion_Reader_getAnnotation
 
@@ -227,37 +307,36 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_Reader_readTimestamp arginfo_class_ion_Reader_readTimestamp
 
-#define arginfo_class_ion_Reader_Reader_readSymbol arginfo_class_ion_Reader_getFieldNameSymbol
+#define arginfo_class_ion_Reader_Reader_readSymbol arginfo_class_ion_Symbol_Enum_toSymbol
 
-#define arginfo_class_ion_Reader_Reader_readString arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Reader_Reader_readString arginfo_class_ion_Symbol_Enum_toString
 
 #define arginfo_class_ion_Reader_Reader_readStringPart arginfo_class_ion_Reader_readStringPart
 
-#define arginfo_class_ion_Reader_Reader_readLob arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Reader_Reader_readLob arginfo_class_ion_Symbol_Enum_toString
 
 #define arginfo_class_ion_Reader_Reader_readLobPart arginfo_class_ion_Reader_readStringPart
 
-#define arginfo_class_ion_Reader_Reader_getPosition arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Reader_Reader_getPosition arginfo_class_ion_Symbol_Enum_toSID
 
-#define arginfo_class_ion_Reader_Reader_getDepth arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Reader_Reader_getDepth arginfo_class_ion_Symbol_Enum_toSID
 
 #define arginfo_class_ion_Reader_Reader_seek arginfo_class_ion_Reader_seek
 
-#define arginfo_class_ion_Reader_Reader_getValueOffset arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Reader_Reader_getValueOffset arginfo_class_ion_Symbol_Enum_toSID
 
-#define arginfo_class_ion_Reader_Reader_getValueLength arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Reader_Reader_getValueLength arginfo_class_ion_Symbol_Enum_toSID
 
-#define arginfo_class_ion_Reader_Buffer_getBuffer arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Reader_Buffer_getBuffer arginfo_class_ion_Symbol_Enum_toString
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Buffer_Reader___construct, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, buffer, IS_STRING, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, options, ion\\Reader\\Options, 1, "null")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Reader_Buffer_Reader_getBuffer arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Reader_Buffer_Reader_getBuffer arginfo_class_ion_Symbol_Enum_toString
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Stream_getStream, 0, 0, 0)
-ZEND_END_ARG_INFO()
+#define arginfo_class_ion_Reader_Stream_getStream arginfo_class_ion_Symbol_Table_Local___construct
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_Stream_resetStream, 0, 1, IS_VOID, 0)
 	ZEND_ARG_INFO(0, stream)
@@ -274,7 +353,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Stream_Reader___construct, 0, 0,
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, options, ion\\Reader\\Options, 1, "null")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Reader_Stream_Reader_getStream arginfo_class_ion_Reader_Stream_getStream
+#define arginfo_class_ion_Reader_Stream_Reader_getStream arginfo_class_ion_Symbol_Table_Local___construct
 
 #define arginfo_class_ion_Reader_Stream_Reader_resetStream arginfo_class_ion_Reader_Stream_resetStream
 
@@ -357,11 +436,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Writer_writeAnnotation
 	ZEND_ARG_VARIADIC_OBJ_TYPE_MASK(0, annotation, ion\\Symbol, MAY_BE_STRING, NULL)
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Writer_getDepth arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Writer_getDepth arginfo_class_ion_Symbol_Enum_toSID
 
-#define arginfo_class_ion_Writer_flush arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Writer_flush arginfo_class_ion_Symbol_Enum_toSID
 
-#define arginfo_class_ion_Writer_finish arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Writer_finish arginfo_class_ion_Symbol_Enum_toSID
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Writer_writeOne, 0, 1, IS_VOID, 0)
 	ZEND_ARG_OBJ_INFO(0, reader, ion\\Reader, 0)
@@ -405,33 +484,33 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_Writer_writeAnnotation arginfo_class_ion_Writer_writeAnnotation
 
-#define arginfo_class_ion_Writer_Writer_getDepth arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Writer_Writer_getDepth arginfo_class_ion_Symbol_Enum_toSID
 
-#define arginfo_class_ion_Writer_Writer_flush arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Writer_Writer_flush arginfo_class_ion_Symbol_Enum_toSID
 
-#define arginfo_class_ion_Writer_Writer_finish arginfo_class_ion_Decimal_toInt
+#define arginfo_class_ion_Writer_Writer_finish arginfo_class_ion_Symbol_Enum_toSID
 
 #define arginfo_class_ion_Writer_Writer_writeOne arginfo_class_ion_Writer_writeOne
 
 #define arginfo_class_ion_Writer_Writer_writeAll arginfo_class_ion_Writer_writeOne
 
-#define arginfo_class_ion_Writer_Buffer_getBuffer arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Writer_Buffer_getBuffer arginfo_class_ion_Symbol_Enum_toString
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Buffer_Writer___construct, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(1, buffer, IS_STRING, 1)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, options, ion\\Writer\\Options, 1, "null")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Writer_Buffer_Writer_getBuffer arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Writer_Buffer_Writer_getBuffer arginfo_class_ion_Symbol_Enum_toString
 
-#define arginfo_class_ion_Writer_Stream_getStream arginfo_class_ion_Reader_Stream_getStream
+#define arginfo_class_ion_Writer_Stream_getStream arginfo_class_ion_Symbol_Table_Local___construct
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Stream_Writer___construct, 0, 0, 1)
 	ZEND_ARG_INFO(0, stream)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, options, ion\\Writer\\Options, 1, "null")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Writer_Stream_Writer_getStream arginfo_class_ion_Reader_Stream_getStream
+#define arginfo_class_ion_Writer_Stream_Writer_getStream arginfo_class_ion_Symbol_Table_Local___construct
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Serializer___invoke, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -464,104 +543,117 @@ ZEND_END_ARG_INFO()
 #define arginfo_class_ion_Unserializer_PHP_unserialize arginfo_class_ion_Unserializer___invoke
 
 
-ZEND_FUNCTION(ion_serialize);
-ZEND_FUNCTION(ion_unserialize);
-ZEND_METHOD(ion_Symbol_ImportLocation, __construct);
-ZEND_METHOD(ion_Symbol, __construct);
-ZEND_METHOD(ion_Symbol, equals);
-ZEND_METHOD(ion_Symbol, __toString);
-ZEND_METHOD(ion_LOB, __construct);
-ZEND_METHOD(ion_Decimal_Context, __construct);
-ZEND_METHOD(ion_Decimal_Context, Dec32);
-ZEND_METHOD(ion_Decimal_Context, Dec64);
-ZEND_METHOD(ion_Decimal_Context, Dec128);
-ZEND_METHOD(ion_Decimal_Context, DecMax);
-ZEND_METHOD(ion_Decimal, __construct);
-ZEND_METHOD(ion_Decimal, equals);
-ZEND_METHOD(ion_Decimal, isInt);
-ZEND_METHOD(ion_Decimal, __toString);
-ZEND_METHOD(ion_Decimal, toInt);
-ZEND_METHOD(ion_Timestamp, __construct);
-ZEND_METHOD(ion_Timestamp, __toString);
-ZEND_METHOD(ion_Reader_Options, __construct);
-ZEND_METHOD(ion_Reader_Reader, hasChildren);
-ZEND_METHOD(ion_Reader_Reader, getChildren);
-ZEND_METHOD(ion_Reader_Reader, rewind);
-ZEND_METHOD(ion_Reader_Reader, next);
-ZEND_METHOD(ion_Reader_Reader, valid);
-ZEND_METHOD(ion_Reader_Reader, key);
-ZEND_METHOD(ion_Reader_Reader, current);
-ZEND_METHOD(ion_Reader_Reader, getType);
-ZEND_METHOD(ion_Reader_Reader, hasAnnotations);
-ZEND_METHOD(ion_Reader_Reader, hasAnnotation);
-ZEND_METHOD(ion_Reader_Reader, isNull);
-ZEND_METHOD(ion_Reader_Reader, isInStruct);
-ZEND_METHOD(ion_Reader_Reader, getFieldName);
-ZEND_METHOD(ion_Reader_Reader, getFieldNameSymbol);
-ZEND_METHOD(ion_Reader_Reader, getAnnotations);
-ZEND_METHOD(ion_Reader_Reader, getAnnotationSymbols);
-ZEND_METHOD(ion_Reader_Reader, countAnnotations);
-ZEND_METHOD(ion_Reader_Reader, getAnnotation);
-ZEND_METHOD(ion_Reader_Reader, getAnnotationSymbol);
-ZEND_METHOD(ion_Reader_Reader, readNull);
-ZEND_METHOD(ion_Reader_Reader, readBool);
-ZEND_METHOD(ion_Reader_Reader, readInt);
-ZEND_METHOD(ion_Reader_Reader, readFloat);
-ZEND_METHOD(ion_Reader_Reader, readDecimal);
-ZEND_METHOD(ion_Reader_Reader, readTimestamp);
-ZEND_METHOD(ion_Reader_Reader, readSymbol);
-ZEND_METHOD(ion_Reader_Reader, readString);
-ZEND_METHOD(ion_Reader_Reader, readStringPart);
-ZEND_METHOD(ion_Reader_Reader, readLob);
-ZEND_METHOD(ion_Reader_Reader, readLobPart);
-ZEND_METHOD(ion_Reader_Reader, getPosition);
-ZEND_METHOD(ion_Reader_Reader, getDepth);
-ZEND_METHOD(ion_Reader_Reader, seek);
-ZEND_METHOD(ion_Reader_Reader, getValueOffset);
-ZEND_METHOD(ion_Reader_Reader, getValueLength);
-ZEND_METHOD(ion_Reader_Buffer_Reader, __construct);
-ZEND_METHOD(ion_Reader_Buffer_Reader, getBuffer);
-ZEND_METHOD(ion_Reader_Stream_Reader, __construct);
-ZEND_METHOD(ion_Reader_Stream_Reader, getStream);
-ZEND_METHOD(ion_Reader_Stream_Reader, resetStream);
-ZEND_METHOD(ion_Reader_Stream_Reader, resetStreamWithLength);
-ZEND_METHOD(ion_Writer_Options, __construct);
-ZEND_METHOD(ion_Writer_Writer, writeNull);
-ZEND_METHOD(ion_Writer_Writer, writeTypedNull);
-ZEND_METHOD(ion_Writer_Writer, writeBool);
-ZEND_METHOD(ion_Writer_Writer, writeInt);
-ZEND_METHOD(ion_Writer_Writer, writeFloat);
-ZEND_METHOD(ion_Writer_Writer, writeDecimal);
-ZEND_METHOD(ion_Writer_Writer, writeTimestamp);
-ZEND_METHOD(ion_Writer_Writer, writeSymbol);
-ZEND_METHOD(ion_Writer_Writer, writeString);
-ZEND_METHOD(ion_Writer_Writer, writeCLob);
-ZEND_METHOD(ion_Writer_Writer, writeBLob);
-ZEND_METHOD(ion_Writer_Writer, startLob);
-ZEND_METHOD(ion_Writer_Writer, appendLob);
-ZEND_METHOD(ion_Writer_Writer, finishLob);
-ZEND_METHOD(ion_Writer_Writer, startContainer);
-ZEND_METHOD(ion_Writer_Writer, finishContainer);
-ZEND_METHOD(ion_Writer_Writer, writeFieldName);
-ZEND_METHOD(ion_Writer_Writer, writeAnnotation);
-ZEND_METHOD(ion_Writer_Writer, getDepth);
-ZEND_METHOD(ion_Writer_Writer, flush);
-ZEND_METHOD(ion_Writer_Writer, finish);
-ZEND_METHOD(ion_Writer_Writer, writeOne);
-ZEND_METHOD(ion_Writer_Writer, writeAll);
-ZEND_METHOD(ion_Writer_Buffer_Writer, __construct);
-ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer);
-ZEND_METHOD(ion_Writer_Stream_Writer, __construct);
-ZEND_METHOD(ion_Writer_Stream_Writer, getStream);
-ZEND_METHOD(ion_Serializer_PHP, __construct);
-ZEND_METHOD(ion_Serializer_PHP, __invoke);
-ZEND_METHOD(ion_Serializer_PHP, serialize);
-ZEND_METHOD(ion_Unserializer_PHP, __construct);
-ZEND_METHOD(ion_Unserializer_PHP, __invoke);
-ZEND_METHOD(ion_Unserializer_PHP, unserialize);
+static ZEND_FUNCTION(ion_Symbol_Table_PHP);
+static ZEND_FUNCTION(ion_Symbol_Table_System);
+static ZEND_FUNCTION(ion_serialize);
+static ZEND_FUNCTION(ion_unserialize);
+static ZEND_METHOD(ion_Symbol_ImportLocation, __construct);
+static ZEND_METHOD(ion_Symbol, __construct);
+static ZEND_METHOD(ion_Symbol, equals);
+static ZEND_METHOD(ion_Symbol, __toString);
+static ZEND_METHOD(ion_Symbol_Table_Local, __construct);
+static ZEND_METHOD(ion_Symbol_Table_Local, import);
+static ZEND_METHOD(ion_Symbol_Table_Shared, __construct);
+static ZEND_METHOD(ion_Catalog, __construct);
+static ZEND_METHOD(ion_Catalog, count);
+static ZEND_METHOD(ion_Catalog, add);
+static ZEND_METHOD(ion_Catalog, remove);
+static ZEND_METHOD(ion_Catalog, find);
+static ZEND_METHOD(ion_Catalog, findBest);
+static ZEND_METHOD(ion_LOB, __construct);
+static ZEND_METHOD(ion_Decimal_Context, __construct);
+static ZEND_METHOD(ion_Decimal_Context, Dec32);
+static ZEND_METHOD(ion_Decimal_Context, Dec64);
+static ZEND_METHOD(ion_Decimal_Context, Dec128);
+static ZEND_METHOD(ion_Decimal_Context, DecMax);
+static ZEND_METHOD(ion_Decimal, __construct);
+static ZEND_METHOD(ion_Decimal, equals);
+static ZEND_METHOD(ion_Decimal, isInt);
+static ZEND_METHOD(ion_Decimal, __toString);
+static ZEND_METHOD(ion_Decimal, toInt);
+static ZEND_METHOD(ion_Timestamp, __construct);
+static ZEND_METHOD(ion_Timestamp, __toString);
+static ZEND_METHOD(ion_Reader_Options, __construct);
+static ZEND_METHOD(ion_Reader_Reader, hasChildren);
+static ZEND_METHOD(ion_Reader_Reader, getChildren);
+static ZEND_METHOD(ion_Reader_Reader, rewind);
+static ZEND_METHOD(ion_Reader_Reader, next);
+static ZEND_METHOD(ion_Reader_Reader, valid);
+static ZEND_METHOD(ion_Reader_Reader, key);
+static ZEND_METHOD(ion_Reader_Reader, current);
+static ZEND_METHOD(ion_Reader_Reader, getType);
+static ZEND_METHOD(ion_Reader_Reader, hasAnnotations);
+static ZEND_METHOD(ion_Reader_Reader, hasAnnotation);
+static ZEND_METHOD(ion_Reader_Reader, isNull);
+static ZEND_METHOD(ion_Reader_Reader, isInStruct);
+static ZEND_METHOD(ion_Reader_Reader, getFieldName);
+static ZEND_METHOD(ion_Reader_Reader, getFieldNameSymbol);
+static ZEND_METHOD(ion_Reader_Reader, getAnnotations);
+static ZEND_METHOD(ion_Reader_Reader, getAnnotationSymbols);
+static ZEND_METHOD(ion_Reader_Reader, countAnnotations);
+static ZEND_METHOD(ion_Reader_Reader, getAnnotation);
+static ZEND_METHOD(ion_Reader_Reader, getAnnotationSymbol);
+static ZEND_METHOD(ion_Reader_Reader, readNull);
+static ZEND_METHOD(ion_Reader_Reader, readBool);
+static ZEND_METHOD(ion_Reader_Reader, readInt);
+static ZEND_METHOD(ion_Reader_Reader, readFloat);
+static ZEND_METHOD(ion_Reader_Reader, readDecimal);
+static ZEND_METHOD(ion_Reader_Reader, readTimestamp);
+static ZEND_METHOD(ion_Reader_Reader, readSymbol);
+static ZEND_METHOD(ion_Reader_Reader, readString);
+static ZEND_METHOD(ion_Reader_Reader, readStringPart);
+static ZEND_METHOD(ion_Reader_Reader, readLob);
+static ZEND_METHOD(ion_Reader_Reader, readLobPart);
+static ZEND_METHOD(ion_Reader_Reader, getPosition);
+static ZEND_METHOD(ion_Reader_Reader, getDepth);
+static ZEND_METHOD(ion_Reader_Reader, seek);
+static ZEND_METHOD(ion_Reader_Reader, getValueOffset);
+static ZEND_METHOD(ion_Reader_Reader, getValueLength);
+static ZEND_METHOD(ion_Reader_Buffer_Reader, __construct);
+static ZEND_METHOD(ion_Reader_Buffer_Reader, getBuffer);
+static ZEND_METHOD(ion_Reader_Stream_Reader, __construct);
+static ZEND_METHOD(ion_Reader_Stream_Reader, getStream);
+static ZEND_METHOD(ion_Reader_Stream_Reader, resetStream);
+static ZEND_METHOD(ion_Reader_Stream_Reader, resetStreamWithLength);
+static ZEND_METHOD(ion_Writer_Options, __construct);
+static ZEND_METHOD(ion_Writer_Writer, writeNull);
+static ZEND_METHOD(ion_Writer_Writer, writeTypedNull);
+static ZEND_METHOD(ion_Writer_Writer, writeBool);
+static ZEND_METHOD(ion_Writer_Writer, writeInt);
+static ZEND_METHOD(ion_Writer_Writer, writeFloat);
+static ZEND_METHOD(ion_Writer_Writer, writeDecimal);
+static ZEND_METHOD(ion_Writer_Writer, writeTimestamp);
+static ZEND_METHOD(ion_Writer_Writer, writeSymbol);
+static ZEND_METHOD(ion_Writer_Writer, writeString);
+static ZEND_METHOD(ion_Writer_Writer, writeCLob);
+static ZEND_METHOD(ion_Writer_Writer, writeBLob);
+static ZEND_METHOD(ion_Writer_Writer, startLob);
+static ZEND_METHOD(ion_Writer_Writer, appendLob);
+static ZEND_METHOD(ion_Writer_Writer, finishLob);
+static ZEND_METHOD(ion_Writer_Writer, startContainer);
+static ZEND_METHOD(ion_Writer_Writer, finishContainer);
+static ZEND_METHOD(ion_Writer_Writer, writeFieldName);
+static ZEND_METHOD(ion_Writer_Writer, writeAnnotation);
+static ZEND_METHOD(ion_Writer_Writer, getDepth);
+static ZEND_METHOD(ion_Writer_Writer, flush);
+static ZEND_METHOD(ion_Writer_Writer, finish);
+static ZEND_METHOD(ion_Writer_Writer, writeOne);
+static ZEND_METHOD(ion_Writer_Writer, writeAll);
+static ZEND_METHOD(ion_Writer_Buffer_Writer, __construct);
+static ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer);
+static ZEND_METHOD(ion_Writer_Stream_Writer, __construct);
+static ZEND_METHOD(ion_Writer_Stream_Writer, getStream);
+static ZEND_METHOD(ion_Serializer_PHP, __construct);
+static ZEND_METHOD(ion_Serializer_PHP, __invoke);
+static ZEND_METHOD(ion_Serializer_PHP, serialize);
+static ZEND_METHOD(ion_Unserializer_PHP, __construct);
+static ZEND_METHOD(ion_Unserializer_PHP, __invoke);
+static ZEND_METHOD(ion_Unserializer_PHP, unserialize);
 
 
 static const zend_function_entry ext_functions[] = {
+	ZEND_NS_RAW_FENTRY("ion\\Symbol\\Table", "PHP", ZEND_FN(ion_Symbol_Table_PHP), arginfo_ion_Symbol_Table_PHP, 0)
+	ZEND_NS_RAW_FENTRY("ion\\Symbol\\Table", "System", ZEND_FN(ion_Symbol_Table_System), arginfo_ion_Symbol_Table_System, 0)
 	ZEND_NS_RAW_FENTRY("ion", "serialize", ZEND_FN(ion_serialize), arginfo_ion_serialize, 0)
 	ZEND_NS_RAW_FENTRY("ion", "unserialize", ZEND_FN(ion_unserialize), arginfo_ion_unserialize, 0)
 	ZEND_FE_END
@@ -573,23 +665,32 @@ static const zend_function_entry class_ion_Type_methods[] = {
 };
 
 
-static const zend_function_entry class_ion_Annotation_methods[] = {
-	ZEND_FE_END
-};
-
-
 static const zend_function_entry class_ion_Symbol_ImportLocation_methods[] = {
 	ZEND_ME(ion_Symbol_ImportLocation, __construct, arginfo_class_ion_Symbol_ImportLocation___construct, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
 
-static const zend_function_entry class_ion_Symbol_System_methods[] = {
+static const zend_function_entry class_ion_Symbol_Enum_methods[] = {
+	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Symbol_Enum, toSymbol, arginfo_class_ion_Symbol_Enum_toSymbol, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
+	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Symbol_Enum, toSID, arginfo_class_ion_Symbol_Enum_toSID, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
+	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Symbol_Enum, toString, arginfo_class_ion_Symbol_Enum_toString, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
 	ZEND_FE_END
 };
 
 
-static const zend_function_entry class_ion_Symbol_System_SID_methods[] = {
+static const zend_function_entry class_ion_Symbol_Table_System_methods[] = {
+	ZEND_MALIAS(ion_Symbol_Enum, toSymbol, toSymbol, arginfo_class_ion_Symbol_Table_System_toSymbol, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Enum, toSID, toSID, arginfo_class_ion_Symbol_Table_System_toSID, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Enum, toString, toString, arginfo_class_ion_Symbol_Table_System_toString, ZEND_ACC_PUBLIC)
+	ZEND_FE_END
+};
+
+
+static const zend_function_entry class_ion_Symbol_Table_PHP_methods[] = {
+	ZEND_MALIAS(ion_Symbol_Enum, toSymbol, toSymbol, arginfo_class_ion_Symbol_Table_PHP_toSymbol, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Enum, toSID, toSID, arginfo_class_ion_Symbol_Table_PHP_toSID, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Enum, toString, toString, arginfo_class_ion_Symbol_Table_PHP_toString, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -604,16 +705,42 @@ static const zend_function_entry class_ion_Symbol_methods[] = {
 
 
 static const zend_function_entry class_ion_Symbol_Table_methods[] = {
+	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Symbol_Table, getMaxId, arginfo_class_ion_Symbol_Table_getMaxId, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
+	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Symbol_Table, add, arginfo_class_ion_Symbol_Table_add, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
+	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Symbol_Table, find, arginfo_class_ion_Symbol_Table_find, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
+	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Symbol_Table, findLocal, arginfo_class_ion_Symbol_Table_findLocal, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
+	ZEND_FE_END
+};
+
+
+static const zend_function_entry class_ion_Symbol_Table_Local_methods[] = {
+	ZEND_ME(ion_Symbol_Table_Local, __construct, arginfo_class_ion_Symbol_Table_Local___construct, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Symbol_Table_Local, import, arginfo_class_ion_Symbol_Table_Local_import, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Table, getMaxId, getMaxId, arginfo_class_ion_Symbol_Table_Local_getMaxId, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Table, add, add, arginfo_class_ion_Symbol_Table_Local_add, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Table, find, find, arginfo_class_ion_Symbol_Table_Local_find, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Table, findLocal, findLocal, arginfo_class_ion_Symbol_Table_Local_findLocal, ZEND_ACC_PUBLIC)
+	ZEND_FE_END
+};
+
+
+static const zend_function_entry class_ion_Symbol_Table_Shared_methods[] = {
+	ZEND_ME(ion_Symbol_Table_Shared, __construct, arginfo_class_ion_Symbol_Table_Shared___construct, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Table, getMaxId, getMaxId, arginfo_class_ion_Symbol_Table_Shared_getMaxId, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Table, add, add, arginfo_class_ion_Symbol_Table_Shared_add, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Table, find, find, arginfo_class_ion_Symbol_Table_Shared_find, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Table, findLocal, findLocal, arginfo_class_ion_Symbol_Table_Shared_findLocal, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
 
 static const zend_function_entry class_ion_Catalog_methods[] = {
-	ZEND_FE_END
-};
-
-
-static const zend_function_entry class_ion_Collection_methods[] = {
+	ZEND_ME(ion_Catalog, __construct, arginfo_class_ion_Catalog___construct, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Catalog, count, arginfo_class_ion_Catalog_count, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Catalog, add, arginfo_class_ion_Catalog_add, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Catalog, remove, arginfo_class_ion_Catalog_remove, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Catalog, find, arginfo_class_ion_Catalog_find, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Catalog, findBest, arginfo_class_ion_Catalog_findBest, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -957,63 +1084,6 @@ static zend_class_entry *register_class_ion_Type(void)
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Annotation(void)
-{
-	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Annotation", IS_STRING, class_ion_Annotation_methods);
-
-	zval enum_case_PHP_value;
-	zend_string *enum_case_PHP_value_str = zend_string_init("PHP", sizeof("PHP") - 1, 1);
-	ZVAL_STR(&enum_case_PHP_value, enum_case_PHP_value_str);
-	zend_enum_add_case_cstr(class_entry, "PHP", &enum_case_PHP_value);
-
-	zval enum_case_REFERENCE_value;
-	zend_string *enum_case_REFERENCE_value_str = zend_string_init("R", sizeof("R") - 1, 1);
-	ZVAL_STR(&enum_case_REFERENCE_value, enum_case_REFERENCE_value_str);
-	zend_enum_add_case_cstr(class_entry, "REFERENCE", &enum_case_REFERENCE_value);
-
-	zval enum_case_BACKREF_value;
-	zend_string *enum_case_BACKREF_value_str = zend_string_init("r", sizeof("r") - 1, 1);
-	ZVAL_STR(&enum_case_BACKREF_value, enum_case_BACKREF_value_str);
-	zend_enum_add_case_cstr(class_entry, "BACKREF", &enum_case_BACKREF_value);
-
-	zval enum_case_OBJECT_value;
-	zend_string *enum_case_OBJECT_value_str = zend_string_init("o", sizeof("o") - 1, 1);
-	ZVAL_STR(&enum_case_OBJECT_value, enum_case_OBJECT_value_str);
-	zend_enum_add_case_cstr(class_entry, "OBJECT", &enum_case_OBJECT_value);
-
-	zval enum_case_CLASS_OBJ_value;
-	zend_string *enum_case_CLASS_OBJ_value_str = zend_string_init("c", sizeof("c") - 1, 1);
-	ZVAL_STR(&enum_case_CLASS_OBJ_value, enum_case_CLASS_OBJ_value_str);
-	zend_enum_add_case_cstr(class_entry, "CLASS_OBJ", &enum_case_CLASS_OBJ_value);
-
-	zval enum_case_MAGIC_OBJ_value;
-	zend_string *enum_case_MAGIC_OBJ_value_str = zend_string_init("O", sizeof("O") - 1, 1);
-	ZVAL_STR(&enum_case_MAGIC_OBJ_value, enum_case_MAGIC_OBJ_value_str);
-	zend_enum_add_case_cstr(class_entry, "MAGIC_OBJ", &enum_case_MAGIC_OBJ_value);
-
-	zval enum_case_CUSTOM_OBJ_value;
-	zend_string *enum_case_CUSTOM_OBJ_value_str = zend_string_init("C", sizeof("C") - 1, 1);
-	ZVAL_STR(&enum_case_CUSTOM_OBJ_value, enum_case_CUSTOM_OBJ_value_str);
-	zend_enum_add_case_cstr(class_entry, "CUSTOM_OBJ", &enum_case_CUSTOM_OBJ_value);
-
-	zval enum_case_SERIALIZABLE_value;
-	zend_string *enum_case_SERIALIZABLE_value_str = zend_string_init("S", sizeof("S") - 1, 1);
-	ZVAL_STR(&enum_case_SERIALIZABLE_value, enum_case_SERIALIZABLE_value_str);
-	zend_enum_add_case_cstr(class_entry, "SERIALIZABLE", &enum_case_SERIALIZABLE_value);
-
-	zval enum_case_ENUM_value;
-	zend_string *enum_case_ENUM_value_str = zend_string_init("E", sizeof("E") - 1, 1);
-	ZVAL_STR(&enum_case_ENUM_value, enum_case_ENUM_value_str);
-	zend_enum_add_case_cstr(class_entry, "ENUM", &enum_case_ENUM_value);
-
-	zval enum_case_PROPERTY_value;
-	zend_string *enum_case_PROPERTY_value_str = zend_string_init("p", sizeof("p") - 1, 1);
-	ZVAL_STR(&enum_case_PROPERTY_value, enum_case_PROPERTY_value_str);
-	zend_enum_add_case_cstr(class_entry, "PROPERTY", &enum_case_PROPERTY_value);
-
-	return class_entry;
-}
-
 static zend_class_entry *register_class_ion_Symbol_ImportLocation(void)
 {
 	zend_class_entry ce, *class_entry;
@@ -1036,9 +1106,20 @@ static zend_class_entry *register_class_ion_Symbol_ImportLocation(void)
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Symbol_System(void)
+static zend_class_entry *register_class_ion_Symbol_Enum(void)
 {
-	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Symbol\\System", IS_STRING, class_ion_Symbol_System_methods);
+	zend_class_entry ce, *class_entry;
+
+	INIT_NS_CLASS_ENTRY(ce, "ion\\Symbol", "Enum", class_ion_Symbol_Enum_methods);
+	class_entry = zend_register_internal_interface(&ce);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_ion_Symbol_Table_System(zend_class_entry *class_entry_ion_Symbol_Enum)
+{
+	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Symbol\\Table\\System", IS_STRING, class_ion_Symbol_Table_System_methods);
+	zend_class_implements(class_entry, 1, class_entry_ion_Symbol_Enum);
 
 	zval enum_case_Ion_value;
 	zend_string *enum_case_Ion_value_str = zend_string_init("$ion", sizeof("$ion") - 1, 1);
@@ -1088,45 +1169,60 @@ static zend_class_entry *register_class_ion_Symbol_System(void)
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Symbol_System_SID(void)
+static zend_class_entry *register_class_ion_Symbol_Table_PHP(zend_class_entry *class_entry_ion_Symbol_Enum)
 {
-	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Symbol\\System\\SID", IS_LONG, class_ion_Symbol_System_SID_methods);
+	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Symbol\\Table\\PHP", IS_STRING, class_ion_Symbol_Table_PHP_methods);
+	zend_class_implements(class_entry, 1, class_entry_ion_Symbol_Enum);
 
-	zval enum_case_Ion_value;
-	ZVAL_LONG(&enum_case_Ion_value, 1);
-	zend_enum_add_case_cstr(class_entry, "Ion", &enum_case_Ion_value);
+	zval enum_case_PHP_value;
+	zend_string *enum_case_PHP_value_str = zend_string_init("PHP", sizeof("PHP") - 1, 1);
+	ZVAL_STR(&enum_case_PHP_value, enum_case_PHP_value_str);
+	zend_enum_add_case_cstr(class_entry, "PHP", &enum_case_PHP_value);
 
-	zval enum_case_Ivm_1_0_value;
-	ZVAL_LONG(&enum_case_Ivm_1_0_value, 2);
-	zend_enum_add_case_cstr(class_entry, "Ivm_1_0", &enum_case_Ivm_1_0_value);
+	zval enum_case_Reference_value;
+	zend_string *enum_case_Reference_value_str = zend_string_init("R", sizeof("R") - 1, 1);
+	ZVAL_STR(&enum_case_Reference_value, enum_case_Reference_value_str);
+	zend_enum_add_case_cstr(class_entry, "Reference", &enum_case_Reference_value);
 
-	zval enum_case_IonSymbolTable_value;
-	ZVAL_LONG(&enum_case_IonSymbolTable_value, 3);
-	zend_enum_add_case_cstr(class_entry, "IonSymbolTable", &enum_case_IonSymbolTable_value);
+	zval enum_case_Backref_value;
+	zend_string *enum_case_Backref_value_str = zend_string_init("r", sizeof("r") - 1, 1);
+	ZVAL_STR(&enum_case_Backref_value, enum_case_Backref_value_str);
+	zend_enum_add_case_cstr(class_entry, "Backref", &enum_case_Backref_value);
 
-	zval enum_case_Name_value;
-	ZVAL_LONG(&enum_case_Name_value, 4);
-	zend_enum_add_case_cstr(class_entry, "Name", &enum_case_Name_value);
+	zval enum_case_Property_value;
+	zend_string *enum_case_Property_value_str = zend_string_init("p", sizeof("p") - 1, 1);
+	ZVAL_STR(&enum_case_Property_value, enum_case_Property_value_str);
+	zend_enum_add_case_cstr(class_entry, "Property", &enum_case_Property_value);
 
-	zval enum_case_Version_value;
-	ZVAL_LONG(&enum_case_Version_value, 5);
-	zend_enum_add_case_cstr(class_entry, "Version", &enum_case_Version_value);
+	zval enum_case_Object_value;
+	zend_string *enum_case_Object_value_str = zend_string_init("o", sizeof("o") - 1, 1);
+	ZVAL_STR(&enum_case_Object_value, enum_case_Object_value_str);
+	zend_enum_add_case_cstr(class_entry, "Object", &enum_case_Object_value);
 
-	zval enum_case_Imports_value;
-	ZVAL_LONG(&enum_case_Imports_value, 6);
-	zend_enum_add_case_cstr(class_entry, "Imports", &enum_case_Imports_value);
+	zval enum_case_ClassObject_value;
+	zend_string *enum_case_ClassObject_value_str = zend_string_init("c", sizeof("c") - 1, 1);
+	ZVAL_STR(&enum_case_ClassObject_value, enum_case_ClassObject_value_str);
+	zend_enum_add_case_cstr(class_entry, "ClassObject", &enum_case_ClassObject_value);
 
-	zval enum_case_Symbols_value;
-	ZVAL_LONG(&enum_case_Symbols_value, 7);
-	zend_enum_add_case_cstr(class_entry, "Symbols", &enum_case_Symbols_value);
+	zval enum_case_MagicObject_value;
+	zend_string *enum_case_MagicObject_value_str = zend_string_init("O", sizeof("O") - 1, 1);
+	ZVAL_STR(&enum_case_MagicObject_value, enum_case_MagicObject_value_str);
+	zend_enum_add_case_cstr(class_entry, "MagicObject", &enum_case_MagicObject_value);
 
-	zval enum_case_MaxId_value;
-	ZVAL_LONG(&enum_case_MaxId_value, 8);
-	zend_enum_add_case_cstr(class_entry, "MaxId", &enum_case_MaxId_value);
+	zval enum_case_CustomObject_value;
+	zend_string *enum_case_CustomObject_value_str = zend_string_init("C", sizeof("C") - 1, 1);
+	ZVAL_STR(&enum_case_CustomObject_value, enum_case_CustomObject_value_str);
+	zend_enum_add_case_cstr(class_entry, "CustomObject", &enum_case_CustomObject_value);
 
-	zval enum_case_SharedSymbolTable_value;
-	ZVAL_LONG(&enum_case_SharedSymbolTable_value, 9);
-	zend_enum_add_case_cstr(class_entry, "SharedSymbolTable", &enum_case_SharedSymbolTable_value);
+	zval enum_case_Enum_value;
+	zend_string *enum_case_Enum_value_str = zend_string_init("E", sizeof("E") - 1, 1);
+	ZVAL_STR(&enum_case_Enum_value, enum_case_Enum_value_str);
+	zend_enum_add_case_cstr(class_entry, "Enum", &enum_case_Enum_value);
+
+	zval enum_case_Serializable_value;
+	zend_string *enum_case_Serializable_value_str = zend_string_init("S", sizeof("S") - 1, 1);
+	ZVAL_STR(&enum_case_Serializable_value, enum_case_Serializable_value_str);
+	zend_enum_add_case_cstr(class_entry, "Serializable", &enum_case_Serializable_value);
 
 	return class_entry;
 }
@@ -1165,27 +1261,76 @@ static zend_class_entry *register_class_ion_Symbol_Table(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_NS_CLASS_ENTRY(ce, "ion\\Symbol", "Table", class_ion_Symbol_Table_methods);
-	class_entry = zend_register_internal_class_ex(&ce, NULL);
+	class_entry = zend_register_internal_interface(&ce);
 
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Catalog(void)
+static zend_class_entry *register_class_ion_Symbol_Table_Local(zend_class_entry *class_entry_ion_Symbol_Table)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_NS_CLASS_ENTRY(ce, "ion\\Symbol\\Table", "Local", class_ion_Symbol_Table_Local_methods);
+	class_entry = zend_register_internal_class_ex(&ce, NULL);
+	zend_class_implements(class_entry, 1, class_entry_ion_Symbol_Table);
+
+	zval property_imports_default_value;
+	ZVAL_EMPTY_ARRAY(&property_imports_default_value);
+	zend_string *property_imports_name = zend_string_init("imports", sizeof("imports") - 1, 1);
+	zend_declare_typed_property(class_entry, property_imports_name, &property_imports_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_ARRAY));
+	zend_string_release(property_imports_name);
+
+	zval property_symbols_default_value;
+	ZVAL_EMPTY_ARRAY(&property_symbols_default_value);
+	zend_string *property_symbols_name = zend_string_init("symbols", sizeof("symbols") - 1, 1);
+	zend_declare_typed_property(class_entry, property_symbols_name, &property_symbols_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_ARRAY));
+	zend_string_release(property_symbols_name);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_ion_Symbol_Table_Shared(zend_class_entry *class_entry_ion_Symbol_Table)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_NS_CLASS_ENTRY(ce, "ion\\Symbol\\Table", "Shared", class_ion_Symbol_Table_Shared_methods);
+	class_entry = zend_register_internal_class_ex(&ce, NULL);
+	zend_class_implements(class_entry, 1, class_entry_ion_Symbol_Table);
+
+	zval property_symbols_default_value;
+	ZVAL_EMPTY_ARRAY(&property_symbols_default_value);
+	zend_string *property_symbols_name = zend_string_init("symbols", sizeof("symbols") - 1, 1);
+	zend_declare_typed_property(class_entry, property_symbols_name, &property_symbols_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_ARRAY));
+	zend_string_release(property_symbols_name);
+
+	zval property_name_default_value;
+	ZVAL_UNDEF(&property_name_default_value);
+	zend_string *property_name_name = zend_string_init("name", sizeof("name") - 1, 1);
+	zend_declare_typed_property(class_entry, property_name_name, &property_name_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING));
+	zend_string_release(property_name_name);
+
+	zval property_version_default_value;
+	ZVAL_UNDEF(&property_version_default_value);
+	zend_string *property_version_name = zend_string_init("version", sizeof("version") - 1, 1);
+	zend_declare_typed_property(class_entry, property_version_name, &property_version_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_version_name);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_ion_Catalog(zend_class_entry *class_entry_ion_Countable)
 {
 	zend_class_entry ce, *class_entry;
 
 	INIT_NS_CLASS_ENTRY(ce, "ion", "Catalog", class_ion_Catalog_methods);
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
+	zend_class_implements(class_entry, 1, class_entry_ion_Countable);
 
-	return class_entry;
-}
-
-static zend_class_entry *register_class_ion_Collection(void)
-{
-	zend_class_entry ce, *class_entry;
-
-	INIT_NS_CLASS_ENTRY(ce, "ion", "Collection", class_ion_Collection_methods);
-	class_entry = zend_register_internal_class_ex(&ce, NULL);
+	zval property_symbolTables_default_value;
+	ZVAL_EMPTY_ARRAY(&property_symbolTables_default_value);
+	zend_string *property_symbolTables_name = zend_string_init("symbolTables", sizeof("symbolTables") - 1, 1);
+	zend_declare_typed_property(class_entry, property_symbolTables_name, &property_symbolTables_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_ARRAY));
+	zend_string_release(property_symbolTables_name);
 
 	return class_entry;
 }
