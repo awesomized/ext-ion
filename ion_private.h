@@ -946,6 +946,7 @@ static inline void php_ion_catalog_symbol_table_zval(php_ion_catalog *obj, ION_S
 		ZVAL_ADDREF(return_value);
 		add_assoc_zval_ex(ztabs, key->val, key->len, return_value);
 	}
+	zend_string_release(key);
 }
 
 php_ion_decl(catalog, Catalog, php_ion_catalog_dtor(obj));
