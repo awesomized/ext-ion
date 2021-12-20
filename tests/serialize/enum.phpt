@@ -32,10 +32,10 @@ var_dump(ion\unserialize($s));
 DONE
 --EXPECTF--
 TEST
-PHP::E::e::a
+E::e::a
 enum(e::a)
-PHP::E::i::b
+E::i::b
 enum(i::b)
-PHP::E::s::a
+E::s::a
 enum(s::a)
 DONE

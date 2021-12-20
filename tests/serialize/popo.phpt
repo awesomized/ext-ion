@@ -24,7 +24,7 @@ var_dump(ion\unserialize($s));
 DONE
 --EXPECTF--
 TEST
-PHP::c::popo::{priv:p::popo::1,prot:p::'*'::2,pub:3}
+c::popo::{priv:p::popo::1,prot:p::'*'::2,pub:3}
 object(popo)#%d (3) {
   ["priv":"popo":private]=>
   int(1)

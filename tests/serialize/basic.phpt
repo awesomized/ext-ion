@@ -19,6 +19,6 @@ var_dump($data == ion\unserialize($s));
 DONE
 --EXPECTF--
 TEST
-PHP::{'null':null,bool:true,int:123,double:12%f,string:"foobar",object:o::{prop:"data"}}
+{'null':null,bool:true,int:123,double:12%f,string:"foobar",object:o::{prop:"data"}}
 bool(true)
 DONE

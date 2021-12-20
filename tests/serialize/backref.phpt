@@ -24,12 +24,12 @@ debug_zval_dump($x);
 DONE
 --EXPECTF--
 TEST
-PHP::[R::r::0]
+[R::r::0]
 array(1) {
   [0]=>
   *RECURSION*
 }
-PHP::[[R::r::1],["a",r::4,o::{},r::5,[1,2,3],r::6],r::3,r::4,r::5,r::6]
+[[R::r::1],["a",r::4,o::{},r::5,[1,2,3],r::6],r::3,r::4,r::5,r::6]
 array(6) refcount(2){
   [0]=>
   array(1) refcount(2){

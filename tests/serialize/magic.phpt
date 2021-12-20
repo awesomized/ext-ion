@@ -31,7 +31,7 @@ var_dump(ion\unserialize($s));
 DONE
 --EXPECTF--
 TEST
-PHP::O::magic::{priv:1,prot:2,pub:3}
+O::magic::{priv:1,prot:2,pub:3}
 object(magic)#%d (3) {
   ["priv":"magic":private]=>
   int(1)

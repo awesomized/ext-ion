@@ -1567,11 +1567,7 @@ static inline void php_ion_serialize_ex(php_ion_serializer *ser, zval *zv)
 	}
 
 	while (zv) {
-		/* start off with a global PHP annotation instead of repeating it all over the place */
-		if (0 == php_ion_globals_serializer_step()) {
-			ION_STRING is;
-			ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("PHP"))));
-		}
+		php_ion_globals_serializer_step();
 		php_ion_serialize_zval(ser, zv);
 		php_ion_globals_serializer_exit();
 
