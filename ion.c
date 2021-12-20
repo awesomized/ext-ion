@@ -588,8 +588,8 @@ static ZEND_METHOD(ion_Reader_Options, __construct)
 {
 	php_ion_reader_options *opt = php_ion_obj(reader_options, Z_OBJ_P(ZEND_THIS));
 	zend_bool ret_sys_val = false, skip_validation = false;
-	zend_long ch_nl = 0xa, max_depth = 10, max_ann, max_ann_buf = 512,
-			sym_thr = 0x1000, uval_thr = 0x1000, chunk_thr = 0x1000, alloc_pgsz = 0x1000;
+	zend_long ch_nl = 0xa, max_depth = 10, max_ann = 10, max_ann_buf = 512,
+			sym_thr = 0x4000, uval_thr = 0x4000, chunk_thr = 0x4000, alloc_pgsz = 0x10000;
 
 	PTR_CHECK(opt);
 
@@ -611,13 +611,13 @@ static ZEND_METHOD(ion_Reader_Options, __construct)
 		Z_PARAM_LONG(max_ann)
         // public readonly int $maxAnnotationBuffered = 512,
 		Z_PARAM_LONG(max_ann_buf)
-        // public readonly int $symbolThreshold = 4096,
+        // public readonly int $symbolThreshold = 0x4000,
 		Z_PARAM_LONG(sym_thr)
-        // public readonly int $userValueThreshold = 4096,
+        // public readonly int $userValueThreshold = 0x4000,
 		Z_PARAM_LONG(uval_thr)
-        // public readonly int $chunkThreshold = 4096,
+        // public readonly int $chunkThreshold = 0x4000,
 		Z_PARAM_LONG(chunk_thr)
-        // public readonly int $allocationPageSize = 4096,
+        // public readonly int $allocationPageSize = 0x10000,
 		Z_PARAM_LONG(alloc_pgsz)
         // public readonly bool $skipCharacterValidation = false,
 		Z_PARAM_BOOL(skip_validation)
@@ -1201,7 +1201,7 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 
 	zend_bool binary = false, compact_floats = false, escape = false, pretty = false,
 			tabs = true, small_cntr_inl = true, suppress_sys = false, flush = false;
-	zend_long indent = 2, max_depth = 10, max_ann = 10, temp = 0x400, alloc = 0x1000;
+	zend_long indent = 2, max_depth = 10, max_ann = 10, temp = 0x4000, alloc = 0x10000;
 	ZEND_PARSE_PARAMETERS_START(0, 16)
 		Z_PARAM_OPTIONAL
 		//public readonly ?\ion\Catalog $catalog = null,
@@ -1232,9 +1232,9 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 		Z_PARAM_LONG(max_depth)
 		//public readonly int $maxAnnotations = 10,
 		Z_PARAM_LONG(max_ann)
-		//public readonly int $tempBufferSize = 0x400,
+		//public readonly int $tempBufferSize = 0x4000,
 		Z_PARAM_LONG(temp)
-		//public readonly int $allocationPageSize = 0x1000,
+		//public readonly int $allocationPageSize = 0x10000,
 		Z_PARAM_LONG(alloc)
 	ZEND_PARSE_PARAMETERS_END();
 

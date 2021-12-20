@@ -296,10 +296,10 @@ class Options {
         public readonly int $maxContainerDepth = 10,
         public readonly int $maxAnnotations = 10,
         public readonly int $maxAnnotationBuffered = 512,
-        public readonly int $symbolThreshold = 4096,
-        public readonly int $userValueThreshold = 4096,
-        public readonly int $chunkThreshold = 4096,
-        public readonly int $allocationPageSize = 4096,
+        public readonly int $symbolThreshold = 0x4000,
+        public readonly int $userValueThreshold = 0x4000,
+        public readonly int $chunkThreshold = 0x4000,
+        public readonly int $allocationPageSize = 0x10000,
         public readonly bool $skipCharacterValidation = false,
     ) {}
 }
@@ -413,11 +413,9 @@ class Options {
         public readonly bool $flushEveryValue = false,
         public readonly int $maxContainerDepth = 10,
         public readonly int $maxAnnotations = 10,
-        public readonly int $tempBufferSize = 0x400,
-        public readonly int $allocationPageSize = 0x1000,
+        public readonly int $tempBufferSize = 0x4000,
+        public readonly int $allocationPageSize = 0x10000,
     ) {}
-
-    // public function addSharedImports(\ion\Collection|\ion\Symbol\Table ...$imports) : void;
 }
 
 namespace ion;

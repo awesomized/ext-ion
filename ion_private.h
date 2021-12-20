@@ -1026,8 +1026,7 @@ static inline void php_ion_reader_ctor(php_ion_reader *obj)
 		PTR_CHECK(obj->stream.ptr);
 		GC_ADDREF(obj->stream.ptr->res);
 
-		php_ion_reader_options *opt = php_ion_obj(reader_options, obj->opt);
-		obj->stream.buf.length = opt ? opt->opt.allocation_page_size : 0x1000;
+		obj->stream.buf.length = opt && opt->opt.allocation_page_size ? opt->opt.allocation_page_size : 0x10000;
 		obj->stream.buf.value = emalloc(obj->stream.buf.length);
 		err = ion_reader_open_stream(&obj->reader, obj, php_ion_reader_stream_handler, opt ? &opt->opt : NULL);
 
