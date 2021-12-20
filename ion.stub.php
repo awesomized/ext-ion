@@ -131,12 +131,14 @@ class Local implements \ion\Symbol\Table {
 
 namespace ion\Symbol\Table;
 class Shared implements \ion\Symbol\Table {
-    private array $symbols = [];
-
     public function __construct(
         public readonly string $name,
         public readonly int $version = 1,
+        ?array $symbols = null,
     ) {}
+
+    /** Internal cache */
+    private array $symbols = [];
 
     /** @alias ion\Symbol\Table::getMaxId */
     public function getMaxId() : int {}
@@ -151,6 +153,7 @@ class Shared implements \ion\Symbol\Table {
 
 namespace ion;
 class Catalog implements Countable {
+    /** Internal cache */
     private array $symbolTables = [];
 
     public function __construct() {}

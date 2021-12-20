@@ -17,26 +17,43 @@
 #include "ionc/ion.h"
 
 #define PHP_ION_SYMBOL_TABLE_VERSION 1
-#define PHP_ION_SYMBOL(e, s) {0, {sizeof(e)-1, (BYTE *) e}, {sizeof(s)-1, (BYTE *) s}},
+#define PHP_ION_SYMBOL(c, s) { \
+	{ \
+		0, \
+		{ sizeof(s)-1, (BYTE *) s }, \
+		{ { 0, NULL }, 0 }, \
+		0 \
+	}, \
+	{ sizeof(c)-1, (BYTE *) c } \
+},
 
 typedef struct php_ion_global_symbol {
-	SID id;
+	ION_SYMBOL s;
 	ION_STRING e;
-	ION_STRING s;
 } php_ion_global_symbol;
 
 static php_ion_global_symbol g_sym_tab_php_sym[] = {
-	PHP_ION_SYMBOL("PHP", "PHP")
-	PHP_ION_SYMBOL("Reference", "R")
-	PHP_ION_SYMBOL("Backref", "r")
-	PHP_ION_SYMBOL("Property", "p")
-	PHP_ION_SYMBOL("ClassObject", "c")
-	PHP_ION_SYMBOL("CustomObject", "C")
-	PHP_ION_SYMBOL("Object", "o")
-	PHP_ION_SYMBOL("MagicObject", "O")
-	PHP_ION_SYMBOL("Serializable", "S")
+#define PHP_ION_SYMBOL_PHP				(g_sym_tab_php_sym[0]).s
+	PHP_ION_SYMBOL("PHP",			"PHP")
+#define PHP_ION_SYMBOL_REFERENCE		(g_sym_tab_php_sym[1]).s
+	PHP_ION_SYMBOL("Reference",		"R")
+#define PHP_ION_SYMBOL_BACKREF			(g_sym_tab_php_sym[2]).s
+	PHP_ION_SYMBOL("Backref",		"r")
+#define PHP_ION_SYMBOL_PROPERTY			(g_sym_tab_php_sym[3]).s
+	PHP_ION_SYMBOL("Property",		"p")
+#define PHP_ION_SYMBOL_CLASS_OBJECT		(g_sym_tab_php_sym[4]).s
+	PHP_ION_SYMBOL("ClassObject",	"c")
+#define PHP_ION_SYMBOL_CUSTOM_OBJECT	(g_sym_tab_php_sym[5]).s
+	PHP_ION_SYMBOL("CustomObject",	"C")
+#define PHP_ION_SYMBOL_OBJECT			(g_sym_tab_php_sym[6]).s
+	PHP_ION_SYMBOL("Object",		"o")
+#define PHP_ION_SYMBOL_MAGIC_OBJECT		(g_sym_tab_php_sym[7]).s
+	PHP_ION_SYMBOL("MagicObject",	"O")
+#define PHP_ION_SYMBOL_SERIALIZEABLE	(g_sym_tab_php_sym[8]).s
+	PHP_ION_SYMBOL("Serializable",	"S")
+#define PHP_ION_SYMBOL_ENUM				(g_sym_tab_php_sym[9]).s
 	PHP_ION_SYMBOL("Enum", "E")
-	{0}
+	{{0}, {0}}
 };
 #undef PHP_ION_SYMBOL
 
@@ -94,11 +111,11 @@ static inline int g_sym_init(void)
 	}
 	php_ion_global_symbol *ptr = g_sym_tab_php_sym;
 	ion_symbol_table_set_version(g_sym_tab_php, PHP_ION_SYMBOL_TABLE_VERSION);
-	ion_symbol_table_set_name(g_sym_tab_php, &ptr->s);
+	ion_symbol_table_set_name(g_sym_tab_php, &ptr->s.value);
 	while (ptr->e.value) {
-		ion_symbol_table_add_symbol(g_sym_tab_php, &ptr->s, &ptr->id);
-		g_sym_hash_add(sys_max_id + ptr->id, (const char *) ptr->s.value, ptr->s.length);
-		g_sym_map_add(sys_max_id + ptr->id, (const char *) ptr->e.value, ptr->e.length);
+		ion_symbol_table_add_symbol(g_sym_tab_php, &ptr->s.value, &ptr->s.sid);
+		g_sym_hash_add(sys_max_id + ptr->s.sid, (const char *) ptr->s.value.value, ptr->s.value.length);
+		g_sym_map_add(sys_max_id + ptr->s.sid, (const char *) ptr->e.value, ptr->e.length);
 		++ptr;
 	}
 	ion_symbol_table_lock(g_sym_tab_php);
@@ -120,6 +137,7 @@ typedef struct php_ion_serializer {
 } php_ion_serializer;
 
 typedef struct php_ion_annotaions {
+	uint8_t shared_symtab:1;
 	uint8_t backref:1;
 	uint8_t makeref:1;
 	uint8_t object_prop:1;
@@ -517,6 +535,27 @@ static inline void php_ion_symbol_zval(ION_SYMBOL *sym_ptr, zval *return_value)
 	if (!ION_SYMBOL_IMPORT_LOCATION_IS_NULL(sym_ptr)) {
 		GC_DELREF(sym->iloc);
 	}
+}
+
+static inline zval *php_ion_global_symbol_fetch_by_enum(zend_string *name)
+{
+	zval *zgs = zend_hash_find(&php_ion_globals.symbol.cache, name);
+	if (!zgs) {
+		zval *zid = zend_hash_find(&g_sym_map, name);
+		if (zid) {
+			zval *zss = zend_hash_index_find(&g_sym_hash, Z_LVAL_P(zid));
+			if (zss) {
+				zval zsym;
+				object_init_ex(&zsym, ce_Symbol);
+				php_ion_symbol *sym = php_ion_obj(symbol, Z_OBJ(zsym));
+				sym->sym.sid = Z_LVAL_P(zid);
+				sym->value = zval_get_string(zss);
+				php_ion_symbol_ctor(sym);
+				zgs = zend_hash_add(&php_ion_globals.symbol.cache, name, &zsym);
+			}
+		}
+	}
+	return zgs;
 }
 
 php_ion_decl(symbol, Symbol, php_ion_symbol_dtor(obj));
@@ -927,8 +966,6 @@ static inline void php_ion_catalog_symbol_table_zval(php_ion_catalog *obj, ION_S
 		if (ztab) {
 			zend_string_release(key);
 			RETURN_COPY(ztab);
-		} else {
-			fprintf(stderr, "FAIL\n");
 		}
 	}
 
@@ -1007,6 +1044,7 @@ static inline iERR on_context_change(void *context, ION_COLLECTION *imports)
 		php_ion_reader *obj = php_ion_obj(reader, context);
 		(void) obj;
 	}
+	fprintf(stderr, "%s\n", __FUNCTION__);
 	return IERR_OK;
 }
 
@@ -1267,7 +1305,7 @@ static inline void php_ion_serializer_php_dtor(php_ion_serializer_php *obj)
 
 static inline void php_ion_serialize_zval(php_ion_serializer *, zval *);
 
-static inline void php_ion_serialize_struct(php_ion_serializer *ser, zend_array *arr, bool props)
+static inline void php_ion_serialize_struct(php_ion_serializer *ser, zend_array *arr, bool unmangle_props, bool annotate_props)
 {
 	ION_CHECK(ion_writer_start_container(ser->writer, tid_STRUCT));
 
@@ -1275,20 +1313,23 @@ static inline void php_ion_serialize_struct(php_ion_serializer *ser, zend_array 
 	zend_ulong h;
 	zend_string *k = NULL;
 	if (arr) ZEND_HASH_FOREACH_KEY_VAL_IND(arr, h, k, v)
+		char buf[MAX_LENGTH_OF_LONG + 1];
 		ION_STRING is;
 		if (k) {
 			size_t prop_len;
 			const char *class_name, *prop_name;
-			if (props && (SUCCESS == zend_unmangle_property_name_ex(k, &class_name, &prop_name, &prop_len)) && class_name) {
-				ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("p"))));
-				ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, (char *) class_name, prop_name - class_name - 1)));
+			if (unmangle_props && (SUCCESS == zend_unmangle_property_name_ex(k, &class_name, &prop_name, &prop_len)) && class_name) {
+				if (annotate_props) {
+					ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_PROPERTY));
+					ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, (char *) class_name, prop_name - class_name - 1)));
+				}
 			} else {
 				prop_name = k->val;
 				prop_len = k->len;
 			}
 			ion_string_assign_cstr(&is, (char *) prop_name, prop_len);
 		} else {
-			char buf[MAX_LENGTH_OF_LONG + 1], *end = buf + sizeof(buf) - 1;
+			char *end = buf + sizeof(buf) - 1;
 			char *ptr = zend_print_long_to_buf(end, (zend_long) h);
 			ion_string_assign_cstr(&is, ptr, end - ptr);
 		}
@@ -1323,7 +1364,7 @@ static inline void php_ion_serialize_array(php_ion_serializer *ser, zend_array *
 	if (zend_array_is_list(arr)) {
 		php_ion_serialize_list(ser, arr);
 	} else {
-		php_ion_serialize_struct(ser, arr, false);
+		php_ion_serialize_struct(ser, arr, false, false);
 	}
 }
 
@@ -1336,7 +1377,7 @@ static inline void php_ion_serialize_object_iface(php_ion_serializer *ser, zend_
 	ZVAL_OBJ(&tmp, zobject);
 	if (SUCCESS == zobject->ce->serialize(&tmp, &buf, &len, NULL)) {
 		ION_STRING is;
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("S"))));
+		ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_SERIALIZEABLE));
 		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_zend(&is, zobject->ce->name)));
 		ION_CHECK(ion_writer_write_string(ser->writer, ion_string_assign_cstr(&is, (char *) buf, len)));
 		efree(buf);
@@ -1356,7 +1397,7 @@ static inline void php_ion_serialize_object_magic(php_ion_serializer *ser, zend_
 
 	if (IS_ARRAY == Z_TYPE(rv)) {
 		ION_STRING is;
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, fn ? "C" : "O", 1)));
+		ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, fn ? &PHP_ION_SYMBOL_CUSTOM_OBJECT : &PHP_ION_SYMBOL_MAGIC_OBJECT));
 		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_zend(&is, zobject->ce->name)));
 		php_ion_serialize_zval(ser, &rv);
 		zval_ptr_dtor(&rv);
@@ -1371,7 +1412,7 @@ static inline void php_ion_serialize_object_magic(php_ion_serializer *ser, zend_
 static inline void php_ion_serialize_object_enum(php_ion_serializer *ser, zend_object *zobject)
 {
 	ION_STRING is;
-	ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("E"))));
+	ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_ENUM));
 
 	ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_zend(&is, zobject->ce->name)));
 	zval *z_cname = zend_enum_fetch_case_name(zobject);
@@ -1383,17 +1424,17 @@ static inline void php_ion_serialize_object_std(php_ion_serializer *ser, zend_ob
 	ION_STRING is;
 
 	if (zobject->ce != zend_standard_class_def) {
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("c"))));
+		ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_CLASS_OBJECT));
 		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_zend(&is, zobject->ce->name)));
 	} else {
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("o"))));
+		ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_OBJECT));
 	}
 
 	zval zobj;
 	ZVAL_OBJ(&zobj, zobject);
 	HashTable *props = zend_get_properties_for(&zobj, ZEND_PROP_PURPOSE_SERIALIZE);
 	if (props) {
-		php_ion_serialize_struct(ser, props, true);
+		php_ion_serialize_struct(ser, props, true, true);
 		zend_release_properties(props);
 	} else {
 		zend_throw_exception_ex(spl_ce_UnexpectedValueException, IERR_INTERNAL_ERROR,
@@ -1474,15 +1515,33 @@ static inline void php_ion_serialize_object(php_ion_serializer *ser, zend_object
 	}
 }
 
+static inline bool php_ion_serialize_system_value(php_ion_serializer *ser, zval *zv)
+{
+	if (1 == php_ion_globals.serializer.level) {
+		if (Z_TYPE_P(zv) == IS_OBJECT) {
+			if (Z_OBJCE_P(zv) == ce_Symbol_Table_Shared) {
+				php_ion_symbol_table *obj = php_ion_obj(symbol_table, Z_OBJ_P(zv));
+				ION_CHECK_RETURN(true, ion_symbol_table_unload(obj->tab, ser->writer));
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 static inline void php_ion_serialize_refcounted(php_ion_serializer *ser, zval *zv)
 {
+	if (php_ion_serialize_system_value(ser, zv)) {
+		return;
+	}
+
 	zend_ulong idx = (zend_ulong) (uintptr_t) Z_COUNTED_P(zv);
 
 	ION_STRING is;
 	if (zend_hash_index_exists(ser->ids, idx)) {
 		zval *num = zend_hash_index_find(ser->ids, idx);
 
-		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("r"))));
+		ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_BACKREF));
 		ION_CHECK(ion_writer_write_int64(ser->writer, Z_LVAL_P(num)));
 	} else {
 		zval num;
@@ -1507,7 +1566,7 @@ static inline void php_ion_serialize_refcounted(php_ion_serializer *ser, zval *z
 			break;
 
 		case IS_REFERENCE:
-			ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_assign_cstr(&is, ZEND_STRL("R"))));
+			ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_REFERENCE));
 			php_ion_serialize_zval(ser, Z_REFVAL_P(zv));
 			break;
 		}
@@ -1914,8 +1973,16 @@ static inline void php_ion_unserialize_struct(php_ion_unserializer *ser, zval *r
 			php_ion_unserialize_object(ser, return_value);
 		}
 	} else if (!ser->annotations.object_type) {
+		bool is_shared_symtab = ser->annotations.shared_symtab;
 		array_init(return_value);
 		php_ion_unserialize_hash(ser, return_value);
+		if (is_shared_symtab) {
+			zval zobj;
+			object_init_ex(&zobj, ce_Symbol_Table_Shared);
+			zend_call_known_function(Z_OBJCE(zobj)->constructor, Z_OBJ(zobj), Z_OBJCE(zobj), NULL, 0, NULL, Z_ARRVAL_P(return_value));
+			zval_ptr_dtor(return_value);
+			RETURN_COPY_VALUE(&zobj);
+		}
 	} else if (ser->annotations.object_type == 'o') {
 		object_init(return_value);
 		php_ion_unserialize_hash(ser, return_value);
@@ -2039,6 +2106,11 @@ static inline void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 		ION_CHECK(ion_reader_get_an_annotation(ser->reader, i, &ann_str));
 
 		if (ann_str.length != 1) {
+			if (ann_str.length == ION_SYS_STRLEN_SHARED_SYMBOL_TABLE) {
+				if (!memcmp(ann_str.value, ION_SYMBOL_SHARED_SYMBOL_TABLE_BYTES, ION_SYS_STRLEN_SHARED_SYMBOL_TABLE)) {
+					ser->annotations.shared_symtab = true;
+				}
+			}
 			continue;
 		}
 
@@ -2323,25 +2395,4 @@ void php_ion_unserialize(php_ion_unserializer *ser, zval *zdata, zval *return_va
 	if (zo_ser) {
 		OBJ_RELEASE(zo_ser);
 	}
-}
-
-static inline zval *php_ion_global_symbol_fetch_by_enum(zend_string *name)
-{
-	zval *zgs = zend_hash_find(&php_ion_globals.symbol.cache, name);
-	if (!zgs) {
-		zval *zid = zend_hash_find(&g_sym_map, name);
-		if (zid) {
-			zval *zss = zend_hash_index_find(&g_sym_hash, Z_LVAL_P(zid));
-			if (zss) {
-				zval zsym;
-				object_init_ex(&zsym, ce_Symbol);
-				php_ion_symbol *sym = php_ion_obj(symbol, Z_OBJ(zsym));
-				sym->sym.sid = Z_LVAL_P(zid);
-				sym->value = zval_get_string(zss);
-				php_ion_symbol_ctor(sym);
-				zgs = zend_hash_add(&php_ion_globals.symbol.cache, name, &zsym);
-			}
-		}
-	}
-	return zgs;
 }

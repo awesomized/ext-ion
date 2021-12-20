@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 943d369644718978b3b990f4345d51bed5f71366 */
+ * Stub hash: 8f4964120dccb00c053325183fda763f64f08b6e */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_ion_Symbol_Table_PHP, 0, 0, ion\\Symbol\\Table, 0)
 ZEND_END_ARG_INFO()
@@ -86,6 +86,7 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Symbol_Table_Shared___construct, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, version, IS_LONG, 0, "1")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, symbols, IS_ARRAY, 1, "null")
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Symbol_Table_Shared_getMaxId arginfo_class_ion_Symbol_Enum_toSID
@@ -1297,12 +1298,6 @@ static zend_class_entry *register_class_ion_Symbol_Table_Shared(zend_class_entry
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
 	zend_class_implements(class_entry, 1, class_entry_ion_Symbol_Table);
 
-	zval property_symbols_default_value;
-	ZVAL_EMPTY_ARRAY(&property_symbols_default_value);
-	zend_string *property_symbols_name = zend_string_init("symbols", sizeof("symbols") - 1, 1);
-	zend_declare_typed_property(class_entry, property_symbols_name, &property_symbols_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_ARRAY));
-	zend_string_release(property_symbols_name);
-
 	zval property_name_default_value;
 	ZVAL_UNDEF(&property_name_default_value);
 	zend_string *property_name_name = zend_string_init("name", sizeof("name") - 1, 1);
@@ -1314,6 +1309,12 @@ static zend_class_entry *register_class_ion_Symbol_Table_Shared(zend_class_entry
 	zend_string *property_version_name = zend_string_init("version", sizeof("version") - 1, 1);
 	zend_declare_typed_property(class_entry, property_version_name, &property_version_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
 	zend_string_release(property_version_name);
+
+	zval property_symbols_default_value;
+	ZVAL_EMPTY_ARRAY(&property_symbols_default_value);
+	zend_string *property_symbols_name = zend_string_init("symbols", sizeof("symbols") - 1, 1);
+	zend_declare_typed_property(class_entry, property_symbols_name, &property_symbols_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_ARRAY));
+	zend_string_release(property_symbols_name);
 
 	return class_entry;
 }

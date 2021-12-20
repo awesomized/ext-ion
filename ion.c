@@ -176,10 +176,12 @@ static ZEND_METHOD(ion_Symbol_Table_Shared, __construct)
 
 	zend_string *zname;
 	zend_long version = 1;
-	ZEND_PARSE_PARAMETERS_START(1, 2)
+	HashTable *ht_sym = NULL;
+	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_STR(zname)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(version)
+		Z_PARAM_ARRAY_HT_OR_NULL(ht_sym)
 	ZEND_PARSE_PARAMETERS_END();
 
 	ION_CHECK(ion_symbol_table_open_with_type(&obj->tab, NULL, ist_SHARED));
@@ -190,6 +192,20 @@ static ZEND_METHOD(ion_Symbol_Table_Shared, __construct)
 	ION_CHECK(ion_symbol_table_set_version(obj->tab, version));
 
 	php_ion_symbol_table_ctor(obj);
+
+	zval *zsym;
+	if (ht_sym) ZEND_HASH_FOREACH_VAL(ht_sym, zsym)
+	{
+		zend_string *str = zval_get_string(zsym);
+		if (EG(exception)) {
+			break;
+		}
+
+		ION_STRING is;
+		ION_CHECK(ion_symbol_table_add_symbol(obj->tab, ion_string_from_zend(&is, str), NULL), zend_string_release(str));
+		zend_string_release(str);
+	}
+	ZEND_HASH_FOREACH_END();
 }
 static ZEND_METHOD(ion_Symbol_Table, getMaxId)
 {

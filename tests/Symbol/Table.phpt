@@ -49,22 +49,22 @@ DONE
 TEST
 global
 object(ion\Symbol\Table\Shared)#%d (3) {
-  ["symbols":"ion\Symbol\Table\Shared":private]=>
-  array(0) {
-  }
   ["name"]=>
   string(4) "$ion"
   ["version"]=>
   int(1)
-}
-object(ion\Symbol\Table\Shared)#%d (3) {
   ["symbols":"ion\Symbol\Table\Shared":private]=>
   array(0) {
   }
+}
+object(ion\Symbol\Table\Shared)#%d (3) {
   ["name"]=>
   string(3) "PHP"
   ["version"]=>
   int(1)
+  ["symbols":"ion\Symbol\Table\Shared":private]=>
+  array(0) {
+  }
 }
 object(ion\Symbol)#%d (3) {
   ["value"]=>
