@@ -59,7 +59,7 @@ Deprecated: test implements the Serializable interface, which is deprecated. Imp
 
 Deprecated: recursive implements the Serializable interface, which is deprecated. Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary) in %sserialize/serializable.php on line %d
 
-[S::test::"foobar",r::1]
+[S::test::{{"foobar"}},r::1]
 array(2) refcount(2){
   [0]=>
   object(test)#%d (1) refcount(2){
@@ -83,7 +83,7 @@ object(recursive)#%d (2) {
     NULL
   }
 }
-S::recursive::"node:S::recursive::\"leaf\""
+S::recursive::{{"node:S::recursive::{{\"leaf\"}}"}}
 object(recursive)#%d (2) refcount(1){
   ["id":"recursive":private]=>
   string(4) "node" refcount(1)

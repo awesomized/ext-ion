@@ -1378,7 +1378,7 @@ static inline void php_ion_serialize_object_iface(php_ion_serializer *ser, zend_
 		ION_STRING is;
 		ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_SERIALIZEABLE));
 		ION_CHECK(ion_writer_add_annotation(ser->writer, ion_string_from_zend(&is, zobject->ce->name)));
-		ION_CHECK(ion_writer_write_string(ser->writer, ion_string_assign_cstr(&is, (char *) buf, len)));
+		ION_CHECK(ion_writer_write_clob(ser->writer, buf, len));
 		efree(buf);
 	} else if (!EG(exception)){
 		zend_throw_exception_ex(spl_ce_UnexpectedValueException, IERR_INTERNAL_ERROR,
