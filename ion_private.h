@@ -195,7 +195,6 @@ ZEND_DECLARE_MODULE_GLOBALS(ion);
 
 static zend_class_entry
 	*ce_Catalog,
-	*ce_Collection,
 	*ce_Decimal,
 	*ce_Decimal_Context,
 	*ce_Decimal_Context_Rounding,
@@ -1104,7 +1103,7 @@ php_ion_decl(reader, Reader_Reader, php_ion_reader_dtor(obj));
 
 typedef struct php_ion_writer_options {
 	ION_WRITER_OPTIONS opt;
-	zend_object *cat, *dec_ctx, *col, std;
+	zend_object *cat, *dec_ctx, std;
 } php_ion_writer_options;
 
 php_ion_decl(writer_options, Writer_Options);

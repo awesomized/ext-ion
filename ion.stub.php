@@ -404,7 +404,6 @@ class Options {
     public function __construct(
         public readonly ?\ion\Catalog $catalog = null,
         public readonly ?\ion\Decimal\Context $decimalContext = null,
-        ?\ion\Collection $encodingSymbolTable = null,
         public readonly bool $outputBinary = false,
         public readonly bool $compactFloats = false,
         public readonly bool $escapeNonAscii = false,

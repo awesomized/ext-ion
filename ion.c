@@ -1222,8 +1222,6 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 		Z_PARAM_OPTIONAL
 		//public readonly ?\ion\Catalog $catalog = null,
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->cat, ce_Catalog)
-		//public readonly ?\ion\Collection $encodingSymbolTable = null,
-		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->col, ce_Collection)
 		//public readonly ?\ion\Decimal\Context $decimalContext = null,
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->dec_ctx, ce_Decimal_Context)
 		//public readonly bool $outputBinary = false,
@@ -1257,9 +1255,6 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 	if (obj->cat) {
 		update_property_obj(&obj->std, ZEND_STRL("catalog"), obj->cat);
 		obj->opt.pcatalog = php_ion_obj(catalog, obj->cat)->cat;
-	}
-	if (obj->col) {
-		// TODO
 	}
 	if (obj->dec_ctx) {
 		update_property_obj(&obj->std, ZEND_STRL("decimalContext"), obj->dec_ctx);
