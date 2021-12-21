@@ -2106,10 +2106,8 @@ static inline void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 		ION_CHECK(ion_reader_get_an_annotation(ser->reader, i, &ann_str));
 
 		if (ann_str.length != 1) {
-			if (ann_str.length == ION_SYS_STRLEN_SHARED_SYMBOL_TABLE) {
-				if (!memcmp(ann_str.value, ION_SYMBOL_SHARED_SYMBOL_TABLE_BYTES, ION_SYS_STRLEN_SHARED_SYMBOL_TABLE)) {
-					ser->annotations.shared_symtab = true;
-				}
+			if (ION_STRING_EQUALS(&ann_str, &ION_SYMBOL_SHARED_SYMBOL_TABLE_STRING)) {
+				ser->annotations.shared_symtab = true;
 			}
 			continue;
 		}
