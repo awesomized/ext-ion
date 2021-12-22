@@ -530,15 +530,12 @@ class Writer extends \ion\Writer\Writer implements \ion\Writer\Stream {
 
 namespace ion;
 interface Serializer {
-    public function __invoke(mixed $data) : string;
-    // protected function serialize(mixed $data) : string;
+    public function serialize(mixed $data) : string;
 }
 namespace ion;
 interface Unserializer {
     /** @param string|resource $data */
-    public function __invoke($data) : mixed;
-    // /** @param string|resource $data */
-    // protected function unserialize($data) : mixed;
+    public function unserialize($data) : mixed;
 }
 
 namespace ion\Serializer;
@@ -549,8 +546,7 @@ class PHP implements \ion\Serializer {
         public readonly bool $callMagicSerialize = true,
         public readonly ?string $callCustomSerialize = null,
     ) {}
-    public function __invoke(mixed $data) : string {}
-    protected function serialize(mixed $data) : string {}
+    public function serialize(mixed $data) : string {}
 }
 
 namespace ion\Unserializer;
@@ -562,9 +558,7 @@ class PHP implements \ion\Unserializer {
         public readonly ?string $callCustomUnserialize = null,
     ){}
     /** @param string|resource $data */
-    public function __invoke($data) : mixed {}
-    /** @param string|resource $data */
-    protected function unserialize($data) : mixed {}
+    public function unserialize($data) : mixed {}
 }
 
 namespace ion;

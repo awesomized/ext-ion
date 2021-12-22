@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 7322502dd0c48787538abe7e2fa1894b20a736ba */
+ * Stub hash: 6aa30c4f415607e9d724405a1b4c0fb10e4027f3 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_ion_Symbol_Table_PHP, 0, 0, ion\\Symbol\\Table, 0)
 ZEND_END_ARG_INFO()
@@ -512,11 +512,11 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_Stream_Writer_getStream arginfo_class_ion_Symbol_Table_Local___construct
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Serializer___invoke, 0, 1, IS_STRING, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Serializer_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Unserializer___invoke, 0, 1, IS_MIXED, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Unserializer_unserialize, 0, 1, IS_MIXED, 0)
 	ZEND_ARG_INFO(0, data)
 ZEND_END_ARG_INFO()
 
@@ -527,9 +527,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Serializer_PHP___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callCustomSerialize, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Serializer_PHP___invoke arginfo_class_ion_Serializer___invoke
-
-#define arginfo_class_ion_Serializer_PHP_serialize arginfo_class_ion_Serializer___invoke
+#define arginfo_class_ion_Serializer_PHP_serialize arginfo_class_ion_Serializer_serialize
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Unserializer_PHP___construct, 0, 0, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, readerOptions, ion\\Reader\\Options, 1, "null")
@@ -538,9 +536,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Unserializer_PHP___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callCustomUnserialize, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Unserializer_PHP___invoke arginfo_class_ion_Unserializer___invoke
-
-#define arginfo_class_ion_Unserializer_PHP_unserialize arginfo_class_ion_Unserializer___invoke
+#define arginfo_class_ion_Unserializer_PHP_unserialize arginfo_class_ion_Unserializer_unserialize
 
 
 static ZEND_FUNCTION(ion_Symbol_Table_PHP);
@@ -644,10 +640,8 @@ static ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer);
 static ZEND_METHOD(ion_Writer_Stream_Writer, __construct);
 static ZEND_METHOD(ion_Writer_Stream_Writer, getStream);
 static ZEND_METHOD(ion_Serializer_PHP, __construct);
-static ZEND_METHOD(ion_Serializer_PHP, __invoke);
 static ZEND_METHOD(ion_Serializer_PHP, serialize);
 static ZEND_METHOD(ion_Unserializer_PHP, __construct);
-static ZEND_METHOD(ion_Unserializer_PHP, __invoke);
 static ZEND_METHOD(ion_Unserializer_PHP, unserialize);
 
 
@@ -987,29 +981,27 @@ static const zend_function_entry class_ion_Writer_Stream_Writer_methods[] = {
 
 
 static const zend_function_entry class_ion_Serializer_methods[] = {
-	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Serializer, __invoke, arginfo_class_ion_Serializer___invoke, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
+	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Serializer, serialize, arginfo_class_ion_Serializer_serialize, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
 	ZEND_FE_END
 };
 
 
 static const zend_function_entry class_ion_Unserializer_methods[] = {
-	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Unserializer, __invoke, arginfo_class_ion_Unserializer___invoke, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
+	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Unserializer, unserialize, arginfo_class_ion_Unserializer_unserialize, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
 	ZEND_FE_END
 };
 
 
 static const zend_function_entry class_ion_Serializer_PHP_methods[] = {
 	ZEND_ME(ion_Serializer_PHP, __construct, arginfo_class_ion_Serializer_PHP___construct, ZEND_ACC_PUBLIC)
-	ZEND_ME(ion_Serializer_PHP, __invoke, arginfo_class_ion_Serializer_PHP___invoke, ZEND_ACC_PUBLIC)
-	ZEND_ME(ion_Serializer_PHP, serialize, arginfo_class_ion_Serializer_PHP_serialize, ZEND_ACC_PROTECTED)
+	ZEND_ME(ion_Serializer_PHP, serialize, arginfo_class_ion_Serializer_PHP_serialize, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
 
 static const zend_function_entry class_ion_Unserializer_PHP_methods[] = {
 	ZEND_ME(ion_Unserializer_PHP, __construct, arginfo_class_ion_Unserializer_PHP___construct, ZEND_ACC_PUBLIC)
-	ZEND_ME(ion_Unserializer_PHP, __invoke, arginfo_class_ion_Unserializer_PHP___invoke, ZEND_ACC_PUBLIC)
-	ZEND_ME(ion_Unserializer_PHP, unserialize, arginfo_class_ion_Unserializer_PHP_unserialize, ZEND_ACC_PROTECTED)
+	ZEND_ME(ion_Unserializer_PHP, unserialize, arginfo_class_ion_Unserializer_PHP_unserialize, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 

@@ -1682,7 +1682,7 @@ static ZEND_METHOD(ion_Serializer_PHP, __construct)
 
 	php_ion_serializer_php_ctor(obj);
 }
-static ZEND_METHOD(ion_Serializer_PHP, __invoke)
+static ZEND_METHOD(ion_Serializer_PHP, serialize)
 {
 	zend_object *obj = Z_OBJ_P(ZEND_THIS);
 
@@ -1691,12 +1691,7 @@ static ZEND_METHOD(ion_Serializer_PHP, __invoke)
 		Z_PARAM_ZVAL(data)
 	ZEND_PARSE_PARAMETERS_END();
 
-	if (obj->ce == ce_Serializer_PHP) {
-		// default, fast path
-		php_ion_serialize(&php_ion_obj(serializer_php, obj)->serializer, data, return_value);
-	} else {
-		zend_call_method_with_1_params(obj, obj->ce, NULL /* TODO */, "serialize", return_value, data);
-	}
+	php_ion_serialize(&php_ion_obj(serializer_php, obj)->serializer, data, return_value);
 }
 static ZEND_FUNCTION(ion_serialize)
 {
@@ -1713,20 +1708,8 @@ static ZEND_FUNCTION(ion_serialize)
 		php_ion_serializer *ser = zo_ser ? &php_ion_obj(serializer_php, zo_ser)->serializer : NULL;
 		php_ion_serialize(ser, data, return_value);
 	} else {
-		zend_call_method_with_1_params(zo_ser, NULL, NULL, "__invoke", return_value, data);
+		zend_call_method_with_1_params(zo_ser, NULL, NULL, "serialize", return_value, data);
 	}
-}
-static ZEND_METHOD(ion_Serializer_PHP, serialize)
-{
-	//zend_object *obj = Z_OBJ_P(ZEND_THIS);
-
-	zval *data;
-	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(data)
-	ZEND_PARSE_PARAMETERS_END();
-
-	// TODO
-	zend_throw_exception_ex(spl_ce_BadMethodCallException, 0, "Not implemented");
 }
 
 static ZEND_METHOD(ion_Unserializer_PHP, __construct)
@@ -1746,7 +1729,7 @@ static ZEND_METHOD(ion_Unserializer_PHP, __construct)
 
 	php_ion_unserializer_php_ctor(obj);
 }
-static ZEND_METHOD(ion_Unserializer_PHP, __invoke)
+static ZEND_METHOD(ion_Unserializer_PHP, unserialize)
 {
 	zend_object *obj = Z_OBJ_P(ZEND_THIS);
 
@@ -1755,11 +1738,7 @@ static ZEND_METHOD(ion_Unserializer_PHP, __invoke)
 		Z_PARAM_ZVAL(data)
 	ZEND_PARSE_PARAMETERS_END();
 
-	if (obj->ce == ce_Unserializer_PHP) {
-		php_ion_unserialize(&php_ion_obj(unserializer_php, obj)->unserializer, data, return_value);
-	} else {
-		zend_call_method_with_1_params(obj, obj->ce, NULL /* TODO */, "unserialize", return_value, data);
-	}
+	php_ion_unserialize(&php_ion_obj(unserializer_php, obj)->unserializer, data, return_value);
 }
 static ZEND_FUNCTION(ion_unserialize)
 {
@@ -1778,18 +1757,6 @@ static ZEND_FUNCTION(ion_unserialize)
 	} else {
 		zend_call_method_with_1_params(zo_ser, NULL, NULL, "__invoke", return_value, data);
 	}
-}
-static ZEND_METHOD(ion_Unserializer_PHP, unserialize)
-{
-	//zend_object *obj = Z_OBJ_P(ZEND_THIS);
-
-	zval *data;
-	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(data)
-	ZEND_PARSE_PARAMETERS_END();
-
-	// TODO
-	zend_throw_exception_ex(spl_ce_BadMethodCallException, 0, "Not implemented");
 }
 
 PHP_RINIT_FUNCTION(ion)

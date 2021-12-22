@@ -28,13 +28,13 @@ foreach (str_split($buf, 8) as $line) {
 echo "\n";
 
 $u = new ion\Unserializer\PHP(multiSequence: true);
-var_dump($u($buf));
+var_dump($u->unserialize($buf));
 
 $u = new ion\Unserializer\PHP(multiSequence: true,
 	readerOptions: new ion\Reader\Options(
 		catalog: $c,
 		onContextChange: fn(ion\Reader $r) => print("on_context_change\n")));
-var_dump($u($buf));
+var_dump($u->unserialize($buf));
 
 ?>
 DONE
