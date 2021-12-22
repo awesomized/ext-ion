@@ -325,26 +325,7 @@ static ZEND_METHOD(ion_Catalog, add)
 	php_ion_symbol_table *o_symtab = php_ion_obj(symbol_table, zo_symtab);
 	php_ion_catalog_add_symbol_table(obj, o_symtab);
 }
-struct remove_symtab_ctx {
-	const char *name;
-	zend_bool deleted;
-};
-static int remove_symtab(zval *ztab, void *ctx)
-{
-	struct remove_symtab_ctx *rsc = ctx;
-	php_ion_symbol_table *tab = php_ion_obj(symbol_table, Z_OBJ_P(ztab));
-	if (tab && tab->tab) {
-		ION_STRING is;
-		if (IERR_OK == ion_symbol_table_get_name(tab->tab, &is)) {
-			if (strcmp((const char *) is.value, rsc->name)) {
-				return ZEND_HASH_APPLY_KEEP;
-			}
-		}
-	}
-	rsc->deleted = true;
-	return ZEND_HASH_APPLY_REMOVE;
 
-}
 static ZEND_METHOD(ion_Catalog, remove)
 {
 	php_ion_catalog *obj = php_ion_obj(catalog, Z_OBJ_P(ZEND_THIS));
@@ -364,12 +345,22 @@ static ZEND_METHOD(ion_Catalog, remove)
 		if (zo_symtab) {
 			// fast path
 			zend_ulong idx = (uintptr_t) &zo_symtab->gc;
-			RETURN_BOOL(SUCCESS == zend_hash_index_del(Z_ARRVAL_P(ztabs), idx));
+			RETVAL_BOOL(SUCCESS == zend_hash_index_del(Z_ARRVAL_P(ztabs), idx));
+			ION_CHECK(ion_catalog_release_symbol_table(obj->cat, php_ion_obj(symbol_table, zo_symtab)->tab));
 		} else {
-			// iterate over all symbol tables and delete any with matching name
-			struct remove_symtab_ctx ctx = {zs_symtab->val, false};
-			zend_hash_apply_with_argument(Z_ARRVAL_P(ztabs), remove_symtab, &ctx);
-			RETURN_BOOL(ctx.deleted);
+			bool deleted = false;
+			ION_SYMBOL_TABLE *tab;
+			ION_STRING is;
+			ion_string_from_zend(&is, zs_symtab);
+			do {
+				tab = NULL;
+				ION_CHECK(ion_catalog_find_best_match(obj->cat, &is, 0, &tab));
+				if (tab) {
+					ION_CHECK(ion_catalog_release_symbol_table(obj->cat, tab));
+					deleted = true;
+				}
+			} while(tab);
+			RETVAL_BOOL(deleted);
 		}
 	}
 }

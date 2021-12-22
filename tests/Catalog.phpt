@@ -20,6 +20,8 @@ var_dump($c);
 var_dump($c->find("shared", 1));
 var_dump($c->findBest("shared"));
 
+$c->remove("shared");
+var_dump(count($c));
 ?>
 DONE
 --EXPECTF--
@@ -111,4 +113,5 @@ object(ion\Symbol\Table\Shared)#%d (3) {
   array(0) {
   }
 }
+int(1)
 DONE

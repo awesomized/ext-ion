@@ -1222,13 +1222,56 @@ static inline iERR php_ion_writer_buffer_handler(struct _ion_user_stream *user)
 	return IERR_OK;
 }
 
+static inline ION_COLLECTION *php_ion_catalog_collection(php_ion_catalog *cat)
+{
+	/* do not look too close */
+	struct {
+		void *owner;
+		ION_SYMBOL_TABLE *sys;
+		ION_COLLECTION collection;
+	} *cat_ptr = (void *) cat->cat;
+	return &cat_ptr->collection;
+}
+
+static inline void php_ion_writer_options_init_shared_imports(php_ion_writer_options *opt)
+{
+	php_ion_catalog *cat = php_ion_obj(catalog, opt->cat);
+	OBJ_CHECK(cat);
+
+	ION_CHECK(ion_writer_options_initialize_shared_imports(&opt->opt));
+
+	ION_COLLECTION *col = php_ion_catalog_collection(cat);
+	if (!ION_COLLECTION_IS_EMPTY(col)) {
+		// holy, nah, forget it batman...
+#ifndef IPCN_pNODE_TO_pDATA
+# define IPCN_pNODE_TO_pDATA(x)    (&((x)->_data[0]))
+#endif
+		ION_COLLECTION_CURSOR cur;
+		ION_COLLECTION_OPEN(col, cur);
+		while (cur) {
+			ION_SYMBOL_TABLE **ptr;
+			ION_COLLECTION_NEXT(cur, ptr);
+			if (*ptr) {
+				ION_CHECK(ion_writer_options_add_shared_imports_symbol_tables(&opt->opt, ptr, 1));
+			} else {
+				break;
+			}
+		}
+	}
+}
+
 static inline void php_ion_writer_ctor(php_ion_writer *obj)
 {
+	php_ion_writer_options *opt = NULL;
+
 	if (obj->opt) {
 		update_property_obj(&obj->std, ZEND_STRL("options"), obj->opt);
+		opt = php_ion_obj(writer_options, obj->opt);
+		if (opt->cat) {
+			php_ion_writer_options_init_shared_imports(opt);
+		}
 	}
 
-	php_ion_writer_options *opt = php_ion_obj(writer_options, obj->opt);
 	ION_STREAM_HANDLER h;
 	if (obj->type == STREAM_WRITER) {
 		h = php_ion_writer_stream_handler;
@@ -1238,6 +1281,7 @@ static inline void php_ion_writer_ctor(php_ion_writer *obj)
 		php_ion_writer_buffer_init(obj);
 	}
 
+
 	ION_CHECK(ion_writer_open_stream(&obj->writer, h, obj, opt ? &opt->opt : NULL));
 	OBJ_CHECK(obj);
 }
@@ -1246,6 +1290,12 @@ static inline void php_ion_writer_dtor(php_ion_writer *obj)
 {
 	if (obj->writer) {
 		ion_writer_close(obj->writer);
+	}
+	if (obj->opt) {
+		php_ion_writer_options *opt = php_ion_obj(writer_options, obj->opt);
+		if (opt->cat) {
+			ion_writer_options_close_shared_imports(&opt->opt);
+		}
 	}
 	if (obj->type == STREAM_WRITER) {
 		if (obj->stream.buf.value) {
