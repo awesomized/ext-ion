@@ -924,7 +924,7 @@ static ZEND_METHOD(ion_Reader_Reader, readNull)
 
 	ION_TYPE typ;
 	ION_CHECK(ion_reader_read_null(obj->reader, &typ));
-	RETURN_OBJ_COPY(php_ion_type_fetch(typ));
+	RETURN_IONTYPE(typ);
 }
 static ZEND_METHOD(ion_Reader_Reader, readBool)
 {
@@ -1310,9 +1310,7 @@ static ZEND_METHOD(ion_Writer_Writer, writeTypedNull)
 		Z_PARAM_OBJ_OF_CLASS(typ_obj, ce_Type)
 	ZEND_PARSE_PARAMETERS_END();
 
-	php_ion_type *typ = php_ion_obj(type, typ_obj);
-	OBJ_CHECK(typ);
-	ION_CHECK(ion_writer_write_typed_null(obj->writer, php_ion_obj(type, typ)->typ));
+	ION_CHECK(ion_writer_write_typed_null(obj->writer, ion_type_from_enum(typ_obj)));
 }
 static ZEND_METHOD(ion_Writer_Writer, writeBool)
 {
@@ -1472,9 +1470,7 @@ static ZEND_METHOD(ion_Writer_Writer, startLob)
 		Z_PARAM_OBJ_OF_CLASS(typ_obj, ce_Type)
 	ZEND_PARSE_PARAMETERS_END();
 
-	php_ion_type *typ = php_ion_obj(type, typ_obj);
-	OBJ_CHECK(typ);
-	ION_CHECK(ion_writer_start_lob(obj->writer, php_ion_obj(type, typ)->typ));
+	ION_CHECK(ion_writer_start_lob(obj->writer, ion_type_from_enum(typ_obj)));
 }
 static ZEND_METHOD(ion_Writer_Writer, appendLob)
 {
@@ -1507,9 +1503,7 @@ static ZEND_METHOD(ion_Writer_Writer, startContainer)
 		Z_PARAM_OBJ_OF_CLASS(typ_obj, ce_Type)
 	ZEND_PARSE_PARAMETERS_END();
 
-	php_ion_type *typ = php_ion_obj(type, typ_obj);
-	OBJ_CHECK(typ);
-	ION_CHECK(ion_writer_start_container(obj->writer, php_ion_obj(type, typ)->typ));
+	ION_CHECK(ion_writer_start_container(obj->writer, ion_type_from_enum(typ_obj)));
 }
 static ZEND_METHOD(ion_Writer_Writer, finishContainer)
 {
@@ -1833,7 +1827,7 @@ PHP_MINIT_FUNCTION(ion)
 	ce_Timestamp_Precision = register_class_ion_Timestamp_Precision();
 
 	// Type
-	php_ion_register(type, Type);
+	ce_Type = register_class_ion_Type();
 
 	// Writer
 	ce_Writer = register_class_ion_Writer();

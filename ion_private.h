@@ -413,13 +413,6 @@ static inline void update_property_obj(zend_object *obj, const char *n, size_t l
 	zend_update_property(obj->ce, obj, n, l, &zobj);
 }
 
-typedef struct php_ion_type {
-	ION_TYPE typ;
-	zend_object std;
-} php_ion_type;
-
-php_ion_decl(type, Type);
-
 #define RETURN_IONTYPE(typ) do { \
 	zend_object *__zo = php_ion_type_fetch(typ); \
 	if (UNEXPECTED(!__zo)) { \
@@ -438,6 +431,11 @@ static inline zend_object *php_ion_type_fetch(ION_TYPE typ)
 		return NULL;
 	}
 	return zend_enum_get_case(ce_Type, Z_STR_P(ztype));
+}
+
+static inline ION_TYPE ion_type_from_enum(zend_object *zo)
+{
+	return Z_LVAL_P(zend_enum_fetch_case_value(zo));
 }
 
 typedef struct php_ion_symbol_iloc {
