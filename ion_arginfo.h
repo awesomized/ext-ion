@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: c45868fbad8a734e7511f0c4e4991d10b5cc4aa7 */
+ * Stub hash: 7322502dd0c48787538abe7e2fa1894b20a736ba */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_ion_Symbol_Table_PHP, 0, 0, ion\\Symbol\\Table, 0)
 ZEND_END_ARG_INFO()
@@ -533,7 +533,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Unserializer_PHP___construct, 0, 0, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, readerOptions, ion\\Reader\\Options, 1, "null")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiSequence, _IS_BOOL, 0, "true")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiSequence, _IS_BOOL, 0, "false")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callMagicUnserialize, _IS_BOOL, 0, "true")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callCustomUnserialize, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()

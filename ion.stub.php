@@ -557,7 +557,7 @@ namespace ion\Unserializer;
 class PHP implements \ion\Unserializer {
     public function __construct(
         public readonly ?\ion\Reader\Options $readerOptions = null,
-        public readonly bool $multiSequence = true,
+        public readonly bool $multiSequence = false,
         public readonly bool $callMagicUnserialize = true,
         public readonly ?string $callCustomUnserialize = null,
     ){}

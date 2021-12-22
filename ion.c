@@ -630,17 +630,26 @@ static ZEND_METHOD(ion_Reader_Options, __construct)
 		Z_PARAM_BOOL(skip_validation)
 	ZEND_PARSE_PARAMETERS_END();
 
-	opt->opt.context_change_notifier = EMPTY_READER_CHANGE_NOTIFIER;
 	if (opt->cb) {
+		zval zcb;
+		ZVAL_OBJ(&zcb, opt->cb);
+		zend_fcall_info_init(&zcb, 0, &opt->ccn.fci, &opt->ccn.fcc, NULL, NULL);
+		opt->opt.context_change_notifier.context = &opt->ccn;
 		update_property_obj(&opt->std, ZEND_STRL("onContextChange"), opt->cb);
+	} else {
+		zend_update_property_null(NULL, &opt->std, ZEND_STRL("onContextChange"));
 	}
 	if (opt->cat) {
 		update_property_obj(&opt->std, ZEND_STRL("catalog"), opt->cat);
 		opt->opt.pcatalog = php_ion_obj(catalog, opt->cat)->cat;
+	} else {
+		zend_update_property_null(NULL, &opt->std, ZEND_STRL("catalog"));
 	}
 	if (opt->dec_ctx) {
 		update_property_obj(&opt->std, ZEND_STRL("decimalContext"), opt->dec_ctx);
 		opt->opt.decimal_context = &php_ion_obj(decimal_ctx, opt->dec_ctx)->ctx;
+	} else {
+		zend_update_property_null(NULL, &opt->std, ZEND_STRL("decimalContext"));
 	}
 	zend_update_property_bool(opt->std.ce, &opt->std, ZEND_STRL("returnSystemValues"),
 		opt->opt.return_system_values = ret_sys_val);
@@ -648,7 +657,7 @@ static ZEND_METHOD(ion_Reader_Options, __construct)
 		opt->opt.new_line_char = ch_nl);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("maxContainerDepth"),
 		opt->opt.max_container_depth = max_depth);
-	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("maxAnnotationCount"),
+	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("maxAnnotations"),
 		opt->opt.max_annotation_count = max_ann);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("maxAnnotationBuffered"),
 		opt->opt.max_annotation_buffered = max_ann_buf);
@@ -1246,16 +1255,20 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 	if (obj->cat) {
 		update_property_obj(&obj->std, ZEND_STRL("catalog"), obj->cat);
 		obj->opt.pcatalog = php_ion_obj(catalog, obj->cat)->cat;
+	} else {
+		zend_update_property_null(NULL, &obj->std, ZEND_STRL("catalog"));
 	}
 	if (obj->dec_ctx) {
 		update_property_obj(&obj->std, ZEND_STRL("decimalContext"), obj->dec_ctx);
 		obj->opt.decimal_context = &php_ion_obj(decimal_ctx, obj->dec_ctx)->ctx;
+	} else {
+		zend_update_property_null(NULL, &obj->std, ZEND_STRL("decimalContext"));
 	}
 	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("outputBinary"),
 			obj->opt.output_as_binary = binary);
-	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("comactFloats"),
+	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("compactFloats"),
 			obj->opt.compact_floats = compact_floats);
-	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("excapeNonAscii"),
+	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("escapeNonAscii"),
 			obj->opt.escape_all_non_ascii = escape);
 	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("prettyPrint"),
 			obj->opt.pretty_print = pretty);
@@ -1659,7 +1672,7 @@ static ZEND_METHOD(ion_Serializer_PHP, __construct)
 
 	obj->serializer.call_magic = true;
 
-	ZEND_PARSE_PARAMETERS_START(0, 3)
+	ZEND_PARSE_PARAMETERS_START(0, 4)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->opt, ce_Writer_Options)
 		Z_PARAM_BOOL(obj->serializer.multi_seq)
@@ -1723,7 +1736,7 @@ static ZEND_METHOD(ion_Unserializer_PHP, __construct)
 
 	obj->unserializer.call_magic = true;
 
-	ZEND_PARSE_PARAMETERS_START(0, 3)
+	ZEND_PARSE_PARAMETERS_START(0, 4)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->opt, ce_Reader_Options)
 		Z_PARAM_BOOL(obj->unserializer.multi_seq)

@@ -31,7 +31,9 @@ $u = new ion\Unserializer\PHP(multiSequence: true);
 var_dump($u($buf));
 
 $u = new ion\Unserializer\PHP(multiSequence: true,
-	readerOptions: new ion\Reader\Options(catalog: $c));
+	readerOptions: new ion\Reader\Options(
+		catalog: $c,
+		onContextChange: fn(ion\Reader $r) => print("on_context_change\n")));
 var_dump($u($buf));
 
 ?>
