@@ -28,7 +28,15 @@ foreach (str_split($buf, 8) as $line) {
 echo "\n";
 
 $u = new ion\Unserializer\PHP(multiSequence: true);
-var_dump($u->unserialize($buf));
+var_dump($s = $u->unserialize($buf));
+
+foreach ($s as $sym) {
+	/** @var ion\Symbol $sym */
+	$t = $c->findBest($sym->importLocation->name);
+	$r = $t->findLocal($sym->importLocation->location);
+	printf("%s: %s@%d\n", $r->value, $sym->importLocation->name,
+		$sym->importLocation->location);
+}
 
 $u = new ion\Unserializer\PHP(multiSequence: true,
 	readerOptions: new ion\Reader\Options(
@@ -104,6 +112,10 @@ array(4) {
     }
   }
 }
+shared1: shared@1
+shared1: shared@1
+shared2: shared@2
+shared2: shared@2
 on_context_change
 array(4) {
   [0]=>
