@@ -201,8 +201,8 @@ static ZEND_METHOD(ion_Symbol_Table_Shared, __construct)
 			break;
 		}
 
-		ION_STRING is;
-		ION_CHECK(ion_symbol_table_add_symbol(obj->tab, ion_string_from_zend(&is, str), NULL), zend_string_release(str));
+		ION_STRING istr;
+		ION_CHECK(ion_symbol_table_add_symbol(obj->tab, ion_string_from_zend(&istr, str), NULL), zend_string_release(str));
 		zend_string_release(str);
 	}
 	ZEND_HASH_FOREACH_END();
@@ -1547,7 +1547,7 @@ static ZEND_METHOD(ion_Writer_Writer, writeAnnotation)
 
 	for (unsigned i = 0; i < argc; ++i) {
 		switch (Z_TYPE(args[i])) {
-		case IS_STRING:
+		case IS_STRING: ;
 			ION_STRING is;
 			ION_CHECK(ion_writer_add_annotation(obj->writer, ion_string_from_zend(&is, Z_STR(args[i]))));
 			break;

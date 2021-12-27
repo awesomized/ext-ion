@@ -435,7 +435,7 @@ static inline zend_object *php_ion_type_fetch(ION_TYPE typ)
 
 static inline ION_TYPE ion_type_from_enum(zend_object *zo)
 {
-	return Z_LVAL_P(zend_enum_fetch_case_value(zo));
+	return (ION_TYPE) Z_LVAL_P(zend_enum_fetch_case_value(zo));
 }
 
 typedef struct php_ion_symbol_iloc {
@@ -2102,7 +2102,7 @@ static inline void php_ion_unserialize_list(php_ion_unserializer *ser, zval *ret
 static inline void php_ion_reader_read_lob(ION_READER *reader, zval *return_value)
 {
 	zend_string *zstr = zend_string_alloc(0x1000, 0);
-again:
+again: ;
 	SIZE read = 0;
 	iERR err = ion_reader_read_lob_bytes(reader, (BYTE *) zstr->val, zstr->len, &read);
 	if (err == IERR_BUFFER_TOO_SMALL) {
@@ -2148,7 +2148,7 @@ static inline void php_ion_reader_read_int(ION_READER *reader, zval *return_valu
 		RETVAL_LONG(i64);
 		goto done;
 
-	case IERR_NUMERIC_OVERFLOW:
+	case IERR_NUMERIC_OVERFLOW: ;
 		SIZE max, len;
 		ION_CHECK(ion_int_char_length(num, &max));
 		zend_string *zs = zend_string_alloc(max, 0);
@@ -2300,7 +2300,7 @@ static inline void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *ret
 		ION_CHECK(ion_reader_read_null(ser->reader, typ));
 		RETURN_NULL();
 
-	case tid_BOOL_INT:
+	case tid_BOOL_INT: ;
 		BOOL bval;
 		ION_CHECK(ion_reader_read_bool(ser->reader, &bval));
 		RETURN_BOOL(bval);
@@ -2322,7 +2322,7 @@ static inline void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *ret
 		}
 		return;
 
-	case tid_FLOAT_INT:
+	case tid_FLOAT_INT: ;
 		double d;
 		ION_CHECK(ion_reader_read_double(ser->reader, &d));
 		RETURN_DOUBLE(d);
@@ -2340,7 +2340,7 @@ static inline void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *ret
 		zend_hash_next_index_insert(ser->ids, return_value);
 		return;
 
-	case tid_SYMBOL_INT:
+	case tid_SYMBOL_INT: ;
 		ION_SYMBOL sym;
 		ION_CHECK(ion_reader_read_ion_symbol(ser->reader, &sym));
 		php_ion_symbol_zval(&sym, return_value);
@@ -2351,7 +2351,7 @@ static inline void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *ret
 		zend_hash_next_index_insert(ser->ids, return_value);
 		return;
 
-	case tid_STRING_INT:
+	case tid_STRING_INT: ;
 		ION_STRING str;
 		ION_CHECK(ion_reader_read_string(ser->reader, &str));
 		RETVAL_STRINGL((char *) str.value, str.length);
