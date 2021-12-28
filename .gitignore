@@ -40,3 +40,4 @@ tests/**/*.db
 tests/**/*.mem
 tests/Timestamp/
 tmp-php.ini
+*.dep
