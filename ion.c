@@ -25,7 +25,6 @@
 
 #include "ext/date/php_date.h"
 #include "ext/spl/spl_exceptions.h"
-#include "ext/spl/spl_iterators.h"
 
 #include "php_ion.h"
 #include "ion_private.h"
@@ -41,7 +40,7 @@ static ZEND_METHOD(ion_Symbol_ImportLocation, __construct)
 		Z_PARAM_LONG(location)
 	ZEND_PARSE_PARAMETERS_END();
 
-	obj->loc.location = location;
+	obj->loc.location = (SID) location;
 	php_ion_symbol_iloc_ctor(obj);
 }
 static ZEND_METHOD(ion_Symbol, __construct)
@@ -57,7 +56,7 @@ static ZEND_METHOD(ion_Symbol, __construct)
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->iloc, ce_Symbol_ImportLocation)
 	ZEND_PARSE_PARAMETERS_END();
 
-	obj->sym.sid = sid;
+	obj->sym.sid = (SID) sid;
 	php_ion_symbol_ctor(obj);
 }
 static ZEND_METHOD(ion_Symbol, equals)
@@ -457,7 +456,7 @@ static ZEND_METHOD(ion_Decimal_Context, __construct)
 	if (o_round) {
 		round = Z_LVAL_P(zend_enum_fetch_case_value(o_round));
 	}
-	php_ion_decimal_ctx_init(&obj->ctx, digits, emax, emin, round, clamp);
+	php_ion_decimal_ctx_init(&obj->ctx, digits, emax, emin, round, clamp); // NOLINT(cppcoreguidelines-narrowing-conversions)
 	php_ion_decimal_ctx_ctor(obj, o_round);
 }
 static inline void make_decimal_ctx(INTERNAL_FUNCTION_PARAMETERS, int kind)
@@ -654,23 +653,23 @@ static ZEND_METHOD(ion_Reader_Options, __construct)
 	zend_update_property_bool(opt->std.ce, &opt->std, ZEND_STRL("returnSystemValues"),
 		opt->opt.return_system_values = ret_sys_val);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("newLine"),
-		opt->opt.new_line_char = ch_nl);
+		opt->opt.new_line_char = (int) ch_nl);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("maxContainerDepth"),
-		opt->opt.max_container_depth = max_depth);
+		opt->opt.max_container_depth = (SIZE) max_depth);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("maxAnnotations"),
-		opt->opt.max_annotation_count = max_ann);
+		opt->opt.max_annotation_count = (SIZE) max_ann);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("maxAnnotationBuffered"),
-		opt->opt.max_annotation_buffered = max_ann_buf);
+		opt->opt.max_annotation_buffered = (SIZE) max_ann_buf);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("symbolThreshold"),
-		opt->opt.symbol_threshold = sym_thr);
+		opt->opt.symbol_threshold = (SIZE) sym_thr);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("userValueThreshold"),
-		opt->opt.user_value_threshold = uval_thr);
+		opt->opt.user_value_threshold = (SIZE) uval_thr);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("chunkThreshold"),
-		opt->opt.chunk_threshold = chunk_thr);
+		opt->opt.chunk_threshold = (SIZE) chunk_thr);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("allocationPageSize"),
-		opt->opt.allocation_page_size = alloc_pgsz);
+		opt->opt.allocation_page_size = (SIZE) alloc_pgsz);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("skipCharacterValidation"),
-		opt->opt.skip_character_validation = skip_validation);
+		opt->opt.skip_character_validation = (SIZE) skip_validation);
 }
 static ZEND_METHOD(ion_Reader_Reader, hasChildren)
 {
@@ -1275,7 +1274,7 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("indentTabs"),
 			obj->opt.indent_with_tabs = tabs);
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("indentSize"),
-			obj->opt.indent_size = indent);
+			obj->opt.indent_size = (SIZE) indent);
 	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("smallContainersInline"),
 			obj->opt.small_containers_in_line = small_cntr_inl);
 	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("suppressSystemValues"),
@@ -1283,13 +1282,13 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("flushEveryValue"),
 			obj->opt.flush_every_value = flush);
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("maxContainerDepth"),
-			obj->opt.max_container_depth = max_depth);
+			obj->opt.max_container_depth = (SIZE) max_depth);
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("maxAnnotations"),
-			obj->opt.max_annotation_count = max_ann);
+			obj->opt.max_annotation_count = (SIZE) max_ann);
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("tempBufferSize"),
-			obj->opt.temp_buffer_size = temp);
+			obj->opt.temp_buffer_size = (SIZE) temp);
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("allocationPageSize"),
-			obj->opt.allocation_page_size = alloc);
+			obj->opt.allocation_page_size = (SIZE) alloc);
 }
 static ZEND_METHOD(ion_Writer_Writer, writeNull)
 {
@@ -1774,8 +1773,11 @@ PHP_RSHUTDOWN_FUNCTION(ion)
 }
 
 #define ZEND_ARG_VARIADIC_OBJ_TYPE_MASK(pass_by_ref, name, classname, type_mask, default_value) \
-	{ #name, ZEND_TYPE_INIT_CLASS_CONST_MASK(#classname, type_mask | _ZEND_ARG_INFO_FLAGS(pass_by_ref, 1, 0)), default_value },
+	{ #name, ZEND_TYPE_INIT_CLASS_CONST_MASK(#classname, ((type_mask) | _ZEND_ARG_INFO_FLAGS(pass_by_ref, 1, 0))), default_value },
 #include "ion_arginfo.h"
+
+// spl_iterators.h includes ext/pcre/php_pcre.h which might not find pcre2.h
+extern PHPAPI zend_class_entry *spl_ce_RecursiveIterator;
 
 PHP_MINIT_FUNCTION(ion)
 {

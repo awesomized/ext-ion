@@ -358,7 +358,7 @@ static inline void php_ion_globals_unserializer_dtor(void)
 } while (0)
 
 #define php_ion_obj(type, obj) \
-	((php_ion_ ## type *) (obj ? ((char *)(obj) - XtOffsetOf(php_ion_ ## type, std)) : NULL))
+	((php_ion_ ## type *) ((obj) ? ((char *)(obj) - XtOffsetOf(php_ion_ ## type, std)) : NULL))
 
 #define ION_CHECK_RETURN(r, err, ...) do { \
 	iERR __err = err; \
@@ -396,7 +396,7 @@ static inline void php_ion_globals_unserializer_dtor(void)
 
 static inline ION_STRING *ion_string_from_zend(ION_STRING *is, const zend_string *zs)
 {
-	is->length = zs ? zs->len : 0;
+	is->length = zs ? (SIZE) zs->len : 0;
 	is->value = (BYTE *) (zs ? zs->val : NULL);
 	return is;
 }
@@ -639,7 +639,7 @@ typedef struct php_ion_decimal_ctx {
 #define php_ion_decimal_ctx_init_max(c, rounding) \
 	php_ion_decimal_ctx_init((c), DEC_MAX_DIGITS, DEC_MAX_EMAX, DEC_MIN_EMIN, (rounding), false)
 static inline void php_ion_decimal_ctx_init(decContext *ctx,
-		zend_long digits, zend_long emax, zend_long emin, zend_long round, zend_bool clamp)
+		int digits, int emax, int emin, enum rounding round, zend_bool clamp)
 {
 	memset(ctx, 0, sizeof(*ctx));
 	ctx->digits = digits;
@@ -771,7 +771,7 @@ static inline zend_long php_usec_from_ion(const decQuad *frac, decContext *ctx)
 	return (zend_long) decQuadToUInt32(&result, ctx, DEC_ROUND_HALF_EVEN);
 }
 
-static inline decQuad *ion_ts_frac_from_usec(decQuad *frac, zend_long usec, decContext *ctx)
+static inline decQuad *ion_ts_frac_from_usec(decQuad *frac, int usec, decContext *ctx)
 {
 	if (!ctx) {
 		ctx = &php_ion_globals.decimal.ctx;
@@ -780,7 +780,7 @@ static inline decQuad *ion_ts_frac_from_usec(decQuad *frac, zend_long usec, decC
  	return decQuadDivide(frac, decQuadFromInt32(&us, usec), decQuadFromInt32(&microsecs, 1000000), ctx);
 }
 
-static inline zend_string *php_dt_format_from_precision(int precision)
+static inline zend_string *php_dt_format_from_precision(uint8_t precision)
 {
 	switch (precision & 0x7f) {
 	case ION_TS_FRAC:
@@ -802,7 +802,7 @@ static inline zend_string *php_dt_format_from_precision(int precision)
 
 static inline timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContext *ctx, zend_string **fmt)
 {
-	timelib_time *time = timelib_time_ctor();
+	timelib_time *time = ecalloc(1, sizeof(*time));
 
 	int precision = ION_TS_FRAC;
 	ion_timestamp_get_precision(ts,  &precision);
@@ -854,7 +854,7 @@ static inline ION_TIMESTAMP *ion_timestamp_from_php(ION_TIMESTAMP *buf, php_ion_
 				"Invalid precision (%d) of ion\\Timestamp", precision);
 	} else switch ((buf->precision = precision)) {
 	case ION_TS_FRAC:
-		ion_ts_frac_from_usec(&buf->fraction, ts->time->us, ctx);
+		ion_ts_frac_from_usec(&buf->fraction, (int) ts->time->us, ctx);
 		/* fallthrough */
 	case ION_TS_SEC:
 		buf->seconds = ts->time->s;
@@ -873,7 +873,7 @@ static inline ION_TIMESTAMP *ion_timestamp_from_php(ION_TIMESTAMP *buf, php_ion_
 		buf->year = ts->time->y;
 		/* fallthrough */
 	default:
-		buf->tz_offset = ts->time->z / 60;
+		buf->tz_offset = (short) (ts->time->z / 60);
 		if (buf->tz_offset) {
 			buf->precision |= 0x80;
 		}
@@ -1095,9 +1095,7 @@ static inline void php_ion_reader_ctor(php_ion_reader *obj)
 		err = ion_reader_open_stream(&obj->reader, obj, php_ion_reader_stream_handler, opt ? &opt->opt : NULL);
 
 	} else {
-		err = ion_reader_open_buffer(&obj->reader,
-				(BYTE *) obj->buffer->val, obj->buffer->len,
-				opt ? &opt->opt : NULL);
+		err = ion_reader_open_buffer(&obj->reader, (BYTE *) obj->buffer->val, (SIZE) obj->buffer->len, opt ? &opt->opt : NULL);
 	}
 
 	ION_CHECK(err);
@@ -1408,11 +1406,11 @@ static inline void php_ion_serialize_struct(php_ion_serializer *ser, zend_array 
 				prop_name = k->val;
 				prop_len = k->len;
 			}
-			ion_string_assign_cstr(&is, (char *) prop_name, prop_len);
+			ion_string_assign_cstr(&is, (char *) prop_name, (SIZE) prop_len);
 		} else {
 			char *end = buf + sizeof(buf) - 1;
 			char *ptr = zend_print_long_to_buf(end, (zend_long) h);
-			ion_string_assign_cstr(&is, ptr, end - ptr);
+			ion_string_assign_cstr(&is, ptr, (SIZE) (end - ptr));
 		}
 
 		// WATCH OUT: field names need to be copied
@@ -1547,15 +1545,16 @@ static inline bool can_call_magic_serialize(php_ion_serializer *ser, zend_class_
 	return ce->__serialize && ser->call_magic;
 }
 
-static inline bool can_call_iface_serialize(php_ion_serializer *, zend_class_entry *ce)
+static inline bool can_call_iface_serialize(php_ion_serializer *ser, zend_class_entry *ce)
 {
-	return !!ce->serialize;
+  (void) ser;
+	return !!ce->serialize; // NOLINT
 }
 
 static inline bool can_call_custom_serialize(php_ion_serializer *ser, zend_object *zobject, zend_function **fn)
 {
 	if (ser->call_custom) {
-		return !!(*fn = zend_hash_find_ptr(&zobject->ce->function_table, ser->call_custom));
+		return !!(*fn = zend_hash_find_ptr(&zobject->ce->function_table, ser->call_custom)); // NOLINT
 	}
 	return false;
 }
@@ -1818,7 +1817,7 @@ static inline bool can_call_iface_unserialize(php_ion_unserializer *ser, zend_cl
 static inline bool can_call_custom_unserialize(php_ion_unserializer *ser, zend_object *zobject, zend_function **fn)
 {
 	if (ser->call_custom) {
-		return !!(*fn = zend_hash_find_ptr(&zobject->ce->function_table, ser->call_custom));
+		return !!(*fn = zend_hash_find_ptr(&zobject->ce->function_table, ser->call_custom)); // NOLINT
 	}
 	return false;
 }
@@ -2104,7 +2103,7 @@ static inline void php_ion_reader_read_lob(ION_READER *reader, zval *return_valu
 	zend_string *zstr = zend_string_alloc(0x1000, 0);
 again: ;
 	SIZE read = 0;
-	iERR err = ion_reader_read_lob_bytes(reader, (BYTE *) zstr->val, zstr->len, &read);
+	iERR err = ion_reader_read_lob_bytes(reader, (BYTE *) zstr->val, (SIZE) zstr->len, &read);
 	if (err == IERR_BUFFER_TOO_SMALL) {
 		zstr = zend_string_extend(zstr, zstr->len << 2, 0);
 		goto again;
@@ -2174,7 +2173,7 @@ static inline void php_ion_unserialize_backref(php_ion_unserializer *ser, zval *
 		zend_hash_next_index_insert(ser->addref, return_value);
 	} else {
 		zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INTERNAL_ERROR,
-				"Could not find back reference %ld", Z_LVAL_P(return_value));
+				"Could not find back reference " ZEND_LONG_FMT, Z_LVAL_P(return_value));
 	}
 }
 
@@ -2272,7 +2271,7 @@ static inline void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 static inline void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *return_value, ION_TYPE *typ)
 {
 	if (typ) {
-		memcpy(&ser->type, typ, sizeof(ser->type));
+		memcpy(&ser->type, typ, sizeof(ser->type)); // NOLINT
 	} else {
 		typ = &ser->type;
 		ION_CHECK(ion_reader_next(ser->reader, typ));
