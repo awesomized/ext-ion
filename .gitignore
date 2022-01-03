@@ -1,3 +1,5 @@
+*~
+*.o
 *.lo
 *.la
 .libs
@@ -41,3 +43,5 @@ tests/**/*.mem
 tests/Timestamp/
 tmp-php.ini
 *.dep
+*.gcda
+*.gcno

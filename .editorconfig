@@ -8,6 +8,10 @@ indent_style = tab
 charset = utf-8
 trim_trailing_whitespace = true
 
+[*.m4]
+indent_style = space
+indent_size = 2
+
 [*.php]
 indent_style = space
 indent_size = 4
