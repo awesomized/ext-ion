@@ -19,7 +19,7 @@ $w->finish();
 foreach (str_split($buf, 8) as $line) {
 	printf("%-26s", chunk_split(bin2hex($line), 2, " "));
 	foreach (str_split($line) as $byte) {
-		echo ctype_print($byte) ? $byte : ".";
+		echo $byte >= ' ' && $byte <= '~' ? $byte : ".";
 	}
 	echo "\n";
 }
