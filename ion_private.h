@@ -1609,21 +1609,18 @@ static inline bool php_ion_serialize_system_value(php_ion_serializer *ser, zval 
 	return false;
 }
 
-static inline void php_ion_serialize_refcounted(php_ion_serializer *ser, zval *zv)
+static inline bool php_ion_serialize_backref(php_ion_serializer *ser, zval *zv)
 {
-	if (php_ion_serialize_system_value(ser, zv)) {
-		return;
+	if (Z_TYPE_P(zv) == IS_STRING && Z_STR_P(zv) == zend_empty_string) {
+		return false;
+	}
+	if (Z_TYPE_P(zv) == IS_ARRAY && Z_ARR_P(zv) == &zend_empty_array) {
+		return false;
 	}
 
 	zend_ulong idx = (zend_ulong) (uintptr_t) Z_COUNTED_P(zv);
-
-	ION_STRING is;
-	if (zend_hash_index_exists(ser->ids, idx)) {
-		zval *num = zend_hash_index_find(ser->ids, idx);
-
-		ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_BACKREF));
-		ION_CHECK(ion_writer_write_int64(ser->writer, Z_LVAL_P(num)));
-	} else {
+	zval *ref = zend_hash_index_find(ser->ids, idx);
+	if (!ref) {
 		zval num;
 
 		ZVAL_LONG(&num, zend_hash_num_elements(ser->ids));
@@ -1632,24 +1629,41 @@ static inline void php_ion_serialize_refcounted(php_ion_serializer *ser, zval *z
 		Z_TRY_ADDREF_P(zv);
 		zend_hash_next_index_insert(ser->tmp, zv);
 
-		switch (Z_TYPE_P(zv)) {
-		case IS_STRING:
-			ION_CHECK(ion_writer_write_string(ser->writer, ion_string_from_zend(&is, Z_STR_P(zv))));
-			break;
+		return false;
+	}
 
-		case IS_ARRAY:
-			php_ion_serialize_array(ser, Z_ARRVAL_P(zv));
-			break;
+	ION_CHECK_RETURN(true, ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_BACKREF));
+	ION_CHECK_RETURN(true, ion_writer_write_int64(ser->writer, Z_LVAL_P(ref)));
+	return true;
+}
 
-		case IS_OBJECT:
-			php_ion_serialize_object(ser, Z_OBJ_P(zv));
-			break;
+static inline void php_ion_serialize_refcounted(php_ion_serializer *ser, zval *zv)
+{
+	if (php_ion_serialize_system_value(ser, zv)) {
+		return;
+	}
+	if (php_ion_serialize_backref(ser, zv)) {
+		return;
+	}
 
-		case IS_REFERENCE:
-			ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_REFERENCE));
-			php_ion_serialize_zval(ser, Z_REFVAL_P(zv));
-			break;
-		}
+	ION_STRING is;
+	switch (Z_TYPE_P(zv)) {
+	case IS_STRING:
+		ION_CHECK(ion_writer_write_string(ser->writer, ion_string_from_zend(&is, Z_STR_P(zv))));
+		break;
+
+	case IS_ARRAY:
+		php_ion_serialize_array(ser, Z_ARRVAL_P(zv));
+		break;
+
+	case IS_OBJECT:
+		php_ion_serialize_object(ser, Z_OBJ_P(zv));
+		break;
+
+	case IS_REFERENCE:
+		ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_REFERENCE));
+		php_ion_serialize_zval(ser, Z_REFVAL_P(zv));
+		break;
 	}
 }
 
