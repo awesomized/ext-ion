@@ -136,7 +136,7 @@ typedef struct php_ion_serializer {
 	HashTable *tmp;
 } php_ion_serializer;
 
-typedef struct php_ion_annotaions {
+typedef struct php_ion_annotations {
 	uint8_t shared_symtab:1;
 	uint8_t backref:1;
 	uint8_t makeref:1;
