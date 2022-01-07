@@ -18,6 +18,12 @@ var_dump($s=new Symbol("s"), (string)$s, $s->sid);
 var_dump($s=new Symbol("s", 1), (string)$s, $s->sid);
 var_dump($s=new Symbol(1, 2), (string)$s, $s->sid);
 
+var_dump(ion\unserialize(ion\serialize(clone new ion\Symbol("sym"))));
+try {
+	var_dump(ion\unserialize(ion\serialize(clone new ion\Symbol(null, 123))));
+} catch (Throwable $e) {
+	printf("caught %s: %s\n", get_class($e), $e->getMessage());
+}
 ?>
 DONE
 --EXPECTF--
@@ -70,4 +76,13 @@ object(ion\Symbol)#%d (3) {
 }
 string(1) "1"
 int(2)
+object(ion\Symbol)#%d (3) {
+  ["value"]=>
+  string(3) "sym"
+  ["sid"]=>
+  int(-1)
+  ["importLocation"]=>
+  NULL
+}
+caught RuntimeException: IERR_INVALID_SYMBOL: %s
 DONE

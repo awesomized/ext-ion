@@ -112,7 +112,9 @@ function System() : \ion\Symbol\Table {}
 
 namespace ion\Symbol\Table;
 class Local implements \ion\Symbol\Table {
+    /** Internal cache */
     private array $imports = [];
+    /** Internal cache */
     private array $symbols = [];
 
     public function __construct() {}
@@ -288,6 +290,7 @@ interface Reader extends \RecursiveIterator {
     public function getValueOffset() : int;
     public function getValueLength() : int;
 }
+
 namespace ion\Reader;
 class Options {
     public function __construct(

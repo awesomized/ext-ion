@@ -13,6 +13,12 @@
 #include "php.h"
 #include "ext/date/php_date.h"
 
+#if PHP_DEBUG
+# define LOCAL static
+#else
+# define LOCAL static inline
+#endif
+
 #define DECNUMDIGITS 34 /* DECQUAD_Pmax */
 #include "ionc/ion.h"
 
@@ -71,7 +77,7 @@ static HashTable g_sym_map;
 	g_sym_map_add(ION_SYS_SID_ ## c_name, enum_name, sizeof(enum_name)-1); \
 } while (0)
 
-static inline void g_sym_hash_add(int sid, const char *str, size_t len)
+LOCAL void g_sym_hash_add(int sid, const char *str, size_t len)
 {
 	zval zl, zs;
 	ZVAL_LONG(&zl, sid);
@@ -80,14 +86,14 @@ static inline void g_sym_hash_add(int sid, const char *str, size_t len)
 	zend_hash_index_add(&g_sym_hash, sid, &zs);
 }
 
-static inline void g_sym_map_add(int sid, const char *str, size_t len)
+LOCAL void g_sym_map_add(int sid, const char *str, size_t len)
 {
 	zval zv;
 	ZVAL_LONG(&zv, sid);
 	zend_hash_str_add(&g_sym_map, str, len, &zv);
 }
 
-static inline int g_sym_init(void)
+LOCAL int g_sym_init(void)
 {
 	zend_hash_init(&g_sym_hash, 0, NULL, NULL, 1);
 	zend_hash_init(&g_sym_map, 0, NULL, NULL, 1);
@@ -230,17 +236,17 @@ static zend_class_entry
 	*ce_Writer_Writer
 	;
 
-static inline void php_ion_globals_symbols_init(void)
+LOCAL void php_ion_globals_symbols_init(void)
 {
 	zend_hash_init(&php_ion_globals.symbol.cache, 0, NULL, ZVAL_PTR_DTOR, 0);
 }
 
-static inline void php_ion_globals_symbols_dtor(void)
+LOCAL void php_ion_globals_symbols_dtor(void)
 {
 	zend_hash_destroy(&php_ion_globals.symbol.cache);
 }
 
-static inline void php_ion_globals_serializer_init(void)
+LOCAL void php_ion_globals_serializer_init(void)
 {
 	php_ion_serializer *s = &php_ion_globals.serializer;
 	HashTable *h = php_ion_globals._ht.serializer;
@@ -249,7 +255,7 @@ static inline void php_ion_globals_serializer_init(void)
 	zend_hash_init(s->ids = &h[1], 0, NULL, NULL, 0);
 }
 
-static inline uint32_t php_ion_globals_serializer_step(void)
+LOCAL uint32_t php_ion_globals_serializer_step(void)
 {
 	php_ion_serializer *s = &php_ion_globals.serializer;
 	uint32_t level;
@@ -261,7 +267,7 @@ static inline uint32_t php_ion_globals_serializer_step(void)
 	return level;
 }
 
-static inline uint32_t php_ion_globals_serializer_exit(void)
+LOCAL uint32_t php_ion_globals_serializer_exit(void)
 {
 	php_ion_serializer *s = &php_ion_globals.serializer;
 
@@ -273,7 +279,7 @@ static inline uint32_t php_ion_globals_serializer_exit(void)
 	return s->level;
 }
 
-static inline void php_ion_globals_serializer_dtor(void)
+LOCAL void php_ion_globals_serializer_dtor(void)
 {
 	php_ion_serializer *s = &php_ion_globals.serializer;
 
@@ -289,7 +295,7 @@ void ZVAL_ADDREF(zval *zv)
 		Z_TRY_ADDREF_P(zv);
 	}
 }
-static inline void php_ion_globals_unserializer_init(void)
+LOCAL void php_ion_globals_unserializer_init(void)
 {
 	php_ion_unserializer *s = &php_ion_globals.unserializer;
 	HashTable *h = php_ion_globals._ht.unserializer;
@@ -299,7 +305,7 @@ static inline void php_ion_globals_unserializer_init(void)
 	zend_hash_init(s->addref = &h[2], 0, NULL, ZVAL_ADDREF, 0);
 }
 
-static inline void php_ion_globals_unserializer_step(void)
+LOCAL void php_ion_globals_unserializer_step(void)
 {
 	php_ion_unserializer *s = &php_ion_globals.unserializer;
 
@@ -310,7 +316,7 @@ static inline void php_ion_globals_unserializer_step(void)
 	}
 }
 
-static inline void php_ion_globals_unserializer_exit(void)
+LOCAL void php_ion_globals_unserializer_exit(void)
 {
 	php_ion_unserializer *s = &php_ion_globals.unserializer;
 
@@ -322,7 +328,7 @@ static inline void php_ion_globals_unserializer_exit(void)
 	}
 }
 
-static inline void php_ion_globals_unserializer_dtor(void)
+LOCAL void php_ion_globals_unserializer_dtor(void)
 {
 	php_ion_unserializer *s = &php_ion_globals.unserializer;
 
@@ -331,9 +337,18 @@ static inline void php_ion_globals_unserializer_dtor(void)
 	zend_hash_destroy(s->tmp);
 }
 
-#define php_ion_decl(type, cname, ...) \
+#define php_ion_obj(type, zo) \
+	((php_ion_ ##type *) php_ion_obj_ex(zo, XtOffsetOf(php_ion_ ## type, std)))
+LOCAL void *php_ion_obj_ex(void *obj, ptrdiff_t offset) {
+	if (obj) {
+		return ((char *) obj) - offset;
+	}
+	return NULL;
+}
+
+#define php_ion_decl(type, cname) \
 	static zend_object_handlers oh_ ## cname; \
-	static inline zend_object *create_ion_ ## cname(zend_class_entry *ce) \
+	LOCAL zend_object *create_ion_ ## cname(zend_class_entry *ce) \
 	{ \
 		if (!ce) ce = ce_ ## cname; \
 		php_ion_ ## type *o = ecalloc(1, sizeof(*o) + zend_object_properties_size(ce)); \
@@ -342,12 +357,18 @@ static inline void php_ion_globals_unserializer_dtor(void)
 		o->std.handlers = &oh_ ## cname; \
 		return &o->std; \
 	} \
-	static inline void free_ion_ ## cname(zend_object *std) \
+	LOCAL void free_ion_ ## cname(zend_object *std) \
 	{ \
 		php_ion_ ## type *obj = php_ion_obj(type, std); \
-		__VA_ARGS__; \
+		php_ion_ ## type ## _dtor(obj); \
 		zend_object_std_dtor(std); \
-		(void) obj; \
+	} \
+	LOCAL zend_object *clone_ion_ ## cname(zend_object *std) \
+	{ \
+		php_ion_ ## type *old_obj = php_ion_obj(type, std), \
+						 *new_obj = php_ion_obj(type, create_ion_ ## cname(std->ce)); \
+		php_ion_ ## type ## _copy(new_obj, old_obj); \
+		return &new_obj->std; \
 	}
 #define php_ion_register(type, cname, ...) do { \
 	ce_ ## cname = register_class_ion_ ## cname(__VA_ARGS__); \
@@ -355,10 +376,8 @@ static inline void php_ion_globals_unserializer_dtor(void)
 	memcpy(&oh_ ## cname, zend_get_std_object_handlers(), sizeof(zend_object_handlers)); \
 	oh_ ## cname .offset = offsetof(php_ion_ ## type, std); \
 	oh_ ## cname .free_obj = free_ion_ ## cname; \
+	oh_ ## cname .clone_obj = clone_ion_ ## cname; \
 } while (0)
-
-#define php_ion_obj(type, obj) \
-	((php_ion_ ## type *) ((obj) ? ((char *)(obj) - XtOffsetOf(php_ion_ ## type, std)) : NULL))
 
 #define ION_CHECK_RETURN(r, err, ...) do { \
 	iERR __err = err; \
@@ -394,23 +413,32 @@ static inline void php_ion_globals_unserializer_dtor(void)
 } while (0)
 #define OBJ_CHECK(obj, ...) OBJ_CHECK_RETURN(, obj, __VA_ARGS__)
 
-static inline ION_STRING *ion_string_from_zend(ION_STRING *is, const zend_string *zs)
+LOCAL ION_STRING *ion_string_from_zend(ION_STRING *is, const zend_string *zs)
 {
 	is->length = zs ? (SIZE) zs->len : 0;
 	is->value = (BYTE *) (zs ? zs->val : NULL);
 	return is;
 }
 
-static inline zend_string *zend_string_from_ion(const ION_STRING *s)
+LOCAL zend_string *zend_string_from_ion(const ION_STRING *s)
 {
 	return zend_string_init((const char *) s->value, s->length, 0);
 }
 
-static inline void update_property_obj(zend_object *obj, const char *n, size_t l, zend_object *p)
+LOCAL void update_property_obj(zend_object *obj, const char *n, size_t l, zend_object *p)
 {
 	zval zobj;
 	ZVAL_OBJ(&zobj, p);
 	zend_update_property(obj->ce, obj, n, l, &zobj);
+}
+
+LOCAL zend_object *get_property_obj(zend_object *obj, const char *n, size_t l, int type)
+{
+	zval tmp, *zv = zend_read_property(obj->ce, obj, n, l, 0, &tmp);
+	if (zv && type & Z_TYPE_P(zv)) {
+		return Z_PTR_P(zv);
+	}
+	return NULL;
 }
 
 #define RETURN_IONTYPE(typ) do { \
@@ -421,7 +449,7 @@ static inline void update_property_obj(zend_object *obj, const char *n, size_t l
 	RETURN_OBJ_COPY(__zo); \
 } while(0)
 
-static inline zend_object *php_ion_type_fetch(ION_TYPE typ)
+LOCAL zend_object *php_ion_type_fetch(ION_TYPE typ)
 {
 	zend_long index = ION_TYPE_INT(typ);
 	zval *ztype = zend_hash_index_find(ce_Type->backed_enum_table, index);
@@ -433,7 +461,7 @@ static inline zend_object *php_ion_type_fetch(ION_TYPE typ)
 	return zend_enum_get_case(ce_Type, Z_STR_P(ztype));
 }
 
-static inline ION_TYPE ion_type_from_enum(zend_object *zo)
+LOCAL ION_TYPE ion_type_from_enum(zend_object *zo)
 {
 	return (ION_TYPE) Z_LVAL_P(zend_enum_fetch_case_value(zo));
 }
@@ -444,19 +472,27 @@ typedef struct php_ion_symbol_iloc {
 	zend_object std;
 } php_ion_symbol_iloc;
 
-static inline void php_ion_symbol_iloc_ctor(php_ion_symbol_iloc *obj)
+LOCAL void php_ion_symbol_iloc_ctor(php_ion_symbol_iloc *obj)
 {
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("location"), obj->loc.location);
 	zend_update_property_str(obj->std.ce, &obj->std, ZEND_STRL("name"), obj->name);
 	ion_string_from_zend(&obj->loc.name, obj->name);
 }
 
-static inline void php_ion_symbol_iloc_dtor(php_ion_symbol_iloc *obj)
+LOCAL void php_ion_symbol_iloc_dtor(php_ion_symbol_iloc *obj)
 {
 	zend_string_release(obj->name);
 }
 
-php_ion_decl(symbol_iloc, Symbol_ImportLocation, php_ion_symbol_iloc_dtor(obj));
+LOCAL void php_ion_symbol_iloc_copy(php_ion_symbol_iloc *new_obj, php_ion_symbol_iloc *old_obj)
+{
+	zend_objects_clone_members(&new_obj->std, &old_obj->std);
+	new_obj->name = zend_string_copy(old_obj->name);
+	ion_string_from_zend(&new_obj->loc.name, new_obj->name);
+	new_obj->loc.location = old_obj->loc.location;
+}
+
+php_ion_decl(symbol_iloc, Symbol_ImportLocation);
 
 typedef struct php_ion_symbol {
 	ION_SYMBOL sym;
@@ -464,7 +500,7 @@ typedef struct php_ion_symbol {
 	zend_object *iloc, std;
 } php_ion_symbol;
 
-static inline int php_ion_symbol_zval_compare(zval *zv1, zval *zv2) {
+LOCAL int php_ion_symbol_zval_compare(zval *zv1, zval *zv2) {
 	zend_string *zs1 = zval_get_string(zv1);
 	zend_string *zs2 = zval_get_string(zv2);
 
@@ -485,7 +521,7 @@ static inline int php_ion_symbol_zval_compare(zval *zv1, zval *zv2) {
 	return result;
 }
 
-static inline void php_ion_symbol_ctor(php_ion_symbol *obj)
+LOCAL void php_ion_symbol_ctor(php_ion_symbol *obj)
 {
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("sid"),
 		obj->sym.sid);
@@ -503,14 +539,28 @@ static inline void php_ion_symbol_ctor(php_ion_symbol *obj)
 	}
 }
 
-static inline void php_ion_symbol_dtor(php_ion_symbol *obj)
+LOCAL void php_ion_symbol_dtor(php_ion_symbol *obj)
 {
 	if (obj->value) {
 		zend_string_release(obj->value);
 	}
 }
 
-static inline void php_ion_symbol_zval(ION_SYMBOL *sym_ptr, zval *return_value)
+LOCAL void php_ion_symbol_copy(php_ion_symbol *new_obj, php_ion_symbol *old_obj)
+{
+	zend_objects_clone_members(&new_obj->std, &old_obj->std);
+	new_obj->sym = old_obj->sym;
+	if (old_obj->value) {
+		new_obj->value = zend_string_copy(old_obj->value);
+		ion_string_from_zend(&new_obj->sym.value, new_obj->value);
+	}
+
+	if ((new_obj->iloc = get_property_obj(&new_obj->std, ZEND_STRL("importLocation"), IS_OBJECT))) {
+		new_obj->sym.import_location = php_ion_obj(symbol_iloc, new_obj->iloc)->loc;
+	}
+}
+
+LOCAL void php_ion_symbol_zval(ION_SYMBOL *sym_ptr, zval *return_value)
 {
 	object_init_ex(return_value, ce_Symbol);
 	php_ion_symbol *sym = php_ion_obj(symbol, Z_OBJ_P(return_value));
@@ -536,7 +586,7 @@ static inline void php_ion_symbol_zval(ION_SYMBOL *sym_ptr, zval *return_value)
 	}
 }
 
-static inline zval *php_ion_global_symbol_fetch_by_enum(zend_string *name)
+LOCAL zval *php_ion_global_symbol_fetch_by_enum(zend_string *name)
 {
 	zval *zgs = zend_hash_find(&php_ion_globals.symbol.cache, name);
 	if (!zgs) {
@@ -557,7 +607,7 @@ static inline zval *php_ion_global_symbol_fetch_by_enum(zend_string *name)
 	return zgs;
 }
 
-php_ion_decl(symbol, Symbol, php_ion_symbol_dtor(obj));
+php_ion_decl(symbol, Symbol);
 
 typedef struct php_ion_symbol_table {
 	ION_SYMBOL_TABLE *tab;
@@ -565,7 +615,7 @@ typedef struct php_ion_symbol_table {
 	zend_object std;
 } php_ion_symbol_table;
 
-static inline void php_ion_symbol_table_ctor(php_ion_symbol_table *obj)
+LOCAL void php_ion_symbol_table_ctor(php_ion_symbol_table *obj)
 {
 	OBJ_CHECK(obj);
 
@@ -579,7 +629,7 @@ static inline void php_ion_symbol_table_ctor(php_ion_symbol_table *obj)
 	}
 }
 
-static inline void php_ion_symbol_table_dtor(php_ion_symbol_table *obj)
+LOCAL void php_ion_symbol_table_dtor(php_ion_symbol_table *obj)
 {
 	if (obj->tab) {
 		if (obj->dtor) {
@@ -589,7 +639,20 @@ static inline void php_ion_symbol_table_dtor(php_ion_symbol_table *obj)
 	}
 }
 
-static inline void php_ion_symbol_table_import(php_ion_symbol_table *obj, php_ion_symbol_table *import)
+LOCAL void php_ion_symbol_table_copy(php_ion_symbol_table *new_obj, php_ion_symbol_table *old_obj)
+{
+	// do not clone cache members
+	// zend_objects_clone_members(...)
+	if ((new_obj->dtor = old_obj->dtor)) {
+		ION_CHECK(ion_symbol_table_clone_with_owner(old_obj->tab, &new_obj->tab, NULL));
+	} else {
+		new_obj->tab = old_obj->tab;
+	}
+	// update non-cache members
+	php_ion_symbol_table_ctor(new_obj);
+}
+
+LOCAL void php_ion_symbol_table_import(php_ion_symbol_table *obj, php_ion_symbol_table *import)
 {
 	OBJ_CHECK(obj);
 	OBJ_CHECK(import);
@@ -609,7 +672,7 @@ static inline void php_ion_symbol_table_import(php_ion_symbol_table *obj, php_io
 	}
 }
 
-static inline void php_ion_symbol_table_symbol_zval(php_ion_symbol_table *obj, ION_SYMBOL *sym, zval *return_value)
+LOCAL void php_ion_symbol_table_symbol_zval(php_ion_symbol_table *obj, ION_SYMBOL *sym, zval *return_value)
 {
 	zval tmp;
 	zval *zsyms = zend_read_property(obj->std.ce, &obj->std, ZEND_STRL("symbols"), 0, &tmp);
@@ -629,7 +692,7 @@ static inline void php_ion_symbol_table_symbol_zval(php_ion_symbol_table *obj, I
 	}
 }
 
-php_ion_decl(symbol_table, Symbol_Table, php_ion_symbol_table_dtor(obj));
+php_ion_decl(symbol_table, Symbol_Table);
 
 typedef struct php_ion_decimal_ctx {
 	decContext ctx;
@@ -638,7 +701,7 @@ typedef struct php_ion_decimal_ctx {
 
 #define php_ion_decimal_ctx_init_max(c, rounding) \
 	php_ion_decimal_ctx_init((c), DEC_MAX_DIGITS, DEC_MAX_EMAX, DEC_MIN_EMIN, (rounding), false)
-static inline void php_ion_decimal_ctx_init(decContext *ctx,
+LOCAL void php_ion_decimal_ctx_init(decContext *ctx,
 		int digits, int emax, int emin, enum rounding round, zend_bool clamp)
 {
 	memset(ctx, 0, sizeof(*ctx));
@@ -649,7 +712,7 @@ static inline void php_ion_decimal_ctx_init(decContext *ctx,
 	ctx->clamp = clamp;
 }
 
-static inline void php_ion_decimal_ctx_ctor(php_ion_decimal_ctx *obj, zend_object *o_round)
+LOCAL void php_ion_decimal_ctx_ctor(php_ion_decimal_ctx *obj, zend_object *o_round)
 {
 	if (!obj->ctx.digits) {
 		php_ion_decimal_ctx_init_max(&obj->ctx, DEC_ROUND_HALF_EVEN);
@@ -665,6 +728,16 @@ static inline void php_ion_decimal_ctx_ctor(php_ion_decimal_ctx *obj, zend_objec
 	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("clamp"), obj->ctx.clamp);
 }
 
+LOCAL void php_ion_decimal_ctx_dtor(php_ion_decimal_ctx *obj)
+{
+}
+
+LOCAL void php_ion_decimal_ctx_copy(php_ion_decimal_ctx *new_obj, php_ion_decimal_ctx *old_obj)
+{
+	zend_objects_clone_members(&new_obj->std, &old_obj->std);
+	new_obj->ctx = old_obj->ctx;
+}
+
 php_ion_decl(decimal_ctx, Decimal_Context);
 
 typedef struct php_ion_decimal {
@@ -672,7 +745,7 @@ typedef struct php_ion_decimal {
 	zend_object *ctx, std;
 } php_ion_decimal;
 
-static inline void php_ion_decimal_from_zend_long(ION_DECIMAL *dec, decContext *ctx, zend_long num)
+LOCAL void php_ion_decimal_from_zend_long(ION_DECIMAL *dec, decContext *ctx, zend_long num)
 {
 	if (num <= INT32_MAX && num >= INT32_MIN) {
 		ION_CHECK(ion_decimal_from_int32(dec, num));
@@ -691,14 +764,14 @@ static inline void php_ion_decimal_from_zend_long(ION_DECIMAL *dec, decContext *
 	}
 }
 
-static inline zend_string *php_ion_decimal_to_string(ION_DECIMAL *dec)
+LOCAL zend_string *php_ion_decimal_to_string(ION_DECIMAL *dec)
 {
 	zend_string *zstr = zend_string_alloc(ION_DECIMAL_STRLEN(dec), 0);
 	(void) ion_decimal_to_string(dec, zstr->val);
 	return zend_string_truncate(zstr, strlen(zstr->val), 0);
 }
 
-static inline void php_ion_decimal_to_zend_long(ION_DECIMAL *dec, decContext *ctx, zend_long *l)
+LOCAL void php_ion_decimal_to_zend_long(ION_DECIMAL *dec, decContext *ctx, zend_long *l)
 {
 	ION_INT *ii = NULL;
 	ION_CHECK(ion_int_alloc(NULL, &ii));
@@ -709,7 +782,7 @@ static inline void php_ion_decimal_to_zend_long(ION_DECIMAL *dec, decContext *ct
 	ion_int_free(ii);
 }
 
-static inline bool php_ion_decimal_fits_zend_long(php_ion_decimal *obj)
+LOCAL bool php_ion_decimal_fits_zend_long(php_ion_decimal *obj)
 {
 	int32_t result;
 
@@ -730,7 +803,7 @@ static inline bool php_ion_decimal_fits_zend_long(php_ion_decimal *obj)
 	return true;
 }
 
-static inline void php_ion_decimal_ctor(php_ion_decimal *obj)
+LOCAL void php_ion_decimal_ctor(php_ion_decimal *obj)
 {
 	if (!obj->ctx) {
 		zval zdc;
@@ -752,16 +825,23 @@ static inline void php_ion_decimal_ctor(php_ion_decimal *obj)
 	}
 }
 
-static inline void php_ion_decimal_dtor(php_ion_decimal *obj)
+LOCAL void php_ion_decimal_dtor(php_ion_decimal *obj)
 {
 	ion_decimal_free(&obj->dec);
 }
 
-php_ion_decl(decimal, Decimal, php_ion_decimal_dtor(obj));
+LOCAL void php_ion_decimal_copy(php_ion_decimal *new_obj, php_ion_decimal *old_obj)
+{
+	zend_objects_clone_members(&new_obj->std, &old_obj->std);
+	new_obj->ctx = get_property_obj(&new_obj->std, ZEND_STRL("context"), IS_OBJECT);
+	ION_CHECK(ion_decimal_copy(&new_obj->dec, &old_obj->dec));
+}
+
+php_ion_decl(decimal, Decimal);
 
 typedef php_date_obj php_ion_timestamp;
 
-static inline zend_long php_usec_from_ion(const decQuad *frac, decContext *ctx)
+LOCAL zend_long php_usec_from_ion(const decQuad *frac, decContext *ctx)
 {
 	if (!ctx) {
 		ctx = &php_ion_globals.decimal.ctx;
@@ -771,7 +851,7 @@ static inline zend_long php_usec_from_ion(const decQuad *frac, decContext *ctx)
 	return (zend_long) decQuadToUInt32(&result, ctx, DEC_ROUND_HALF_EVEN);
 }
 
-static inline decQuad *ion_ts_frac_from_usec(decQuad *frac, int usec, decContext *ctx)
+LOCAL decQuad *ion_ts_frac_from_usec(decQuad *frac, int usec, decContext *ctx)
 {
 	if (!ctx) {
 		ctx = &php_ion_globals.decimal.ctx;
@@ -780,7 +860,7 @@ static inline decQuad *ion_ts_frac_from_usec(decQuad *frac, int usec, decContext
  	return decQuadDivide(frac, decQuadFromInt32(&us, usec), decQuadFromInt32(&microsecs, 1000000), ctx);
 }
 
-static inline zend_string *php_dt_format_from_precision(uint8_t precision)
+LOCAL zend_string *php_dt_format_from_precision(uint8_t precision)
 {
 	switch (precision & 0x7f) {
 	case ION_TS_FRAC:
@@ -800,7 +880,7 @@ static inline zend_string *php_dt_format_from_precision(uint8_t precision)
 	}
 }
 
-static inline timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContext *ctx, zend_string **fmt)
+LOCAL timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContext *ctx, zend_string **fmt)
 {
 	timelib_time *time = ecalloc(1, sizeof(*time));
 
@@ -842,7 +922,7 @@ static inline timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContex
 	return time;
 }
 
-static inline ION_TIMESTAMP *ion_timestamp_from_php(ION_TIMESTAMP *buf, php_ion_timestamp *ts, decContext *ctx)
+LOCAL ION_TIMESTAMP *ion_timestamp_from_php(ION_TIMESTAMP *buf, php_ion_timestamp *ts, decContext *ctx)
 {
 	memset(buf, 0, sizeof(*buf));
 
@@ -882,7 +962,7 @@ static inline ION_TIMESTAMP *ion_timestamp_from_php(ION_TIMESTAMP *buf, php_ion_
 	return buf;
 }
 
-static inline void php_ion_timestamp_ctor(php_ion_timestamp *obj, zend_long precision, zend_string *fmt, zend_string *dt, zval *tz)
+LOCAL void php_ion_timestamp_ctor(php_ion_timestamp *obj, zend_long precision, zend_string *fmt, zend_string *dt, zval *tz)
 {
 	if (!obj->time) {
 		php_date_initialize(obj, dt ? dt->val : "", dt ? dt->len : 0, fmt ? fmt->val : NULL, tz, PHP_DATE_INIT_CTOR);
@@ -899,19 +979,55 @@ typedef struct php_ion_catalog {
 	zend_object std;
 } php_ion_catalog;
 
-static inline void php_ion_catalog_ctor(php_ion_catalog *obj)
+LOCAL void php_ion_catalog_ctor(php_ion_catalog *obj)
 {
 	ION_CHECK(ion_catalog_open(&obj->cat));
 }
 
-static inline void php_ion_catalog_dtor(php_ion_catalog *obj)
+LOCAL void php_ion_catalog_dtor(php_ion_catalog *obj)
 {
 	if (obj->cat) {
 		ion_catalog_close(obj->cat);
 	}
 }
 
-static inline zend_string *ion_symbol_table_to_key(ION_SYMBOL_TABLE *tab)
+LOCAL ION_COLLECTION *php_ion_catalog_collection(php_ion_catalog *cat)
+{
+	/* do not look too close */
+	struct {
+		void *owner;
+		ION_SYMBOL_TABLE *sys;
+		ION_COLLECTION collection;
+	} *cat_ptr = (void *) cat->cat;
+	return &cat_ptr->collection;
+}
+// see https://github.com/amzn/ion-c/issues/269
+#ifndef IPCN_pNODE_TO_pDATA
+# define IPCN_pNODE_TO_pDATA(x)    (&((x)->_data[0]))
+#endif
+
+LOCAL void php_ion_catalog_copy(php_ion_catalog *new_obj, php_ion_catalog *old_obj)
+{
+	// do not clone members; they're only caches
+
+	php_ion_catalog_ctor(new_obj);
+	OBJ_CHECK(new_obj);
+
+	ION_COLLECTION *col = php_ion_catalog_collection(old_obj);
+	if (!ION_COLLECTION_IS_EMPTY(col)) {
+		ION_COLLECTION_CURSOR cur;
+		ION_COLLECTION_OPEN(col, cur);
+		while (cur) {
+			ION_SYMBOL_TABLE **ptr;
+			ION_COLLECTION_NEXT(cur, ptr);
+			if (*ptr) {
+				ION_CHECK(ion_catalog_add_symbol_table(new_obj->cat, *ptr));
+			}
+		}
+	}
+}
+
+LOCAL zend_string *ion_symbol_table_to_key(ION_SYMBOL_TABLE *tab)
 {
 	int32_t version;
 	ION_STRING is;
@@ -927,7 +1043,7 @@ static inline zend_string *ion_symbol_table_to_key(ION_SYMBOL_TABLE *tab)
 	return s.s;
 }
 
-static inline void php_ion_catalog_add_symbol_table(php_ion_catalog *obj, php_ion_symbol_table *tab)
+LOCAL void php_ion_catalog_add_symbol_table(php_ion_catalog *obj, php_ion_symbol_table *tab)
 {
 	OBJ_CHECK(obj);
 	OBJ_CHECK(tab);
@@ -953,7 +1069,7 @@ static inline void php_ion_catalog_add_symbol_table(php_ion_catalog *obj, php_io
 	}
 }
 
-static inline void php_ion_catalog_symbol_table_zval(php_ion_catalog *obj, ION_SYMBOL_TABLE *tab, zval *return_value)
+LOCAL void php_ion_catalog_symbol_table_zval(php_ion_catalog *obj, ION_SYMBOL_TABLE *tab, zval *return_value)
 {
 	zend_string *key = ion_symbol_table_to_key(tab);
 	PTR_CHECK(key);
@@ -985,7 +1101,7 @@ static inline void php_ion_catalog_symbol_table_zval(php_ion_catalog *obj, ION_S
 	zend_string_release(key);
 }
 
-php_ion_decl(catalog, Catalog, php_ion_catalog_dtor(obj));
+php_ion_decl(catalog, Catalog);
 
 typedef struct php_ion_reader_options_ccn_ctx {
 	zend_object *obj;
@@ -999,16 +1115,32 @@ typedef struct php_ion_reader_options {
 	zend_object *cat, *dec_ctx, *cb, std;
 } php_ion_reader_options;
 
-static inline void php_ion_reader_options_dtor(php_ion_reader_options *obj)
+LOCAL void php_ion_reader_options_dtor(php_ion_reader_options *obj)
 {
 	if (obj->cb) {
 		zend_fcall_info_args_clear(&obj->ccn.fci, true);
 	}
 }
 
-php_ion_decl(reader_options, Reader_Options, php_ion_reader_options_dtor(obj));
+LOCAL void php_ion_reader_options_copy(php_ion_reader_options *new_obj, php_ion_reader_options *old_obj)
+{
+	zend_objects_clone_members(&new_obj->std, &old_obj->std);
 
-static inline zend_object *php_ion_reader_options_new(void)
+	new_obj->opt = old_obj->opt;
+	new_obj->cat = get_property_obj(&new_obj->std, ZEND_STRL("catalog"), IS_OBJECT);
+	new_obj->dec_ctx = get_property_obj(&new_obj->std, ZEND_STRL("decimalContext"), IS_OBJECT);
+	new_obj->cb = get_property_obj(&new_obj->std, ZEND_STRL("onContextChange"), IS_OBJECT);
+	if (new_obj->cb) {
+		zval zcb;
+		ZVAL_OBJ(&zcb, new_obj->cb);
+		zend_fcall_info_init(&zcb, 0, &new_obj->ccn.fci, &new_obj->ccn.fcc, NULL, NULL);
+		new_obj->opt.context_change_notifier.context = &new_obj->ccn;
+	}
+}
+
+php_ion_decl(reader_options, Reader_Options);
+
+LOCAL zend_object *php_ion_reader_options_new(void)
 {
 	zend_object *obj = create_ion_Reader_Options(NULL);
 	zend_call_known_instance_method_with_0_params(obj->ce->constructor, obj, NULL);
@@ -1032,7 +1164,7 @@ typedef struct php_ion_reader {
 	zend_object *opt, std;
 } php_ion_reader;
 
-static inline iERR php_ion_reader_stream_handler(struct _ion_user_stream *user)
+LOCAL iERR php_ion_reader_stream_handler(struct _ion_user_stream *user)
 {
 	php_ion_reader *reader = (php_ion_reader *) user->handler_state;
 	size_t remaining = 0, spare = reader->stream.buf.length;
@@ -1058,7 +1190,7 @@ static inline iERR php_ion_reader_stream_handler(struct _ion_user_stream *user)
 	return IERR_READ_ERROR;
 }
 
-static inline iERR on_context_change(void *context, ION_COLLECTION *imports)
+LOCAL iERR on_context_change(void *context, ION_COLLECTION *imports)
 {
 	iERR e = IERR_OK;
 
@@ -1076,7 +1208,7 @@ static inline iERR on_context_change(void *context, ION_COLLECTION *imports)
 	return e;
 }
 
-static inline void php_ion_reader_ctor(php_ion_reader *obj)
+LOCAL void php_ion_reader_ctor(php_ion_reader *obj)
 {
 	iERR err;
 	php_ion_reader_options *opt = php_ion_obj(reader_options, obj->opt);
@@ -1101,7 +1233,8 @@ static inline void php_ion_reader_ctor(php_ion_reader *obj)
 	ION_CHECK(err);
 	OBJ_CHECK(obj);
 }
-static inline void php_ion_reader_dtor(php_ion_reader *obj)
+
+LOCAL void php_ion_reader_dtor(php_ion_reader *obj)
 {
 	if (obj->reader) {
 		ion_reader_close(obj->reader);
@@ -1120,16 +1253,36 @@ static inline void php_ion_reader_dtor(php_ion_reader *obj)
 	}
 }
 
-php_ion_decl(reader, Reader_Reader, php_ion_reader_dtor(obj));
+#define php_ion_reader_copy(n,o)
+php_ion_decl(reader, Reader_Reader);
+#define clone_ion_Reader_Reader NULL
 
 typedef struct php_ion_writer_options {
 	ION_WRITER_OPTIONS opt;
 	zend_object *cat, *dec_ctx, std;
 } php_ion_writer_options;
 
+LOCAL void php_ion_writer_options_copy(php_ion_writer_options *new_obj, php_ion_writer_options *old_obj)
+{
+	new_obj->opt = old_obj->opt;
+
+	if (old_obj->cat) {
+		new_obj->cat = old_obj->cat;
+		GC_ADDREF(new_obj->cat);
+	}
+	if (old_obj->dec_ctx) {
+		new_obj->dec_ctx = old_obj->dec_ctx;
+		GC_ADDREF(new_obj->dec_ctx);
+	}
+}
+
+LOCAL void php_ion_writer_options_dtor(php_ion_writer_options *obj)
+{
+}
+
 php_ion_decl(writer_options, Writer_Options);
 
-static inline zend_object *php_ion_writer_options_new(void)
+LOCAL zend_object *php_ion_writer_options_new(void)
 {
 	zend_object *obj = create_ion_Writer_Options(NULL);
 	zend_call_known_instance_method_with_0_params(obj->ce->constructor, obj, NULL);
@@ -1156,7 +1309,7 @@ typedef struct php_ion_writer {
 
 } php_ion_writer;
 
-static inline iERR php_ion_writer_stream_handler(struct _ion_user_stream *user)
+LOCAL iERR php_ion_writer_stream_handler(struct _ion_user_stream *user)
 {
 	php_ion_writer *writer = (php_ion_writer *) user->handler_state;
 
@@ -1183,7 +1336,7 @@ static inline iERR php_ion_writer_stream_handler(struct _ion_user_stream *user)
 	} \
 } while(0)
 
-static inline void php_ion_writer_stream_init(php_ion_writer *obj, php_ion_writer_options *opt)
+LOCAL void php_ion_writer_stream_init(php_ion_writer *obj, php_ion_writer_options *opt)
 {
 	PTR_CHECK(obj->stream.ptr);
 	GC_ADDREF(obj->stream.ptr->res);
@@ -1191,7 +1344,7 @@ static inline void php_ion_writer_stream_init(php_ion_writer *obj, php_ion_write
 	obj->stream.buf.length = opt ? opt->opt.allocation_page_size : 0x1000;
 	obj->stream.buf.value = emalloc(obj->stream.buf.length);
 }
-static inline void php_ion_writer_buffer_init(php_ion_writer *obj)
+LOCAL void php_ion_writer_buffer_init(php_ion_writer *obj)
 {
 	zval *ref = &obj->buffer.val;
 	ZVAL_DEREF(ref);
@@ -1201,7 +1354,7 @@ static inline void php_ion_writer_buffer_init(php_ion_writer *obj)
 	REF_STR();
 }
 
-static inline void php_ion_writer_buffer_grow(php_ion_writer *obj)
+LOCAL void php_ion_writer_buffer_grow(php_ion_writer *obj)
 {
 	zval *ref = &obj->buffer.val;
 	ZVAL_DEREF(ref);
@@ -1233,7 +1386,7 @@ static inline void php_ion_writer_buffer_grow(php_ion_writer *obj)
 	NEW_REF_STR();
 }
 
-static inline iERR php_ion_writer_buffer_handler(struct _ion_user_stream *user)
+LOCAL iERR php_ion_writer_buffer_handler(struct _ion_user_stream *user)
 {
 	php_ion_writer *writer = (php_ion_writer *) user->handler_state;
 
@@ -1250,18 +1403,7 @@ static inline iERR php_ion_writer_buffer_handler(struct _ion_user_stream *user)
 	return IERR_OK;
 }
 
-static inline ION_COLLECTION *php_ion_catalog_collection(php_ion_catalog *cat)
-{
-	/* do not look too close */
-	struct {
-		void *owner;
-		ION_SYMBOL_TABLE *sys;
-		ION_COLLECTION collection;
-	} *cat_ptr = (void *) cat->cat;
-	return &cat_ptr->collection;
-}
-
-static inline void php_ion_writer_options_init_shared_imports(php_ion_writer_options *opt)
+LOCAL void php_ion_writer_options_init_shared_imports(php_ion_writer_options *opt)
 {
 	php_ion_catalog *cat = php_ion_obj(catalog, opt->cat);
 	OBJ_CHECK(cat);
@@ -1271,9 +1413,6 @@ static inline void php_ion_writer_options_init_shared_imports(php_ion_writer_opt
 	ION_COLLECTION *col = php_ion_catalog_collection(cat);
 	if (!ION_COLLECTION_IS_EMPTY(col)) {
 		// holy, nah, forget it batman...
-#ifndef IPCN_pNODE_TO_pDATA
-# define IPCN_pNODE_TO_pDATA(x)    (&((x)->_data[0]))
-#endif
 		ION_COLLECTION_CURSOR cur;
 		ION_COLLECTION_OPEN(col, cur);
 		while (cur) {
@@ -1288,7 +1427,7 @@ static inline void php_ion_writer_options_init_shared_imports(php_ion_writer_opt
 	}
 }
 
-static inline void php_ion_writer_ctor(php_ion_writer *obj)
+LOCAL void php_ion_writer_ctor(php_ion_writer *obj)
 {
 	php_ion_writer_options *opt = NULL;
 
@@ -1314,7 +1453,7 @@ static inline void php_ion_writer_ctor(php_ion_writer *obj)
 	OBJ_CHECK(obj);
 }
 
-static inline void php_ion_writer_dtor(php_ion_writer *obj)
+LOCAL void php_ion_writer_dtor(php_ion_writer *obj)
 {
 	if (obj->writer) {
 		ion_writer_close(obj->writer);
@@ -1341,14 +1480,16 @@ static inline void php_ion_writer_dtor(php_ion_writer *obj)
 	}
 }
 
-php_ion_decl(writer, Writer_Writer, php_ion_writer_dtor(obj));
+#define php_ion_writer_copy(o,n)
+php_ion_decl(writer, Writer_Writer);
+#define clone_ion_Writer_Writer NULL
 
 typedef struct php_ion_serializer_php {
 	php_ion_serializer serializer;
 	zend_object *opt, std;
 } php_ion_serializer_php;
 
-static inline void php_ion_serializer_php_ctor(php_ion_serializer_php *ser_obj)
+LOCAL void php_ion_serializer_php_ctor(php_ion_serializer_php *ser_obj)
 {
 	php_ion_serializer *global_ser = &php_ion_globals.serializer;
 	ser_obj->serializer.ids = global_ser->ids;
@@ -1375,16 +1516,16 @@ static inline void php_ion_serializer_php_ctor(php_ion_serializer_php *ser_obj)
 	GC_DELREF(ser_obj->opt);
 }
 
-static inline void php_ion_serializer_php_dtor(php_ion_serializer_php *obj)
+LOCAL void php_ion_serializer_php_dtor(php_ion_serializer_php *obj)
 {
 	if (obj->serializer.call_custom) {
 		zend_string_release(obj->serializer.call_custom);
 	}
 }
 
-static inline void php_ion_serialize_zval(php_ion_serializer *, zval *);
+LOCAL void php_ion_serialize_zval(php_ion_serializer *, zval *);
 
-static inline void php_ion_serialize_struct(php_ion_serializer *ser, zend_array *arr, bool unmangle_props, bool annotate_props)
+LOCAL void php_ion_serialize_struct(php_ion_serializer *ser, zend_array *arr, bool unmangle_props, bool annotate_props)
 {
 	ION_CHECK(ion_writer_start_container(ser->writer, tid_STRUCT));
 
@@ -1425,7 +1566,7 @@ static inline void php_ion_serialize_struct(php_ion_serializer *ser, zend_array 
 	ION_CHECK(ion_writer_finish_container(ser->writer));
 }
 
-static inline void php_ion_serialize_list(php_ion_serializer *ser, zend_array *arr)
+LOCAL void php_ion_serialize_list(php_ion_serializer *ser, zend_array *arr)
 {
 	ION_CHECK(ion_writer_start_container(ser->writer, tid_LIST));
 
@@ -1438,7 +1579,7 @@ static inline void php_ion_serialize_list(php_ion_serializer *ser, zend_array *a
 	ION_CHECK(ion_writer_finish_container(ser->writer));
 }
 
-static inline void php_ion_serialize_array(php_ion_serializer *ser, zend_array *arr)
+LOCAL void php_ion_serialize_array(php_ion_serializer *ser, zend_array *arr)
 {
 	if (zend_array_is_list(arr)) {
 		php_ion_serialize_list(ser, arr);
@@ -1447,7 +1588,7 @@ static inline void php_ion_serialize_array(php_ion_serializer *ser, zend_array *
 	}
 }
 
-static inline void php_ion_serialize_object_iface(php_ion_serializer *ser, zend_object *zobject)
+LOCAL void php_ion_serialize_object_iface(php_ion_serializer *ser, zend_object *zobject)
 {
 	uint8_t *buf;
 	size_t len;
@@ -1466,7 +1607,7 @@ static inline void php_ion_serialize_object_iface(php_ion_serializer *ser, zend_
 	}
 }
 
-static inline void php_ion_serialize_object_magic(php_ion_serializer *ser, zend_object *zobject, zend_function *fn)
+LOCAL void php_ion_serialize_object_magic(php_ion_serializer *ser, zend_object *zobject, zend_function *fn)
 {
 	zval rv;
 
@@ -1488,7 +1629,7 @@ static inline void php_ion_serialize_object_magic(php_ion_serializer *ser, zend_
 	}
 }
 
-static inline void php_ion_serialize_object_enum(php_ion_serializer *ser, zend_object *zobject)
+LOCAL void php_ion_serialize_object_enum(php_ion_serializer *ser, zend_object *zobject)
 {
 	ION_STRING is;
 	ION_CHECK(ion_writer_add_annotation_symbol(ser->writer, &PHP_ION_SYMBOL_ENUM));
@@ -1498,7 +1639,7 @@ static inline void php_ion_serialize_object_enum(php_ion_serializer *ser, zend_o
 	ION_CHECK(ion_writer_write_symbol(ser->writer, ion_string_from_zend(&is, Z_STR_P(z_cname))));
 }
 
-static inline void php_ion_serialize_object_std(php_ion_serializer *ser, zend_object *zobject)
+LOCAL void php_ion_serialize_object_std(php_ion_serializer *ser, zend_object *zobject)
 {
 	ION_STRING is;
 
@@ -1522,7 +1663,7 @@ static inline void php_ion_serialize_object_std(php_ion_serializer *ser, zend_ob
 	}
 }
 
-static inline void php_ion_serialize_object_lob(php_ion_serializer *ser, zend_object *zobject)
+LOCAL void php_ion_serialize_object_lob(php_ion_serializer *ser, zend_object *zobject)
 {
 	zval tmp_type, *type = zend_read_property(NULL, zobject, ZEND_STRL("type"), 0, &tmp_type);
 	zval tmp_value, *value = zend_read_property(NULL, zobject, ZEND_STRL("value"), 0, &tmp_value);
@@ -1540,18 +1681,18 @@ static inline void php_ion_serialize_object_lob(php_ion_serializer *ser, zend_ob
 	}
 }
 
-static inline bool can_call_magic_serialize(php_ion_serializer *ser, zend_class_entry *ce)
+LOCAL bool can_call_magic_serialize(php_ion_serializer *ser, zend_class_entry *ce)
 {
 	return ce->__serialize && ser->call_magic;
 }
 
-static inline bool can_call_iface_serialize(php_ion_serializer *ser, zend_class_entry *ce)
+LOCAL bool can_call_iface_serialize(php_ion_serializer *ser, zend_class_entry *ce)
 {
   (void) ser;
 	return !!ce->serialize; // NOLINT
 }
 
-static inline bool can_call_custom_serialize(php_ion_serializer *ser, zend_object *zobject, zend_function **fn)
+LOCAL bool can_call_custom_serialize(php_ion_serializer *ser, zend_object *zobject, zend_function **fn)
 {
 	if (ser->call_custom) {
 		return !!(*fn = zend_hash_find_ptr(&zobject->ce->function_table, ser->call_custom)); // NOLINT
@@ -1559,7 +1700,7 @@ static inline bool can_call_custom_serialize(php_ion_serializer *ser, zend_objec
 	return false;
 }
 
-static inline void php_ion_serialize_object(php_ion_serializer *ser, zend_object *zobject)
+LOCAL void php_ion_serialize_object(php_ion_serializer *ser, zend_object *zobject)
 {
 	zend_function *fn;
 	zend_class_entry *ce = zobject->ce;
@@ -1595,7 +1736,7 @@ static inline void php_ion_serialize_object(php_ion_serializer *ser, zend_object
 	}
 }
 
-static inline bool php_ion_serialize_system_value(php_ion_serializer *ser, zval *zv)
+LOCAL bool php_ion_serialize_system_value(php_ion_serializer *ser, zval *zv)
 {
 	if (1 == php_ion_globals.serializer.level) {
 		if (Z_TYPE_P(zv) == IS_OBJECT) {
@@ -1609,7 +1750,7 @@ static inline bool php_ion_serialize_system_value(php_ion_serializer *ser, zval 
 	return false;
 }
 
-static inline bool php_ion_serialize_backref(php_ion_serializer *ser, zval *zv)
+LOCAL bool php_ion_serialize_backref(php_ion_serializer *ser, zval *zv)
 {
 	if (Z_TYPE_P(zv) == IS_STRING && Z_STR_P(zv) == zend_empty_string) {
 		return false;
@@ -1637,7 +1778,7 @@ static inline bool php_ion_serialize_backref(php_ion_serializer *ser, zval *zv)
 	return true;
 }
 
-static inline void php_ion_serialize_refcounted(php_ion_serializer *ser, zval *zv)
+LOCAL void php_ion_serialize_refcounted(php_ion_serializer *ser, zval *zv)
 {
 	if (php_ion_serialize_system_value(ser, zv)) {
 		return;
@@ -1667,7 +1808,7 @@ static inline void php_ion_serialize_refcounted(php_ion_serializer *ser, zval *z
 	}
 }
 
-static inline void php_ion_serialize_zval(php_ion_serializer *ser, zval *zv)
+LOCAL void php_ion_serialize_zval(php_ion_serializer *ser, zval *zv)
 {
 	OBJ_CHECK(ser);
 
@@ -1699,9 +1840,11 @@ static inline void php_ion_serialize_zval(php_ion_serializer *ser, zval *zv)
 	}
 }
 
-php_ion_decl(serializer_php, Serializer_PHP, php_ion_serializer_php_dtor(obj));
+#define php_ion_serializer_php_copy(o,n)
+php_ion_decl(serializer_php, Serializer_PHP);
+#define clone_ion_Serializer_PHP NULL
 
-static inline void php_ion_serialize_ex(php_ion_serializer *ser, zval *zv)
+LOCAL void php_ion_serialize_ex(php_ion_serializer *ser, zval *zv)
 {
 	HashPosition pos;
 	HashTable *arr = NULL;
@@ -1781,7 +1924,7 @@ typedef struct php_ion_unserializer_php {
 	zend_object *opt, std;
 } php_ion_unserializer_php;
 
-static inline void php_ion_unserializer_php_ctor(php_ion_unserializer_php *ser_obj)
+LOCAL void php_ion_unserializer_php_ctor(php_ion_unserializer_php *ser_obj)
 {
 	php_ion_unserializer *global_ser = &php_ion_globals.unserializer;
 	ser_obj->unserializer.ids = global_ser->ids;
@@ -1809,26 +1952,26 @@ static inline void php_ion_unserializer_php_ctor(php_ion_unserializer_php *ser_o
 	GC_DELREF(ser_obj->opt);
 }
 
-static inline void php_ion_unserializer_php_dtor(php_ion_unserializer_php *obj)
+LOCAL void php_ion_unserializer_php_dtor(php_ion_unserializer_php *obj)
 {
 	if (obj->unserializer.call_custom) {
 		zend_string_release(obj->unserializer.call_custom);
 	}
 }
 
-static inline void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *return_value, ION_TYPE *typ);
+LOCAL void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *return_value, ION_TYPE *typ);
 
-static inline bool can_call_magic_unserialize(php_ion_unserializer *ser, zend_class_entry *ce)
+LOCAL bool can_call_magic_unserialize(php_ion_unserializer *ser, zend_class_entry *ce)
 {
 	return (ce && ce->__unserialize && ser->call_magic);
 }
 
-static inline bool can_call_iface_unserialize(php_ion_unserializer *ser, zend_class_entry *ce)
+LOCAL bool can_call_iface_unserialize(php_ion_unserializer *ser, zend_class_entry *ce)
 {
 	return (ce && ce->unserialize);
 }
 
-static inline bool can_call_custom_unserialize(php_ion_unserializer *ser, zend_object *zobject, zend_function **fn)
+LOCAL bool can_call_custom_unserialize(php_ion_unserializer *ser, zend_object *zobject, zend_function **fn)
 {
 	if (ser->call_custom) {
 		return !!(*fn = zend_hash_find_ptr(&zobject->ce->function_table, ser->call_custom)); // NOLINT
@@ -1836,7 +1979,7 @@ static inline bool can_call_custom_unserialize(php_ion_unserializer *ser, zend_o
 	return false;
 }
 
-static inline zval *php_ion_unserialize_class(php_ion_unserializer *ser, zval *return_value)
+LOCAL zval *php_ion_unserialize_class(php_ion_unserializer *ser, zval *return_value)
 {
 	zend_class_entry *ce = zend_lookup_class(ser->annotations.object_class);
 
@@ -1850,7 +1993,7 @@ static inline zval *php_ion_unserialize_class(php_ion_unserializer *ser, zval *r
 	return NULL;
 }
 
-static inline void php_ion_unserialize_object_enum(php_ion_unserializer *ser, zval *return_value)
+LOCAL void php_ion_unserialize_object_enum(php_ion_unserializer *ser, zval *return_value)
 {
 	zend_string *zs_case = zval_get_string(return_value);
 	ION_CATCH();
@@ -1871,7 +2014,7 @@ static inline void php_ion_unserialize_object_enum(php_ion_unserializer *ser, zv
 	zend_string_release(zs_case);
 }
 
-static inline void php_ion_unserialize_object_iface(php_ion_unserializer *ser, zval *return_value)
+LOCAL void php_ion_unserialize_object_iface(php_ion_unserializer *ser, zval *return_value)
 {
 	zend_class_entry *ce = zend_lookup_class(ser->annotations.object_class);
 	if (can_call_iface_unserialize(ser, ce)) {
@@ -1891,7 +2034,7 @@ static inline void php_ion_unserialize_object_iface(php_ion_unserializer *ser, z
 	}
 }
 
-static inline void php_ion_unserialize_field_name(php_ion_unserializer *ser, zend_string **key)
+LOCAL void php_ion_unserialize_field_name(php_ion_unserializer *ser, zend_string **key)
 {
 	// FIXME: symbol table
 	ION_STRING name;
@@ -1953,7 +2096,7 @@ static void php_ion_unserialize_props(php_ion_unserializer *ser, zval *return_va
  * (the binary format identifies structs that are sorted by symbolID), so certain operations may lead to
  * nondeterministic behavior.
  */
-static inline void php_ion_unserialize_hash(php_ion_unserializer *ser, zval *return_value)
+LOCAL void php_ion_unserialize_hash(php_ion_unserializer *ser, zval *return_value)
 {
 	zend_hash_next_index_insert(ser->ids, return_value);
 
@@ -1994,7 +2137,7 @@ static inline void php_ion_unserialize_hash(php_ion_unserializer *ser, zval *ret
 	ION_CHECK(ion_reader_step_out(ser->reader));
 }
 
-static inline void verify_unserializer(php_ion_unserializer *ser, zend_object *zobject, zend_function **fn)
+LOCAL void verify_unserializer(php_ion_unserializer *ser, zend_object *zobject, zend_function **fn)
 {
 	switch (ser->annotations.object_type) {
 	case 'c':
@@ -2022,7 +2165,7 @@ static inline void verify_unserializer(php_ion_unserializer *ser, zend_object *z
 	}
 }
 
-static inline void php_ion_unserialize_object(php_ion_unserializer *ser, zval *return_value)
+LOCAL void php_ion_unserialize_object(php_ion_unserializer *ser, zval *return_value)
 {
 	// backup possible backref to array returned by magic/custom __serialize()
 	zval *input = zend_hash_next_index_insert(ser->tmp, return_value);
@@ -2055,7 +2198,7 @@ static inline void php_ion_unserialize_object(php_ion_unserializer *ser, zval *r
 	zval_ptr_dtor(&rv);
 }
 
-static inline void php_ion_unserialize_struct(php_ion_unserializer *ser, zval *return_value)
+LOCAL void php_ion_unserialize_struct(php_ion_unserializer *ser, zval *return_value)
 {
 	if (ser->annotations.object_class) {
 		switch (ser->annotations.object_type) {
@@ -2088,7 +2231,7 @@ static inline void php_ion_unserialize_struct(php_ion_unserializer *ser, zval *r
 	}
 }
 
-static inline void php_ion_unserialize_list(php_ion_unserializer *ser, zval *return_value)
+LOCAL void php_ion_unserialize_list(php_ion_unserializer *ser, zval *return_value)
 {
 	ION_CHECK(ion_reader_step_in(ser->reader));
 	array_init(return_value);
@@ -2112,7 +2255,7 @@ static inline void php_ion_unserialize_list(php_ion_unserializer *ser, zval *ret
 	ION_CHECK(ion_reader_step_out(ser->reader));
 }
 
-static inline void php_ion_reader_read_lob(ION_READER *reader, zval *return_value)
+LOCAL void php_ion_reader_read_lob(ION_READER *reader, zval *return_value)
 {
 	zend_string *zstr = zend_string_alloc(0x1000, 0);
 again: ;
@@ -2130,7 +2273,7 @@ again: ;
 	RETURN_STR(zstr);
 }
 
-static inline void php_ion_reader_read_timestamp(ION_READER *reader, ION_READER_OPTIONS *opt, zval *return_value)
+LOCAL void php_ion_reader_read_timestamp(ION_READER *reader, ION_READER_OPTIONS *opt, zval *return_value)
 {
 	ION_TIMESTAMP ts;
 	ION_CHECK(ion_reader_read_timestamp(reader, &ts));
@@ -2147,7 +2290,7 @@ static inline void php_ion_reader_read_timestamp(ION_READER *reader, ION_READER_
 	OBJ_CHECK(ts_obj);
 }
 
-static inline void php_ion_reader_read_int(ION_READER *reader, zval *return_value)
+LOCAL void php_ion_reader_read_int(ION_READER *reader, zval *return_value)
 {
 	ION_INT *num = NULL;
 	ION_CHECK(ion_int_alloc(reader, &num));
@@ -2178,7 +2321,7 @@ static inline void php_ion_reader_read_int(ION_READER *reader, zval *return_valu
 	}
 }
 
-static inline void php_ion_unserialize_backref(php_ion_unserializer *ser, zval *return_value)
+LOCAL void php_ion_unserialize_backref(php_ion_unserializer *ser, zval *return_value)
 {
 	zval *backref = zend_hash_index_find(ser->ids, Z_LVAL_P(return_value));
 
@@ -2191,7 +2334,7 @@ static inline void php_ion_unserialize_backref(php_ion_unserializer *ser, zval *
 	}
 }
 
-static inline void php_ion_unserialize_annotations(php_ion_unserializer *ser)
+LOCAL void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 {
 	memset(&ser->annotations, 0, sizeof(ser->annotations));
 
@@ -2282,7 +2425,7 @@ static inline void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 	}
 }
 
-static inline void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *return_value, ION_TYPE *typ)
+LOCAL void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *return_value, ION_TYPE *typ)
 {
 	if (typ) {
 		memcpy(&ser->type, typ, sizeof(ser->type)); // NOLINT
@@ -2409,9 +2552,11 @@ unserialize_struct: ;
 	}
 }
 
-php_ion_decl(unserializer_php, Unserializer_PHP, php_ion_unserializer_php_dtor(obj));
+#define php_ion_unserializer_php_copy(o,n)
+php_ion_decl(unserializer_php, Unserializer_PHP);
+#define clone_ion_Unserializer_PHP NULL
 
-static inline void php_ion_unserialize_ex(php_ion_unserializer *ser, zval *return_value)
+LOCAL void php_ion_unserialize_ex(php_ion_unserializer *ser, zval *return_value)
 {
 	if (ser->multi_seq) {
 		array_init(return_value);

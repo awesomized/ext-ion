@@ -22,6 +22,8 @@ var_dump($c->findBest("shared"));
 
 $c->remove("shared");
 var_dump(count($c));
+
+var_dump(clone $c);
 ?>
 DONE
 --EXPECTF--
@@ -114,4 +116,9 @@ object(ion\Symbol\Table\Shared)#%d (3) {
   }
 }
 int(1)
+object(ion\Catalog)#%d (1) {
+  ["symbolTables":"ion\Catalog":private]=>
+  array(0) {
+  }
+}
 DONE

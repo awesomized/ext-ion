@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 6aa30c4f415607e9d724405a1b4c0fb10e4027f3 */
+ * Stub hash: ab42c2a137aa474d0da60bcc65144da7a9472948 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_ion_Symbol_Table_PHP, 0, 0, ion\\Symbol\\Table, 0)
 ZEND_END_ARG_INFO()

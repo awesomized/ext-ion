@@ -19,6 +19,8 @@ var_dump($t=new Timestamp(Timestamp\Precision::Day, datetime:$full),(string)$t);
 var_dump($t=new Timestamp(Timestamp\Precision::Day->value, datetime:$full),(string)$t);
 var_dump($t=new Timestamp(Timestamp\Precision::Min, datetime:"2020-10-01"),(string)$t);
 var_dump($t=new Timestamp(Timestamp\Precision::Day, "!Y-m", "2000-10"),(string)$t);
+
+var_dump(ion\unserialize(ion\serialize(clone new ion\Timestamp(ion\Timestamp\Precision::Sec, DateTime::RFC3339, "1971-02-03T04:05:06Z"))));
 ?>
 DONE
 --EXPECTF--
@@ -76,4 +78,12 @@ object(ion\Timestamp)#%d (5) {
   string(3) "CET"
 }
 string(11) "2000-10-01T"
+object(ion\Timestamp)#8 (3) {
+  ["precision"]=>
+  int(55)
+  ["format"]=>
+  string(13) "Y-m-d\TH:i:sP"
+  ["date"]=>
+  string(26) "1971-02-03 04:05:06.000000"
+}
 DONE

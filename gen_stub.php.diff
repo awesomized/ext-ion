@@ -1,5 +1,5 @@
 diff --git a/build/gen_stub.php b/build/gen_stub.php
-index 5f74d26dbc3..01a19988161 100755
+index 5f74d26dbc..400619bdbb 100755
 --- a/build/gen_stub.php
 +++ b/build/gen_stub.php
 @@ -793,7 +793,7 @@ class FunctionName implements FunctionOrMethodName {
@@ -88,3 +88,23 @@ index 5f74d26dbc3..01a19988161 100755
                  } else if ($classStmt instanceof Stmt\EnumCase) {
                      $enumCaseInfos[] = new EnumCaseInfo(
                          $classStmt->name->toString(), $classStmt->expr);
+@@ -2821,7 +2845,9 @@ function generateArgInfoCode(FileInfo $fileInfo, string $stubHash): string {
+                 }
+ 
+                 $generatedFunctionDeclarations[$key] = true;
+-                return $fileInfo->declarationPrefix . $funcInfo->getDeclaration();
++                if ($decl = $funcInfo->getDeclaration()) {
++                    return $fileInfo->declarationPrefix . $decl;
++                }
+             }
+         );
+ 
+@@ -3265,7 +3291,7 @@ function initPhpParser() {
+     }
+ 
+     $isInitialized = true;
+-    $version = "4.13.0";
++    $version = "4.13.2";
+     $phpParserDir = __DIR__ . "/PHP-Parser-$version";
+     if (!is_dir($phpParserDir)) {
+         installPhpParser($version, $phpParserDir);
