@@ -26,4 +26,4 @@ clean-ion:
 gcov-ion:
 	@rm -rf $@
 	@mkdir -p $@
-	gcovr -j $$(nproc) -sr . --html --html-details --html-title $@ -o $@/index.html -f '.*/(php_)?ion.*'
+	@gcovr -j $$(nproc) -sr . --html --html-details --html-title $@ -o $@/index.html -f '.*/(php_)?ion.*' 2>/dev/null

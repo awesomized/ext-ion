@@ -389,6 +389,7 @@ LOCAL void *php_ion_obj_ex(void *obj, ptrdiff_t offset) {
 		php_ion_ ## type *old_obj = php_ion_obj(type, std), \
 						 *new_obj = php_ion_obj(type, create_ion_ ## cname(std->ce)); \
 		php_ion_ ## type ## _copy(new_obj, old_obj); \
+		(void) old_obj; \
 		return &new_obj->std; \
 	}
 #define php_ion_register(type, cname, ...) do { \
@@ -2064,25 +2065,47 @@ LOCAL void php_ion_unserialize_object_iface(php_ion_unserializer *ser, zval *ret
 	}
 }
 
-LOCAL void php_ion_unserialize_field_name(php_ion_unserializer *ser, zend_string **key)
+LOCAL void php_ion_unserialize_field_name_ex(php_ion_unserializer *ser, ION_STRING *name, SID *sid)
 {
-	// FIXME: symbol table
-	ION_STRING name;
-	ION_CHECK(ion_reader_get_field_name(ser->reader, &name));
-	if (!name.length) {
+	ION_CHECK(ion_reader_get_field_name(ser->reader, name));
+	if (!name->length) {
 		ION_SYMBOL *is_ptr;
 		ION_CHECK(ion_reader_get_field_name_symbol(ser->reader, &is_ptr));
 		if (!ION_SYMBOL_IS_NULL(is_ptr) && is_ptr->value.length) {
-			name = is_ptr->value;
-		} else if (is_ptr) {
-			char buf[MAX_LENGTH_OF_LONG + 1 + 1] = {0}, *end = buf + sizeof(buf) - 1, *ptr;
-			ptr = zend_print_long_to_buf(end, is_ptr->sid);
-			*--ptr = '$';
-			*key = zend_string_init(ptr, end - ptr, 0);
-			return;
+			ION_STRING_ASSIGN(name, &is_ptr->value);
+		} else {
+			*sid = is_ptr->sid;
 		}
 	}
-	*key = zend_string_from_ion(&name);
+}
+
+LOCAL void php_ion_unserialize_field_name(php_ion_unserializer *ser, zend_string **key, bool is_prop)
+{
+	// FIXME: symbol table
+	ION_STRING name;
+	SID sid = UNKNOWN_SID;
+	char buf[MAX_LENGTH_OF_LONG + 1 + 1] = {0}, *end = buf + sizeof(buf) - 1, *ptr;
+
+	php_ion_unserialize_field_name_ex(ser, &name, &sid);
+	ION_CATCH();
+
+	switch (name.length) {
+	case 0:
+		ptr = zend_print_long_to_buf(end, sid);
+		*--ptr = '$';
+		*key = zend_string_init(ptr, end - ptr, 0);
+		break;
+	case 1:
+		*key = zend_one_char_string[*name.value];
+		break;
+	default:
+		if (is_prop) {
+			*key = zend_string_init_interned((char *) name.value, name.length, 0);
+		} else {
+			*key = zend_string_from_ion(&name);
+		}
+		break;
+	}
 }
 
 static void php_ion_unserialize_props(php_ion_unserializer *ser, zval *return_value)
@@ -2100,7 +2123,7 @@ static void php_ion_unserialize_props(php_ion_unserializer *ser, zval *return_va
 		}
 
 		zend_string *key;
-		php_ion_unserialize_field_name(ser, &key);
+		php_ion_unserialize_field_name(ser, &key, true);
 		ION_CATCH();
 
 		zval zvalue;
@@ -2141,7 +2164,7 @@ LOCAL void php_ion_unserialize_hash(php_ion_unserializer *ser, zval *return_valu
 		}
 
 		zend_string *key;
-		php_ion_unserialize_field_name(ser, &key);
+		php_ion_unserialize_field_name(ser, &key, false);
 		ION_CATCH();
 
 		zval zvalue;
