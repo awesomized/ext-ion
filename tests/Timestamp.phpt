@@ -14,7 +14,7 @@ try {
 } catch (Throwable) {
 	echo "caught empty\n";
 }
-$full = "2021-12-07T14:08:51+00:00";
+$full = "2021-12-07T14:08:51.123456+00:00";
 var_dump($t=new Timestamp(Timestamp\Precision::Day, datetime:$full),(string)$t);
 var_dump($t=new Timestamp(Timestamp\Precision::Day->value, datetime:$full),(string)$t);
 var_dump($t=new Timestamp(Timestamp\Precision::Min, datetime:"2020-10-01"),(string)$t);
@@ -32,7 +32,7 @@ object(ion\Timestamp)#%d (5) {
   ["format"]=>
   string(7) "Y-m-d\T"
   ["date"]=>
-  string(26) "2021-12-07 14:08:51.000000"
+  string(26) "2021-12-07 14:08:51.123456"
   ["timezone_type"]=>
   int(1)
   ["timezone"]=>
@@ -45,7 +45,7 @@ object(ion\Timestamp)#%d (5) {
   ["format"]=>
   string(7) "Y-m-d\T"
   ["date"]=>
-  string(26) "2021-12-07 14:08:51.000000"
+  string(26) "2021-12-07 14:08:51.123456"
   ["timezone_type"]=>
   int(1)
   ["timezone"]=>

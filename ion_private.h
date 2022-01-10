@@ -929,10 +929,10 @@ LOCAL ION_TIMESTAMP *ion_timestamp_from_php(ION_TIMESTAMP *buf, php_ion_timestam
 	zval tmp;
 	int precision = Z_LVAL_P(zend_read_property(ts->std.ce, &ts->std, ZEND_STRL("precision"), 0, &tmp));
 
-	if (!precision || precision > ION_TS_FRAC) {
+	if (!precision || precision > (ION_TS_FRAC|0x80)) {
 		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
 				"Invalid precision (%d) of ion\\Timestamp", precision);
-	} else switch ((buf->precision = precision)) {
+	} else switch ((buf->precision = precision) & 0x7f) {
 	case ION_TS_FRAC:
 		ion_ts_frac_from_usec(&buf->fraction, (int) ts->time->us, ctx);
 		/* fallthrough */
