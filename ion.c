@@ -1036,9 +1036,7 @@ static void read_part(INTERNAL_FUNCTION_PARAMETERS, read_part_fn fn)
 		RETURN_TRUE;
 	}
 fail:
-	if (zstr != Z_STR_P(ref)) {
-		zend_string_release(zstr);
-	}
+	zend_string_release(zstr);
 	ZVAL_EMPTY_STRING(ref);
 	RETURN_FALSE;
 }
