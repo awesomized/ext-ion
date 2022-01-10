@@ -128,6 +128,26 @@ LOCAL int g_sym_init(void)
 	return SUCCESS;
 }
 
+static struct {
+	zend_string *Year, *Month, *Day, *Min, *Sec, *Frac, *MinTZ, *SecTZ, *FracTZ;
+} g_intern_str;
+
+static void g_intern_str_init()
+{
+#define NEW_INTERN_STR(s) \
+	g_intern_str.s = zend_string_init_interned(#s, sizeof(#s)-1, 1)
+	NEW_INTERN_STR(Year);
+	NEW_INTERN_STR(Month);
+	NEW_INTERN_STR(Day);
+	NEW_INTERN_STR(Min);
+	NEW_INTERN_STR(Sec);
+	NEW_INTERN_STR(Frac);
+	NEW_INTERN_STR(MinTZ);
+	NEW_INTERN_STR(SecTZ);
+	NEW_INTERN_STR(FracTZ);
+#undef NEW_INTERN_STR
+}
+
 typedef struct php_ion_serializer {
 	ION_WRITER *writer;
 	ION_WRITER_OPTIONS *options;
@@ -223,6 +243,7 @@ static zend_class_entry
 	*ce_Symbol_Table_Shared,
 	*ce_Symbol_Table_System,
 	*ce_Timestamp,
+	*ce_Timestamp_Format,
 	*ce_Timestamp_Precision,
 	*ce_Type,
 	*ce_Unserializer,
@@ -860,23 +881,34 @@ LOCAL decQuad *ion_ts_frac_from_usec(decQuad *frac, int usec, decContext *ctx)
  	return decQuadDivide(frac, decQuadFromInt32(&us, usec), decQuadFromInt32(&microsecs, 1000000), ctx);
 }
 
+LOCAL zend_string *php_ion_timestamp_format_fetch(zend_string *fmt_case)
+{
+	return Z_STR_P(zend_enum_fetch_case_value(zend_enum_get_case(ce_Timestamp_Format, fmt_case)));
+}
+
 LOCAL zend_string *php_dt_format_from_precision(uint8_t precision)
 {
-	switch (precision & 0x7f) {
+	switch (precision) {
+	case ION_TS_FRAC | 0x80:
+		return php_ion_timestamp_format_fetch(g_intern_str.FracTZ);
 	case ION_TS_FRAC:
-		return zend_string_init(ZEND_STRL("c"), 0);
+		return php_ion_timestamp_format_fetch(g_intern_str.Frac);
+	case ION_TS_SEC | 0x80:
+		return php_ion_timestamp_format_fetch(g_intern_str.SecTZ);
 	case ION_TS_SEC:
-		return zend_string_init(ZEND_STRL("Y-m-d\\TH:i:sP"), 0);
+		return php_ion_timestamp_format_fetch(g_intern_str.Sec);
+	case ION_TS_MIN | 0x80:
+		return php_ion_timestamp_format_fetch(g_intern_str.MinTZ);
 	case ION_TS_MIN:
-		return zend_string_init(ZEND_STRL("Y-m-d\\TH:iP"), 0);
+		return php_ion_timestamp_format_fetch(g_intern_str.Min);
 	case ION_TS_DAY:
-		return zend_string_init(ZEND_STRL("Y-m-d\\T"), 0);
+		return php_ion_timestamp_format_fetch(g_intern_str.Day);
 	case ION_TS_MONTH:
-		return zend_string_init(ZEND_STRL("Y-m\\T"), 0);
+		return php_ion_timestamp_format_fetch(g_intern_str.Month);
 	case ION_TS_YEAR:
-		return zend_string_init(ZEND_STRL("Y\\T"), 0);
+		return php_ion_timestamp_format_fetch(g_intern_str.Year);
 	default:
-		return zend_string_init(ZEND_STRL("c"), 0);
+		return zend_one_char_string['c'];
 	}
 }
 
@@ -884,9 +916,7 @@ LOCAL timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContext *ctx, 
 {
 	timelib_time *time = ecalloc(1, sizeof(*time));
 
-	int precision = ION_TS_FRAC;
-	ion_timestamp_get_precision(ts,  &precision);
-	switch (precision) {
+	switch (ts->precision & 0x7f) {
 	case ION_TS_FRAC:
 		time->us = php_usec_from_ion(&ts->fraction, ctx);
 		/* fallthrough */
@@ -908,7 +938,7 @@ LOCAL timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContext *ctx, 
 		/* fallthrough */
 	default:
 		time->z = ts->tz_offset * 60;
-		if (time->z) {
+		if (time->z || ts->precision & 0x80) {
 			time->zone_type = TIMELIB_ZONETYPE_OFFSET;
 		} else {
 			time->zone_type = TIMELIB_ZONETYPE_ID;
@@ -917,7 +947,7 @@ LOCAL timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContext *ctx, 
 	}
 
 	if (fmt) {
-		*fmt = php_dt_format_from_precision(precision);
+		*fmt = php_dt_format_from_precision(ts->precision);
 	}
 	return time;
 }

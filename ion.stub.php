@@ -234,6 +234,19 @@ enum Precision : int {
     case SecTZ          = 0x1|0x2|0x4|0x10|0x20|0x80;
     case FracTZ         = 0x1|0x2|0x4|0x10|0x20|0x40|0x80;
 }
+
+namespace ion\Timestamp;
+enum Format : string {
+    case Year           = "Y\T";
+    case Month          = "Y-m\T";
+    case Day            = "Y-m-d\T";
+    case Min            = "Y-m-d\TH:i";
+    case Sec            = "Y-m-d\TH:i:s";
+    case Frac           = "Y-m-d\TH:i:s.v";
+    case MinTZ          = "Y-m-d\TH:iP";
+    case SecTZ          = "Y-m-d\TH:i:sP";
+    case FracTZ         = "Y-m-d\TH:i:s.vP";
+}
 namespace ion;
 class Timestamp extends \DateTime {
     public readonly int $precision;
@@ -241,7 +254,7 @@ class Timestamp extends \DateTime {
 
     public function __construct(
         Timestamp\Precision|int $precision,
-        ?string $format = null,
+        Timestamp\Format|string|null $format = null,
         ?string $datetime = null,
         ?\DateTimeZone $timezone = null,
     ) {}

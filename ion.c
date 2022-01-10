@@ -409,19 +409,22 @@ static ZEND_METHOD(ion_Timestamp, __construct)
 	PTR_CHECK(obj);
 
 	zend_long precision;
-	zend_object *precision_obj;
+	zend_object *precision_obj = NULL, *format_obj = NULL;
 	zend_string *fmt = NULL, *dt = NULL;
 	zval *tz = NULL;
 	ZEND_PARSE_PARAMETERS_START(1, 4)
 		Z_PARAM_OBJ_OF_CLASS_OR_LONG(precision_obj, ce_Timestamp_Precision, precision)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_STR_OR_NULL(fmt)
+		Z_PARAM_OBJ_OF_CLASS_OR_STR_OR_NULL(format_obj, ce_Timestamp_Format, fmt)
 		Z_PARAM_STR_OR_NULL(dt)
 		Z_PARAM_ZVAL(tz)
 	ZEND_PARSE_PARAMETERS_END();
 
 	if (precision_obj) {
 		precision = Z_LVAL_P(zend_enum_fetch_case_value(precision_obj));
+	}
+	if (format_obj) {
+		fmt = Z_STR_P(zend_enum_fetch_case_value(format_obj));
 	}
 	php_ion_timestamp_ctor(obj, precision, fmt, dt, tz);
 }
@@ -1785,6 +1788,7 @@ PHP_MINIT_FUNCTION(ion)
 	if (SUCCESS != g_sym_init())  {
 		return FAILURE;
 	}
+	g_intern_str_init();
 
 	// Catalog
 	php_ion_register(catalog, Catalog, zend_ce_countable);
@@ -1826,6 +1830,7 @@ PHP_MINIT_FUNCTION(ion)
 
 	// Timestamp
 	ce_Timestamp = register_class_ion_Timestamp(php_date_get_date_ce());
+	ce_Timestamp_Format = register_class_ion_Timestamp_Format();
 	ce_Timestamp_Precision = register_class_ion_Timestamp_Precision();
 
 	// Type

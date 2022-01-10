@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: ab42c2a137aa474d0da60bcc65144da7a9472948 */
+ * Stub hash: 8e04adcc2af90243429a756e14d48507f8411309 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_ion_Symbol_Table_PHP, 0, 0, ion\\Symbol\\Table, 0)
 ZEND_END_ARG_INFO()
@@ -158,7 +158,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Timestamp___construct, 0, 0, 1)
 	ZEND_ARG_OBJ_TYPE_MASK(0, precision, ion\\Timestamp\\Precision, MAY_BE_LONG, NULL)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, format, IS_STRING, 1, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, format, ion\\Timestamp\\Format, MAY_BE_STRING|MAY_BE_NULL, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, datetime, IS_STRING, 1, "null")
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, timezone, DateTimeZone, 1, "null")
 ZEND_END_ARG_INFO()
@@ -772,6 +772,11 @@ static const zend_function_entry class_ion_Decimal_methods[] = {
 
 
 static const zend_function_entry class_ion_Timestamp_Precision_methods[] = {
+	ZEND_FE_END
+};
+
+
+static const zend_function_entry class_ion_Timestamp_Format_methods[] = {
 	ZEND_FE_END
 };
 
@@ -1491,6 +1496,58 @@ static zend_class_entry *register_class_ion_Timestamp_Precision(void)
 
 	zval enum_case_FracTZ_value;
 	ZVAL_LONG(&enum_case_FracTZ_value, 247);
+	zend_enum_add_case_cstr(class_entry, "FracTZ", &enum_case_FracTZ_value);
+
+	return class_entry;
+}
+
+static zend_class_entry *register_class_ion_Timestamp_Format(void)
+{
+	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Timestamp\\Format", IS_STRING, class_ion_Timestamp_Format_methods);
+
+	zval enum_case_Year_value;
+	zend_string *enum_case_Year_value_str = zend_string_init("Y\\T", sizeof("Y\\T") - 1, 1);
+	ZVAL_STR(&enum_case_Year_value, enum_case_Year_value_str);
+	zend_enum_add_case_cstr(class_entry, "Year", &enum_case_Year_value);
+
+	zval enum_case_Month_value;
+	zend_string *enum_case_Month_value_str = zend_string_init("Y-m\\T", sizeof("Y-m\\T") - 1, 1);
+	ZVAL_STR(&enum_case_Month_value, enum_case_Month_value_str);
+	zend_enum_add_case_cstr(class_entry, "Month", &enum_case_Month_value);
+
+	zval enum_case_Day_value;
+	zend_string *enum_case_Day_value_str = zend_string_init("Y-m-d\\T", sizeof("Y-m-d\\T") - 1, 1);
+	ZVAL_STR(&enum_case_Day_value, enum_case_Day_value_str);
+	zend_enum_add_case_cstr(class_entry, "Day", &enum_case_Day_value);
+
+	zval enum_case_Min_value;
+	zend_string *enum_case_Min_value_str = zend_string_init("Y-m-d\\TH:i", sizeof("Y-m-d\\TH:i") - 1, 1);
+	ZVAL_STR(&enum_case_Min_value, enum_case_Min_value_str);
+	zend_enum_add_case_cstr(class_entry, "Min", &enum_case_Min_value);
+
+	zval enum_case_Sec_value;
+	zend_string *enum_case_Sec_value_str = zend_string_init("Y-m-d\\TH:i:s", sizeof("Y-m-d\\TH:i:s") - 1, 1);
+	ZVAL_STR(&enum_case_Sec_value, enum_case_Sec_value_str);
+	zend_enum_add_case_cstr(class_entry, "Sec", &enum_case_Sec_value);
+
+	zval enum_case_Frac_value;
+	zend_string *enum_case_Frac_value_str = zend_string_init("Y-m-d\\TH:i:s.v", sizeof("Y-m-d\\TH:i:s.v") - 1, 1);
+	ZVAL_STR(&enum_case_Frac_value, enum_case_Frac_value_str);
+	zend_enum_add_case_cstr(class_entry, "Frac", &enum_case_Frac_value);
+
+	zval enum_case_MinTZ_value;
+	zend_string *enum_case_MinTZ_value_str = zend_string_init("Y-m-d\\TH:iP", sizeof("Y-m-d\\TH:iP") - 1, 1);
+	ZVAL_STR(&enum_case_MinTZ_value, enum_case_MinTZ_value_str);
+	zend_enum_add_case_cstr(class_entry, "MinTZ", &enum_case_MinTZ_value);
+
+	zval enum_case_SecTZ_value;
+	zend_string *enum_case_SecTZ_value_str = zend_string_init("Y-m-d\\TH:i:sP", sizeof("Y-m-d\\TH:i:sP") - 1, 1);
+	ZVAL_STR(&enum_case_SecTZ_value, enum_case_SecTZ_value_str);
+	zend_enum_add_case_cstr(class_entry, "SecTZ", &enum_case_SecTZ_value);
+
+	zval enum_case_FracTZ_value;
+	zend_string *enum_case_FracTZ_value_str = zend_string_init("Y-m-d\\TH:i:s.vP", sizeof("Y-m-d\\TH:i:s.vP") - 1, 1);
+	ZVAL_STR(&enum_case_FracTZ_value, enum_case_FracTZ_value_str);
 	zend_enum_add_case_cstr(class_entry, "FracTZ", &enum_case_FracTZ_value);
 
 	return class_entry;
