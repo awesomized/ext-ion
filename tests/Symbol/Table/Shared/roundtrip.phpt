@@ -1,5 +1,5 @@
 --TEST--
-Symbol\Table\Shared/roundtrip
+ion\Symbol\Table\Shared/roundtrip
 --EXTENSIONS--
 ion
 --FILE--

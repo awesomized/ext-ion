@@ -2027,6 +2027,8 @@ LOCAL zval *php_ion_unserialize_class(php_ion_unserializer *ser, zval *return_va
 LOCAL void php_ion_unserialize_object_enum(php_ion_unserializer *ser, zval *return_value)
 {
 	zend_string *zs_case = zval_get_string(return_value);
+	zend_hash_next_index_insert(ser->tmp, return_value);
+	ZVAL_NULL(return_value);
 	ION_CATCH();
 
 	zend_class_entry *ce = zend_lookup_class(ser->annotations.object_class);
@@ -2050,6 +2052,7 @@ LOCAL void php_ion_unserialize_object_iface(php_ion_unserializer *ser, zval *ret
 	zend_class_entry *ce = zend_lookup_class(ser->annotations.object_class);
 	if (can_call_iface_unserialize(ser, ce)) {
 		zend_string *s = zval_get_string(return_value);
+		zend_hash_next_index_insert(ser->tmp, return_value);
 		ZVAL_NULL(return_value);
 		zval *backref = zend_hash_next_index_insert(ser->ids, return_value);
 		if (SUCCESS == ce->unserialize(backref, ce, (BYTE *) s->val, s->len, NULL)) {
@@ -2222,7 +2225,7 @@ LOCAL void php_ion_unserialize_object(php_ion_unserializer *ser, zval *return_va
 {
 	// backup possible backref to array returned by magic/custom __serialize()
 	zval *input = zend_hash_next_index_insert(ser->tmp, return_value);
-
+	ZVAL_NULL(return_value);
 	php_ion_unserialize_class(ser, return_value);
 	ION_CATCH();
 
@@ -2554,7 +2557,6 @@ LOCAL void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *return_valu
 		ION_CHECK(ion_reader_read_ion_symbol(ser->reader, &sym));
 		php_ion_symbol_zval(&sym, return_value);
 		if (ser->annotations.object_type) {
-			zend_hash_next_index_insert(ser->tmp, return_value);
 			goto unserialize_struct;
 		}
 		zend_hash_next_index_insert(ser->ids, return_value);
@@ -2565,7 +2567,6 @@ LOCAL void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *return_valu
 		ION_CHECK(ion_reader_read_string(ser->reader, &str));
 		RETVAL_STRINGL((char *) str.value, str.length);
 		if (ser->annotations.object_type) {
-			zend_hash_next_index_insert(ser->tmp, return_value);
 			goto unserialize_struct;
 		}
 		zend_hash_next_index_insert(ser->ids, return_value);
@@ -2575,7 +2576,6 @@ LOCAL void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *return_valu
 	case tid_BLOB_INT:
 		php_ion_reader_read_lob(ser->reader, return_value);
 		if (ser->annotations.object_type) {
-			zend_hash_next_index_insert(ser->tmp, return_value);
 			goto unserialize_struct;
 		}
 		zend_hash_next_index_insert(ser->ids, return_value);
@@ -2661,7 +2661,8 @@ void php_ion_unserialize(php_ion_unserializer *ser, zval *zdata, zval *return_va
 		reader->buffer = zval_get_string(zdata);
 	} else {
 		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
-				"Invalid source to unserialize; expected string or resource");
+				"Invalid source to unserialize: expected string or resource, got %s",
+								zend_zval_type_name(zdata));
 		if (zo_ser) {
 			OBJ_RELEASE(zo_ser);
 		}

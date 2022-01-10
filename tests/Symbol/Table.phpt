@@ -43,6 +43,7 @@ echo "add, find, local sym4\n";
 var_dump($local->add("sym4"));
 var_dump($local->find("sym4"));
 var_dump($local->findLocal("sym4"));
+var_dump($local->getMaxId());
 ?>
 DONE
 --EXPECTF--
@@ -157,4 +158,5 @@ object(ion\Symbol)#%d (3) {
   ["importLocation"]=>
   NULL
 }
+int(23)
 DONE
