@@ -917,6 +917,11 @@ LOCAL timelib_time* php_time_from_ion(const ION_TIMESTAMP *ts, decContext *ctx, 
 {
 	timelib_time *time = ecalloc(1, sizeof(*time));
 
+	/* defaults */
+	time->y = 1970;
+	time->m = 1;
+	time->d = 1;
+
 	switch (ts->precision & 0x7f) {
 	case ION_TS_FRAC:
 		time->us = php_usec_from_ion(&ts->fraction, ctx);

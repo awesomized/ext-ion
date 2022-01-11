@@ -18,7 +18,7 @@ enum Type : int {
     case String     = 0x800;
     case CLob       = 0x900;
     case BLob       = 0xa00;
-    case AList      = 0xb00;
+    case List       = 0xb00;
     case SExp       = 0xc00;
     case Struct     = 0xd00;
     case Datagram   = 0xf00;
@@ -396,7 +396,7 @@ interface Stream extends \ion\Reader {
     /** @param resource $stream */
     public function resetStream($stream) : void;
     /** @param resource $stream */
-    public function resetStreamWithLength($stream, int $position, int $length = -1) : void;
+    public function resetStreamWithLength($stream, int $length) : void;
 }
 
 namespace ion\Reader\Stream;
@@ -412,7 +412,7 @@ class Reader extends \ion\Reader\Reader implements \ion\Reader\Stream {
     /** @param resource $stream */
     public function resetStream($stream) : void {}
     /** @param resource $stream */
-    public function resetStreamWithLength($stream, int $position, int $length = -1) : void {}
+    public function resetStreamWithLength($stream, int $length) : void {}
 }
 
 namespace ion\Writer;

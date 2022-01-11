@@ -864,7 +864,12 @@ static ZEND_METHOD(ion_Reader_Reader, getAnnotationSymbols)
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
-	int32_t count, max = php_ion_obj(reader_options, obj->opt)->opt.max_annotation_count;
+	int32_t count, max;
+	if (obj->opt) {
+		max = php_ion_obj(reader_options, obj->opt)->opt.max_annotation_count;
+	} else {
+		max = 10;
+	}
 	ION_SYMBOL *ptr = ecalloc(sizeof(*ptr), max);
 	iERR err = ion_reader_get_annotation_symbols(obj->reader, ptr, max, &count);
 	if (!err) {
@@ -955,7 +960,9 @@ static ZEND_METHOD(ion_Reader_Reader, readFloat)
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
-	ION_CHECK(ion_reader_read_double(obj->reader, &Z_DVAL_P(return_value)));
+	double dval;
+	ION_CHECK(ion_reader_read_double(obj->reader, &dval));
+	RETURN_DOUBLE(dval);
 }
 static ZEND_METHOD(ion_Reader_Reader, readDecimal)
 {
@@ -1196,7 +1203,7 @@ static ZEND_METHOD(ion_Reader_Stream_Reader, resetStreamWithLength)
 
 	zval *zstream;
 	zend_long length;
-	ZEND_PARSE_PARAMETERS_START(1, 2);
+	ZEND_PARSE_PARAMETERS_START(2, 2);
 		Z_PARAM_RESOURCE(zstream);
 		Z_PARAM_LONG(length)
 	ZEND_PARSE_PARAMETERS_END();

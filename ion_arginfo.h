@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 8e04adcc2af90243429a756e14d48507f8411309 */
+ * Stub hash: 8cd99962a32b5321624d6cb043fb60ff13f93738 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_ion_Symbol_Table_PHP, 0, 0, ion\\Symbol\\Table, 0)
 ZEND_END_ARG_INFO()
@@ -345,8 +345,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_Stream_resetStreamWithLength, 0, 2, IS_VOID, 0)
 	ZEND_ARG_INFO(0, stream)
-	ZEND_ARG_TYPE_INFO(0, position, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, length, IS_LONG, 0, "-1")
+	ZEND_ARG_TYPE_INFO(0, length, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Stream_Reader___construct, 0, 0, 1)
@@ -1054,9 +1053,9 @@ static zend_class_entry *register_class_ion_Type(void)
 	ZVAL_LONG(&enum_case_BLob_value, 2560);
 	zend_enum_add_case_cstr(class_entry, "BLob", &enum_case_BLob_value);
 
-	zval enum_case_AList_value;
-	ZVAL_LONG(&enum_case_AList_value, 2816);
-	zend_enum_add_case_cstr(class_entry, "AList", &enum_case_AList_value);
+	zval enum_case_List_value;
+	ZVAL_LONG(&enum_case_List_value, 2816);
+	zend_enum_add_case_cstr(class_entry, "List", &enum_case_List_value);
 
 	zval enum_case_SExp_value;
 	ZVAL_LONG(&enum_case_SExp_value, 3072);
