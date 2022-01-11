@@ -11,6 +11,7 @@
 */
 
 #include "php.h"
+#include "ext/standard/php_var.h"
 #include "ext/date/php_date.h"
 
 #if PHP_DEBUG
@@ -1333,7 +1334,6 @@ typedef struct php_ion_writer {
 	} type;
 	union {
 		struct {
-			zval val;
 			smart_str str;
 		} buffer;
 		struct {
@@ -1360,18 +1360,6 @@ LOCAL iERR php_ion_writer_stream_handler(struct _ion_user_stream *user)
 	return IERR_OK;
 }
 
-#define REF_STR() do { \
-	ZVAL_NEW_STR(ref, obj->buffer.str.s); \
-	GC_ADDREF(obj->buffer.str.s); \
-} while (0)
-
-#define NEW_REF_STR() do {\
-	if (Z_STR_P(ref) != obj->buffer.str.s) { \
-		zval_ptr_dtor(ref); \
-		REF_STR(); \
-	} \
-} while(0)
-
 LOCAL void php_ion_writer_stream_init(php_ion_writer *obj, php_ion_writer_options *opt)
 {
 	PTR_CHECK(obj->stream.ptr);
@@ -1380,46 +1368,34 @@ LOCAL void php_ion_writer_stream_init(php_ion_writer *obj, php_ion_writer_option
 	obj->stream.buf.length = opt ? opt->opt.allocation_page_size : 0x1000;
 	obj->stream.buf.value = emalloc(obj->stream.buf.length);
 }
+
 LOCAL void php_ion_writer_buffer_init(php_ion_writer *obj)
 {
-	zval *ref = &obj->buffer.val;
-	ZVAL_DEREF(ref);
-
 	smart_str_alloc(&obj->buffer.str, 0, 0);
 	smart_str_0(&obj->buffer.str);
-	REF_STR();
+}
+
+LOCAL void php_ion_writer_buffer_reset(php_ion_writer *obj)
+{
+	smart_str_free(&obj->buffer.str);
+	memset(&obj->buffer.str, 0, sizeof(obj->buffer.str));
+	smart_str_alloc(&obj->buffer.str, 0, 0);
+	smart_str_0(&obj->buffer.str);
 }
 
 LOCAL void php_ion_writer_buffer_grow(php_ion_writer *obj)
 {
-	zval *ref = &obj->buffer.val;
-	ZVAL_DEREF(ref);
-
-	switch (GC_REFCOUNT(obj->buffer.str.s)) {
-	case 2:
-		// nothing to do
-		break;
-	case 1:
-		// we've been separated
-		GC_ADDREF(obj->buffer.str.s);
-		break;
-	default:
-		// we have to separate
-		fprintf(stderr, "SEPARATE\n");
-		obj->buffer.str.s = zend_string_dup(obj->buffer.str.s, 0);
-		break;
+	if (GC_REFCOUNT(obj->buffer.str.s) > 1) {
+		zend_string *keep = obj->buffer.str.s;
+		obj->buffer.str.s = NULL;
+		smart_str_alloc(&obj->buffer.str, obj->buffer.str.a << 1, 0);
+		memcpy(obj->buffer.str.s->val, keep->val, keep->len + 1);
+		obj->buffer.str.s->len = keep->len;
+		smart_str_0(&obj->buffer.str);
+		zend_string_release(keep);
+	} else {
+		smart_str_erealloc(&obj->buffer.str, obj->buffer.str.a << 1);
 	}
-
-	zend_string *old = obj->buffer.str.s;
-	GC_DELREF(old);
-	smart_str_erealloc(&obj->buffer.str, obj->buffer.str.a << 1);
-	if (old == obj->buffer.str.s) {
-		GC_ADDREF(old);
-	} else if(old == Z_STR_P(ref)) {
-		ZVAL_NULL(ref);
-	}
-
-	NEW_REF_STR();
 }
 
 LOCAL iERR php_ion_writer_buffer_handler(struct _ion_user_stream *user)
@@ -1512,7 +1488,6 @@ LOCAL void php_ion_writer_dtor(php_ion_writer *obj)
 			smart_str_0(&obj->buffer.str);
 			zend_string_release(obj->buffer.str.s);
 		}
-		zval_ptr_dtor(&obj->buffer.val);
 	}
 }
 

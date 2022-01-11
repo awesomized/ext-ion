@@ -1615,17 +1615,12 @@ static ZEND_METHOD(ion_Writer_Buffer_Writer, __construct)
 	php_ion_writer *obj = php_ion_obj(writer, Z_OBJ_P(ZEND_THIS));
 	PTR_CHECK(obj);
 
-	zval *ref;
-	ZEND_PARSE_PARAMETERS_START(1, 2)
-		Z_PARAM_ZVAL(ref)
+	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->opt, ce_Writer_Options)
 	ZEND_PARSE_PARAMETERS_END();
 
 	obj->type = BUFFER_WRITER;
-	ZVAL_COPY(&obj->buffer.val, ref);
-	zval_dtor(Z_REFVAL_P(ref));
-
 	php_ion_writer_ctor(obj);
 }
 static ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer)
@@ -1635,7 +1630,16 @@ static ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer)
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
-	RETVAL_STR(zend_string_dup(obj->buffer.str.s, 0));
+	RETVAL_STR_COPY(obj->buffer.str.s);
+}
+static ZEND_METHOD(ion_Writer_Buffer_Writer, resetBuffer)
+{
+	php_ion_writer *obj = php_ion_obj(writer, Z_OBJ_P(ZEND_THIS));
+	OBJ_CHECK(obj);
+
+	ZEND_PARSE_PARAMETERS_NONE();
+
+	php_ion_writer_buffer_reset(obj);
 }
 static ZEND_METHOD(ion_Writer_Stream_Writer, __construct)
 {

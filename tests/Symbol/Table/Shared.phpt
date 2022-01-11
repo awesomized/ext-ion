@@ -8,8 +8,7 @@ TEST
 
 $c = new ion\Catalog;
 $c->add(new ion\Symbol\Table\Shared("shared", 1, ["shared1", "shared2"]));
-$w = new ion\Writer\Buffer\Writer($buf,
-	new ion\Writer\Options(catalog: $c, outputBinary: true));
+$w = new ion\Writer\Buffer\Writer(new ion\Writer\Options(catalog: $c, outputBinary: true));
 
 $w->writeSymbol("shared1");
 $w->writeSymbol("shared1");
@@ -18,7 +17,7 @@ $w->writeSymbol("shared2");
 
 $w->finish();
 
-foreach (str_split($buf, 8) as $line) {
+foreach (str_split($w->getBuffer(), 8) as $line) {
 	printf("%-26s", chunk_split(bin2hex($line), 2, " "));
 	foreach (str_split($line) as $byte) {
 		echo $byte >= ' ' && $byte <= '~' ? $byte : ".";
@@ -28,7 +27,7 @@ foreach (str_split($buf, 8) as $line) {
 echo "\n";
 
 $u = new ion\Unserializer\PHP(multiSequence: true);
-var_dump($s = $u->unserialize($buf));
+var_dump($s = $u->unserialize($w->getBuffer()));
 
 foreach ($s as $sym) {
 	/** @var ion\Symbol $sym */
@@ -42,7 +41,7 @@ $u = new ion\Unserializer\PHP(multiSequence: true,
 	readerOptions: new ion\Reader\Options(
 		catalog: $c,
 		onContextChange: fn(ion\Reader $r) => print("on_context_change\n")));
-var_dump($u->unserialize($buf));
+var_dump($u->unserialize($w->getBuffer()));
 
 ?>
 DONE

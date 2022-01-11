@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 8cd99962a32b5321624d6cb043fb60ff13f93738 */
+ * Stub hash: aafe212ff9dd7fd15753fa5b6a3c127a51073241 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_ion_Symbol_Table_PHP, 0, 0, ion\\Symbol\\Table, 0)
 ZEND_END_ARG_INFO()
@@ -495,12 +495,15 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_Buffer_getBuffer arginfo_class_ion_Symbol_Enum_toString
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Buffer_Writer___construct, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(1, buffer, IS_STRING, 1)
+#define arginfo_class_ion_Writer_Buffer_resetBuffer arginfo_class_ion_Reader_Reader_rewind
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Buffer_Writer___construct, 0, 0, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, options, ion\\Writer\\Options, 1, "null")
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_Buffer_Writer_getBuffer arginfo_class_ion_Symbol_Enum_toString
+
+#define arginfo_class_ion_Writer_Buffer_Writer_resetBuffer arginfo_class_ion_Reader_Reader_rewind
 
 #define arginfo_class_ion_Writer_Stream_getStream arginfo_class_ion_Symbol_Table_Local___construct
 
@@ -636,6 +639,7 @@ static ZEND_METHOD(ion_Writer_Writer, writeOne);
 static ZEND_METHOD(ion_Writer_Writer, writeAll);
 static ZEND_METHOD(ion_Writer_Buffer_Writer, __construct);
 static ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer);
+static ZEND_METHOD(ion_Writer_Buffer_Writer, resetBuffer);
 static ZEND_METHOD(ion_Writer_Stream_Writer, __construct);
 static ZEND_METHOD(ion_Writer_Stream_Writer, getStream);
 static ZEND_METHOD(ion_Serializer_PHP, __construct);
@@ -960,6 +964,7 @@ static const zend_function_entry class_ion_Writer_Writer_methods[] = {
 
 static const zend_function_entry class_ion_Writer_Buffer_methods[] = {
 	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Writer_Buffer, getBuffer, arginfo_class_ion_Writer_Buffer_getBuffer, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
+	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Writer_Buffer, resetBuffer, arginfo_class_ion_Writer_Buffer_resetBuffer, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
 	ZEND_FE_END
 };
 
@@ -967,6 +972,7 @@ static const zend_function_entry class_ion_Writer_Buffer_methods[] = {
 static const zend_function_entry class_ion_Writer_Buffer_Writer_methods[] = {
 	ZEND_ME(ion_Writer_Buffer_Writer, __construct, arginfo_class_ion_Writer_Buffer_Writer___construct, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Writer_Buffer_Writer, getBuffer, arginfo_class_ion_Writer_Buffer_Writer_getBuffer, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Writer_Buffer_Writer, resetBuffer, arginfo_class_ion_Writer_Buffer_Writer_resetBuffer, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 

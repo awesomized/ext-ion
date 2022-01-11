@@ -6,8 +6,7 @@ ion
 TEST
 <?php
 
-$w = new ion\Writer\Buffer\Writer($buf,
-	new ion\Writer\Options(outputBinary: true));
+$w = new ion\Writer\Buffer\Writer(new ion\Writer\Options(outputBinary: true));
 
 $w->writeSymbol("local1");
 $w->writeSymbol("local1");
@@ -16,7 +15,7 @@ $w->writeSymbol("local2");
 
 $w->finish();
 
-foreach (str_split($buf, 8) as $line) {
+foreach (str_split($w->getBuffer(), 8) as $line) {
 	printf("%-26s", chunk_split(bin2hex($line), 2, " "));
 	foreach (str_split($line) as $byte) {
 		echo $byte >= ' ' && $byte <= '~' ? $byte : ".";
@@ -26,7 +25,7 @@ foreach (str_split($buf, 8) as $line) {
 echo "\n";
 
 $u = new ion\Unserializer\PHP(multiSequence: true);
-var_dump($u->unserialize($buf));
+var_dump($u->unserialize($w->getBuffer()));
 
 ?>
 DONE

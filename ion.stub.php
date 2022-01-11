@@ -511,20 +511,17 @@ abstract class Writer implements \ion\Writer {
 namespace ion\Writer;
 interface Buffer extends \ion\Writer {
     public function getBuffer() : string;
+    public function resetBuffer() : void;
 }
 
 namespace ion\Writer\Buffer;
 class Writer extends \ion\Writer\Writer implements \ion\Writer\Buffer {
-    /** @param ref $buffer */
     public function __construct(
-        ?string &$buffer,
         ?\ion\Writer\Options $options = null,
     ) {}
 
-    /**
-     * @return string a _copy_ of $buffer passed to the constructor
-     */
     public function getBuffer() : string {}
+    public function resetBuffer() : void {}
 }
 
 namespace ion\Writer;

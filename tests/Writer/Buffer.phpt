@@ -6,16 +6,21 @@ ion
 TEST
 <?php
 
-$w = new ion\Writer\Buffer\Writer($buf);
-for ($i = 0; $i < 100; ++$i) $w->writeTypedNull(ion\Type::Int);
-var_dump($buf === $w->getBuffer());
+$w = new ion\Writer\Buffer\Writer;
+for ($i = 0; $i < 100; ++$i)
+	$w->writeTypedNull(ion\Type::Int);
+$w->flush();
+echo $w->getBuffer(),"\n";
+$w->resetBuffer();
+var_dump($w->getBuffer());
+$w->writeSymbol("bar");
 $w->finish();
-echo $buf;
+var_dump($w->getBuffer());
 ?>
-
 DONE
 --EXPECTF--
 TEST
-bool(true)
 null.int%r( null.int)*%r
+string(0) ""
+string(3) "bar"
 DONE
