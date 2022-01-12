@@ -1,3 +1,4 @@
 [submodule "ion-c"]
 	path = ion-c
-	url = https://github.com/amzn/ion-c
+	url = https://github.com/m6w6/ion-c
+	branch = all-fixes-merged
