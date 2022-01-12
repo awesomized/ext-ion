@@ -13,7 +13,8 @@ $data = [
 	"double" => 123.123,
 	"string" => "foobar",
 	"object" => (object) ["prop" => "data"],
-	"list" => [1,2,3]
+	"list" => [1,2,3],
+	"hash" => ["foo" => "bar", 1 => 2],
 ];
 echo $s = ion\serialize($data), "\n";
 var_dump($data == ion\unserialize($s));
@@ -21,6 +22,6 @@ var_dump($data == ion\unserialize($s));
 DONE
 --EXPECTF--
 TEST
-{'null':null,'true':true,'false':false,int:123,double:12%f,string:"foobar",object:o::{prop:"data"},list:[1,2,3]}
+{'null':null,'true':true,'false':false,int:123,double:12%f,string:"foobar",object:o::{prop:"data"},list:[1,2,3],hash:{foo:"bar",'1':2}}
 bool(true)
 DONE
