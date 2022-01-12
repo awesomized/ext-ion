@@ -578,7 +578,7 @@ LOCAL void php_ion_symbol_copy(php_ion_symbol *new_obj, php_ion_symbol *old_obj)
 		ion_string_from_zend(&new_obj->sym.value, new_obj->value);
 	}
 
-	if ((new_obj->iloc = get_property_obj(&new_obj->std, ZEND_STRL("importLocation"), IS_OBJECT))) {
+	if ((new_obj->iloc = old_obj->iloc)) {
 		new_obj->sym.import_location = php_ion_obj(symbol_iloc, new_obj->iloc)->loc;
 	}
 }
@@ -856,7 +856,7 @@ LOCAL void php_ion_decimal_dtor(php_ion_decimal *obj)
 LOCAL void php_ion_decimal_copy(php_ion_decimal *new_obj, php_ion_decimal *old_obj)
 {
 	zend_objects_clone_members(&new_obj->std, &old_obj->std);
-	new_obj->ctx = get_property_obj(&new_obj->std, ZEND_STRL("context"), IS_OBJECT);
+	new_obj->ctx = old_obj->ctx;
 	ION_CHECK(ion_decimal_copy(&new_obj->dec, &old_obj->dec));
 }
 
@@ -1045,8 +1045,7 @@ LOCAL ION_COLLECTION *php_ion_catalog_collection(php_ion_catalog *cat)
 
 LOCAL void php_ion_catalog_copy(php_ion_catalog *new_obj, php_ion_catalog *old_obj)
 {
-	// do not clone members; they're only caches
-
+	// do not clone cache members
 	php_ion_catalog_ctor(new_obj);
 	OBJ_CHECK(new_obj);
 
@@ -1164,9 +1163,9 @@ LOCAL void php_ion_reader_options_copy(php_ion_reader_options *new_obj, php_ion_
 	zend_objects_clone_members(&new_obj->std, &old_obj->std);
 
 	new_obj->opt = old_obj->opt;
-	new_obj->cat = get_property_obj(&new_obj->std, ZEND_STRL("catalog"), IS_OBJECT);
-	new_obj->dec_ctx = get_property_obj(&new_obj->std, ZEND_STRL("decimalContext"), IS_OBJECT);
-	new_obj->cb = get_property_obj(&new_obj->std, ZEND_STRL("onContextChange"), IS_OBJECT);
+	new_obj->cat = old_obj->cat;
+	new_obj->dec_ctx = old_obj->dec_ctx;
+	new_obj->cb = old_obj->cb;
 	if (new_obj->cb) {
 		zval zcb;
 		ZVAL_OBJ(&zcb, new_obj->cb);
@@ -1301,16 +1300,11 @@ typedef struct php_ion_writer_options {
 
 LOCAL void php_ion_writer_options_copy(php_ion_writer_options *new_obj, php_ion_writer_options *old_obj)
 {
-	new_obj->opt = old_obj->opt;
+	zend_objects_clone_members(&new_obj->std, &old_obj->std);
 
-	if (old_obj->cat) {
-		new_obj->cat = old_obj->cat;
-		GC_ADDREF(new_obj->cat);
-	}
-	if (old_obj->dec_ctx) {
-		new_obj->dec_ctx = old_obj->dec_ctx;
-		GC_ADDREF(new_obj->dec_ctx);
-	}
+	new_obj->opt = old_obj->opt;
+	new_obj->cat = old_obj->cat;
+	new_obj->dec_ctx = old_obj->dec_ctx;
 }
 
 LOCAL void php_ion_writer_options_dtor(php_ion_writer_options *obj)
