@@ -14,13 +14,20 @@ echo $w->getBuffer(),"\n";
 $w->resetBuffer();
 var_dump($w->getBuffer());
 $w->writeSymbol("bar");
-$w->finish();
+$w->flush();
 var_dump($w->getBuffer());
+$w->resetBuffer();
+// realloc
+for ($i = 0; $i < 100; ++$i)
+	$w->writeTypedNull(ion\Type::Int);
+$w->flush();
+echo $w->getBuffer(),"\n";
 ?>
 DONE
 --EXPECTF--
 TEST
 null.int%r( null.int)*%r
 string(0) ""
-string(3) "bar"
+string(4) " bar"
+ null.int%r( null.int)*%r
 DONE

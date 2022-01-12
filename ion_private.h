@@ -1335,6 +1335,7 @@ typedef struct php_ion_writer {
 	union {
 		struct {
 			smart_str str;
+			struct _ion_user_stream *usr;
 		} buffer;
 		struct {
 			ION_STRING buf;
@@ -1371,16 +1372,18 @@ LOCAL void php_ion_writer_stream_init(php_ion_writer *obj, php_ion_writer_option
 
 LOCAL void php_ion_writer_buffer_init(php_ion_writer *obj)
 {
-	smart_str_alloc(&obj->buffer.str, 0, 0);
-	smart_str_0(&obj->buffer.str);
+	smart_str_alloc(&obj->buffer.str, 0, false);
+	if (obj->buffer.usr) {
+		obj->buffer.usr->curr = (BYTE *) &obj->buffer.str.s->val[obj->buffer.str.s->len];
+		obj->buffer.usr->limit = obj->buffer.usr->curr + obj->buffer.str.a - obj->buffer.str.s->len;
+	}
 }
 
 LOCAL void php_ion_writer_buffer_reset(php_ion_writer *obj)
 {
 	smart_str_free(&obj->buffer.str);
 	memset(&obj->buffer.str, 0, sizeof(obj->buffer.str));
-	smart_str_alloc(&obj->buffer.str, 0, 0);
-	smart_str_0(&obj->buffer.str);
+	php_ion_writer_buffer_init(obj);
 }
 
 LOCAL void php_ion_writer_buffer_grow(php_ion_writer *obj)
@@ -1391,7 +1394,6 @@ LOCAL void php_ion_writer_buffer_grow(php_ion_writer *obj)
 		smart_str_alloc(&obj->buffer.str, obj->buffer.str.a << 1, 0);
 		memcpy(obj->buffer.str.s->val, keep->val, keep->len + 1);
 		obj->buffer.str.s->len = keep->len;
-		smart_str_0(&obj->buffer.str);
 		zend_string_release(keep);
 	} else {
 		smart_str_erealloc(&obj->buffer.str, obj->buffer.str.a << 1);
@@ -1401,17 +1403,17 @@ LOCAL void php_ion_writer_buffer_grow(php_ion_writer *obj)
 LOCAL iERR php_ion_writer_buffer_handler(struct _ion_user_stream *user)
 {
 	php_ion_writer *writer = (php_ion_writer *) user->handler_state;
+	writer->buffer.usr = user;
 
 	if (user->curr) {
-		writer->buffer.str.s->len += user->curr - (BYTE *) &writer->buffer.str.s->val[writer->buffer.str.s->len];
-		smart_str_0(&writer->buffer.str);
+		writer->buffer.str.s->len = user->curr - (BYTE *) writer->buffer.str.s->val;
 		if (user->limit == user->curr) {
 			php_ion_writer_buffer_grow(writer);
 		}
 	}
 	user->curr = (BYTE *) &writer->buffer.str.s->val[writer->buffer.str.s->len];
 	user->limit = user->curr + writer->buffer.str.a - writer->buffer.str.s->len;
-
+	
 	return IERR_OK;
 }
 

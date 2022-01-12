@@ -1585,9 +1585,6 @@ static ZEND_METHOD(ion_Writer_Writer, flush)
 
 	SIZE flushed;
 	ION_CHECK(ion_writer_flush(obj->writer, &flushed));
-	if (obj->type == BUFFER_WRITER) {
-		smart_str_0(&obj->buffer.str);
-	}
 	RETURN_LONG(flushed);
 }
 static ZEND_METHOD(ion_Writer_Writer, finish)
@@ -1599,9 +1596,6 @@ static ZEND_METHOD(ion_Writer_Writer, finish)
 
 	SIZE flushed;
 	ION_CHECK(ion_writer_finish(obj->writer, &flushed));
-	if (obj->type == BUFFER_WRITER) {
-		smart_str_0(&obj->buffer.str);
-	}
 	RETURN_LONG(flushed);
 }
 static ZEND_METHOD(ion_Writer_Writer, writeOne)
@@ -1630,6 +1624,7 @@ static ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer)
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
+	smart_str_0(&obj->buffer.str.s);
 	RETVAL_STR_COPY(obj->buffer.str.s);
 }
 static ZEND_METHOD(ion_Writer_Buffer_Writer, resetBuffer)
