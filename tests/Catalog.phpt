@@ -8,7 +8,7 @@ TEST
 
 $c = new ion\Catalog;
 var_dump(count($c));
-$c->add(ion\Symbol\Table\PHP());
+$c->add($php = ion\Symbol\Table\PHP());
 var_dump(count($c));
 $c->add(new ion\Symbol\Table\Shared("shared", 1, ["foo", "bar", "baz"]));
 var_dump(count($c));
@@ -23,7 +23,14 @@ var_dump($c->findBest("shared"));
 $c->remove("shared");
 var_dump(count($c));
 
-var_dump(clone $c);
+var_dump($d = clone $c);
+$c->remove($php);
+$c->remove($php);
+unset($c);
+var_dump(count($d));
+var_dump($d->find("PHP", 1));
+$d->remove($php);
+var_dump(count($d));
 ?>
 DONE
 --EXPECTF--
@@ -121,4 +128,15 @@ object(ion\Catalog)#%d (1) {
   array(0) {
   }
 }
+int(1)
+object(ion\Symbol\Table\Shared)#%d (3) {
+  ["name"]=>
+  string(3) "PHP"
+  ["version"]=>
+  int(1)
+  ["symbols":"ion\Symbol\Table\Shared":private]=>
+  array(0) {
+  }
+}
+int(0)
 DONE

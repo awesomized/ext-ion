@@ -51,6 +51,12 @@ AC_DEFUN([ION_BUNDLE], [dnl
     EXTRA_LDFLAGS_PROGRAM="$EXTRA_LDFLAGS_PROGRAM -L$builddir/ionc -L$builddir/decNumber"
   fi
 
+  if test "$PHP_DEBUG" = 1; then
+    LIB_IONC_BUILD=Debug
+  else
+    LIB_IONC_BUILD=Release
+  fi
+  PHP_SUBST(LIB_IONC_BUILD)
   PHP_ADD_MAKEFILE_FRAGMENT()
 ])
 AC_DEFUN([ION_CHECK_LIB], [dnl

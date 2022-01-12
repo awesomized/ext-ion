@@ -9,6 +9,7 @@ var_dump(ion\Decimal\Context::Dec32());
 var_dump(ion\Decimal\Context::Dec64());
 var_dump(ion\Decimal\Context::Dec128());
 var_dump(ion\Decimal\Context::DecMax());
+var_dump(ion\Decimal\Context::DecMax(ion\Decimal\Context\Rounding::Down05Up));
 var_dump(clone new ion\Decimal\Context(12, 999, -999, ion\Decimal\Context\Rounding::Down05Up, true));
 ?>
 DONE
@@ -59,6 +60,18 @@ object(ion\Decimal\Context)#%d (5) {
   int(-999999999)
   ["round"]=>
   int(3)
+  ["clamp"]=>
+  bool(false)
+}
+object(ion\Decimal\Context)#%d (5) {
+  ["digits"]=>
+  int(999999999)
+  ["eMax"]=>
+  int(999999999)
+  ["eMin"]=>
+  int(-999999999)
+  ["round"]=>
+  enum(ion\Decimal\Context\Rounding::Down05Up)
   ["clamp"]=>
   bool(false)
 }

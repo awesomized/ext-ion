@@ -465,8 +465,8 @@ interface Writer {
     public function flush() : int;
     public function finish() : int;
 
-    public function writeOne(Reader $reader) : void;
-    public function writeAll(Reader $reader) : void;
+    // public function writeOne(Reader $reader) : void;
+    // public function writeAll(Reader $reader) : void;
 
     // public function getCatalog() : Catalog;
     // public function setCatalog(Catalog $catalog) : void;
@@ -504,8 +504,8 @@ abstract class Writer implements \ion\Writer {
     public function flush() : int {}
     public function finish() : int {}
 
-    public function writeOne(\ion\Reader $reader) : void {}
-    public function writeAll(\ion\Reader $reader) : void {}
+    // public function writeOne(\ion\Reader $reader) : void {}
+    // public function writeAll(\ion\Reader $reader) : void {}
 }
 
 namespace ion\Writer;

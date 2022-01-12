@@ -1225,7 +1225,7 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 	zend_bool binary = false, compact_floats = false, escape = false, pretty = false,
 			tabs = true, small_cntr_inl = true, suppress_sys = false, flush = false;
 	zend_long indent = 2, max_depth = 10, max_ann = 10, temp = 0x4000, alloc = 0x10000;
-	ZEND_PARSE_PARAMETERS_START(0, 16)
+	ZEND_PARSE_PARAMETERS_START(0, 15)
 		Z_PARAM_OPTIONAL
 		//public readonly ?\ion\Catalog $catalog = null,
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->cat, ce_Catalog)
@@ -1376,8 +1376,17 @@ static ZEND_METHOD(ion_Writer_Writer, writeDecimal)
 	ZEND_PARSE_PARAMETERS_END();
 
 	if (dec_str) {
-		ION_STRING s;
-		ION_CHECK(ion_writer_write_string(obj->writer, ion_string_from_zend(&s, dec_str)));
+		decContext *ctx = &php_ion_globals.decimal.ctx;
+		ION_DECIMAL dec = {0};
+
+		if (obj->opt) {
+			php_ion_writer_options *opt_obj = php_ion_obj(writer_options, obj->opt);
+			if (opt_obj->opt.decimal_context) {
+				ctx = opt_obj->opt.decimal_context;
+			}
+		}
+		ION_CHECK(ion_decimal_from_string(&dec, dec_str->val, ctx));
+		ION_CHECK(ion_writer_write_ion_decimal(obj->writer, &dec));
 	} else {
 		php_ion_decimal *dec = php_ion_obj(decimal, dec_obj);
 		ION_CHECK(ion_writer_write_ion_decimal(obj->writer, &dec->dec));
@@ -1597,12 +1606,6 @@ static ZEND_METHOD(ion_Writer_Writer, finish)
 	SIZE flushed;
 	ION_CHECK(ion_writer_finish(obj->writer, &flushed));
 	RETURN_LONG(flushed);
-}
-static ZEND_METHOD(ion_Writer_Writer, writeOne)
-{
-}
-static ZEND_METHOD(ion_Writer_Writer, writeAll)
-{
 }
 static ZEND_METHOD(ion_Writer_Buffer_Writer, __construct)
 {

@@ -44,6 +44,9 @@ var_dump($local->add("sym4"));
 var_dump($local->find("sym4"));
 var_dump($local->findLocal("sym4"));
 var_dump($local->getMaxId());
+
+var_dump(clone $local);
+var_dump(clone $shared);
 ?>
 DONE
 --EXPECTF--
@@ -159,4 +162,21 @@ object(ion\Symbol)#%d (3) {
   NULL
 }
 int(23)
+object(ion\Symbol\Table\Local)#%d (2) {
+  ["imports":"ion\Symbol\Table\Local":private]=>
+  array(0) {
+  }
+  ["symbols":"ion\Symbol\Table\Local":private]=>
+  array(0) {
+  }
+}
+object(ion\Symbol\Table\Shared)#%d (3) {
+  ["name"]=>
+  string(6) "shared"
+  ["version"]=>
+  int(1)
+  ["symbols":"ion\Symbol\Table\Shared":private]=>
+  array(0) {
+  }
+}
 DONE

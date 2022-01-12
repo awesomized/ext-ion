@@ -404,7 +404,7 @@ LOCAL void *php_ion_obj_ex(void *obj, ptrdiff_t offset) {
 
 #define ION_CHECK_RETURN(r, err, ...) do { \
 	iERR __err = err; \
-	if (__err) { \
+	if (UNEXPECTED(__err)) { \
 		zend_throw_exception_ex(spl_ce_RuntimeException, __err, "%s: %s", ion_error_to_str(__err), #err); \
 		__VA_ARGS__; \
 		return r; \
@@ -415,14 +415,14 @@ LOCAL void *php_ion_obj_ex(void *obj, ptrdiff_t offset) {
 	ION_CHECK_RETURN(, err, __VA_ARGS__)
 
 #define ION_CATCH(...) do { \
-	if (EG(exception)) { \
+	if (UNEXPECTED(EG(exception))) { \
 		__VA_ARGS__; \
 		return; \
 	} \
 } while (0)
 
 #define PTR_CHECK_RETURN(ret, ptr, ...) do { \
-	if (!(ptr)) { \
+	if (UNEXPECTED(!(ptr))) { \
 		zend_throw_error(NULL, "Uninitialized object"); \
 		__VA_ARGS__; \
 		return ret; \
@@ -453,15 +453,6 @@ LOCAL void update_property_obj(zend_object *obj, const char *n, size_t l, zend_o
 	zval zobj;
 	ZVAL_OBJ(&zobj, p);
 	zend_update_property(obj->ce, obj, n, l, &zobj);
-}
-
-LOCAL zend_object *get_property_obj(zend_object *obj, const char *n, size_t l, int type)
-{
-	zval tmp, *zv = zend_read_property(obj->ce, obj, n, l, 0, &tmp);
-	if (zv && type & Z_TYPE_P(zv)) {
-		return Z_PTR_P(zv);
-	}
-	return NULL;
 }
 
 #define RETURN_IONTYPE(typ) do { \
@@ -642,13 +633,17 @@ LOCAL void php_ion_symbol_table_ctor(php_ion_symbol_table *obj)
 {
 	OBJ_CHECK(obj);
 
-	ION_STRING is;
-	if (IERR_OK == ion_symbol_table_get_name(obj->tab, &is)) {
-		zend_update_property_stringl(obj->std.ce, &obj->std, ZEND_STRL("name"), (char *) is.value, is.length);
-	}
-	int32_t iv;
-	if (IERR_OK == ion_symbol_table_get_version(obj->tab, &iv)) {
-		zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("version"), iv);
+	ION_SYMBOL_TABLE_TYPE typ = ist_EMPTY;
+	ion_symbol_table_get_type(obj->tab, &typ);
+	if (typ != ist_LOCAL) {
+		ION_STRING is;
+		if (IERR_OK == ion_symbol_table_get_name(obj->tab, &is)) {
+			zend_update_property_stringl(obj->std.ce, &obj->std, ZEND_STRL("name"), (char *) is.value, is.length);
+		}
+		int32_t iv;
+		if (IERR_OK == ion_symbol_table_get_version(obj->tab, &iv)) {
+			zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("version"), iv);
+		}
 	}
 }
 
@@ -910,7 +905,7 @@ LOCAL zend_string *php_dt_format_from_precision(uint8_t precision)
 	case ION_TS_YEAR:
 		return php_ion_timestamp_format_fetch(g_intern_str.Year);
 	default:
-		return zend_one_char_string['c'];
+		return ZSTR_CHAR('c');
 	}
 }
 
@@ -1120,11 +1115,9 @@ LOCAL void php_ion_catalog_symbol_table_zval(php_ion_catalog *obj, ION_SYMBOL_TA
 		}
 	}
 
-	php_error_docref(NULL, E_NOTICE, "Previously unknown ion\\Symbol\\Table encountered: %s", key->val);
-
 	object_init_ex(return_value, ce_Symbol_Table_Shared);
 	php_ion_symbol_table *o_tab = php_ion_obj(symbol_table, Z_OBJ_P(return_value));
-	OBJ_CHECK(o_tab, zend_string_release(key));
+	o_tab->tab = tab;
 	php_ion_symbol_table_ctor(o_tab);
 
 	if (ztabs) {
@@ -1691,8 +1684,8 @@ LOCAL void php_ion_serialize_object_std(php_ion_serializer *ser, zend_object *zo
 
 LOCAL void php_ion_serialize_object_lob(php_ion_serializer *ser, zend_object *zobject)
 {
-	zval tmp_type, *type = zend_read_property(NULL, zobject, ZEND_STRL("type"), 0, &tmp_type);
-	zval tmp_value, *value = zend_read_property(NULL, zobject, ZEND_STRL("value"), 0, &tmp_value);
+	zval tmp_type, *type = zend_read_property_ex(NULL, zobject, ZSTR_KNOWN(ZEND_STR_TYPE), 0, &tmp_type);
+	zval tmp_value, *value = zend_read_property_ex(NULL, zobject, ZSTR_KNOWN(ZEND_STR_VALUE), 0, &tmp_value);
 	switch (Z_LVAL_P(zend_enum_fetch_case_value(Z_OBJ_P(type)))) {
 	case tid_BLOB_INT:
 		ION_CHECK(ion_writer_write_blob(ser->writer, (BYTE *) Z_STRVAL_P(value), Z_STRLEN_P(value)));
@@ -2098,7 +2091,7 @@ LOCAL void php_ion_unserialize_field_name(php_ion_unserializer *ser, zend_string
 		*key = zend_string_init(ptr, end - ptr, 0);
 		break;
 	case 1:
-		*key = zend_one_char_string[*name.value];
+		*key = ZSTR_CHAR(*name.value);
 		break;
 	default:
 		if (is_prop) {

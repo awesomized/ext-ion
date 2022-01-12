@@ -21,6 +21,7 @@ var_dump($t=new Timestamp(Timestamp\Precision::Min, datetime:"2020-10-01"),(stri
 $t->setTimezone(new DateTimeZone("Europe/Helsinki"));
 var_dump((string) $t);
 var_dump($t=new Timestamp(Timestamp\Precision::Day, "!Y-m", "2000-10"),(string)$t);
+var_dump($t=new Timestamp(Timestamp\Precision::MinTZ, Timestamp\Format::MinTZ, "2000-10-20T11:11CET"),(string)$t);
 var_dump(ion\unserialize(ion\serialize(clone new ion\Timestamp(ion\Timestamp\Precision::Sec, DateTime::RFC3339, "1971-02-03T04:05:06Z"))));
 ?>
 DONE
@@ -80,6 +81,19 @@ object(ion\Timestamp)#%d (5) {
   string(3) "CET"
 }
 string(11) "2000-10-01T"
+object(ion\Timestamp)#%d (5) {
+  ["precision"]=>
+  int(151)
+  ["format"]=>
+  string(11) "Y-m-d\TH:iP"
+  ["date"]=>
+  string(26) "2000-10-20 11:11:00.000000"
+  ["timezone_type"]=>
+  int(2)
+  ["timezone"]=>
+  string(3) "CET"
+}
+string(22) "2000-10-20T11:11+01:00"
 object(ion\Timestamp)#%d (3) {
   ["precision"]=>
   int(55)

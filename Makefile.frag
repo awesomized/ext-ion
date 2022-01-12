@@ -7,7 +7,7 @@ $(builddir)/ion-c/build:
 	mkdir -p $@
 	+cd $@ && CFLAGS=-w CXXFLAGS=-w \
 	$(CMAKE) -Wno-dev --log-level=ERROR \
-		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_BUILD_TYPE=$(LIB_IONC_BUILD) \
 		-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
 		$(srcdir)/ion-c
 

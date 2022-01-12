@@ -13,6 +13,7 @@ $o = new ion\Writer\Options(
 	decimalContext: ion\Decimal\Context::Dec64(),
 	outputBinary: true,
 	maxContainerDepth: 20,
+	allocationPageSize: 0x20000
 );
 var_dump($o, clone $o);
 ?>
@@ -128,7 +129,7 @@ object(ion\Writer\Options)#%d (15) {
   ["tempBufferSize"]=>
   int(16384)
   ["allocationPageSize"]=>
-  int(65536)
+  int(131072)
 }
 object(ion\Writer\Options)#%d (15) {
   ["catalog"]=>
@@ -175,6 +176,6 @@ object(ion\Writer\Options)#%d (15) {
   ["tempBufferSize"]=>
   int(16384)
   ["allocationPageSize"]=>
-  int(65536)
+  int(131072)
 }
 DONE
