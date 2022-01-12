@@ -1624,8 +1624,7 @@ static ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer)
 
 	ZEND_PARSE_PARAMETERS_NONE();
 
-	smart_str_0(&obj->buffer.str.s);
-	RETVAL_STR_COPY(obj->buffer.str.s);
+	RETVAL_STR(php_ion_writer_buffer_copy(obj));
 }
 static ZEND_METHOD(ion_Writer_Buffer_Writer, resetBuffer)
 {

@@ -1364,13 +1364,18 @@ LOCAL void php_ion_writer_stream_init(php_ion_writer *obj, php_ion_writer_option
 	obj->stream.buf.value = emalloc(obj->stream.buf.length);
 }
 
-LOCAL void php_ion_writer_buffer_init(php_ion_writer *obj)
+LOCAL void php_ion_writer_buffer_offer(php_ion_writer *obj)
 {
-	smart_str_alloc(&obj->buffer.str, 0, false);
 	if (obj->buffer.usr) {
 		obj->buffer.usr->curr = (BYTE *) &obj->buffer.str.s->val[obj->buffer.str.s->len];
 		obj->buffer.usr->limit = obj->buffer.usr->curr + obj->buffer.str.a - obj->buffer.str.s->len;
 	}
+}
+
+LOCAL void php_ion_writer_buffer_init(php_ion_writer *obj)
+{
+	smart_str_alloc(&obj->buffer.str, 0, false);
+	php_ion_writer_buffer_offer(obj);
 }
 
 LOCAL void php_ion_writer_buffer_reset(php_ion_writer *obj)
@@ -1380,34 +1385,50 @@ LOCAL void php_ion_writer_buffer_reset(php_ion_writer *obj)
 	php_ion_writer_buffer_init(obj);
 }
 
+LOCAL zend_string *php_ion_writer_buffer_copy(php_ion_writer *obj)
+{
+	if (obj->buffer.usr) {
+		// ensure that brain-dead ion_stream interface calls us again
+		obj->buffer.usr->curr = NULL;
+		obj->buffer.usr->limit = NULL;
+	}
+	smart_str_0(&obj->buffer.str);
+	return zend_string_copy(obj->buffer.str.s);
+}
+
+LOCAL void php_ion_writer_buffer_separate(php_ion_writer *obj, bool grow)
+{
+	// see zend_string_separate and smart_str_erealloc
+	zend_string *old_str = obj->buffer.str.s;
+	zend_string *new_str = zend_string_alloc(obj->buffer.str.a << grow, false);
+	memcpy(new_str->val, old_str->val, new_str->len = old_str->len);
+	zend_string_release(old_str);
+	obj->buffer.str.s = new_str;
+}
+
 LOCAL void php_ion_writer_buffer_grow(php_ion_writer *obj)
 {
-	if (GC_REFCOUNT(obj->buffer.str.s) > 1) {
-		zend_string *keep = obj->buffer.str.s;
-		obj->buffer.str.s = NULL;
-		smart_str_alloc(&obj->buffer.str, obj->buffer.str.a << 1, 0);
-		memcpy(obj->buffer.str.s->val, keep->val, keep->len + 1);
-		obj->buffer.str.s->len = keep->len;
-		zend_string_release(keep);
-	} else {
-		smart_str_erealloc(&obj->buffer.str, obj->buffer.str.a << 1);
+	if (obj->buffer.usr && obj->buffer.usr->curr) {
+		obj->buffer.str.s->len = obj->buffer.usr->curr - (BYTE *) obj->buffer.str.s->val;
 	}
+	if (obj->buffer.usr && obj->buffer.usr->curr && obj->buffer.usr->curr == obj->buffer.usr->limit) {
+		if (UNEXPECTED(GC_REFCOUNT(obj->buffer.str.s) > 1)) {
+			php_ion_writer_buffer_separate(obj, true);
+		} else {
+			smart_str_erealloc(&obj->buffer.str, obj->buffer.str.a << 1);
+		}
+	} else if (UNEXPECTED(GC_REFCOUNT(obj->buffer.str.s) > 1)) {
+		php_ion_writer_buffer_separate(obj, false);
+	}
+	php_ion_writer_buffer_offer(obj);
 }
+
 
 LOCAL iERR php_ion_writer_buffer_handler(struct _ion_user_stream *user)
 {
 	php_ion_writer *writer = (php_ion_writer *) user->handler_state;
 	writer->buffer.usr = user;
-
-	if (user->curr) {
-		writer->buffer.str.s->len = user->curr - (BYTE *) writer->buffer.str.s->val;
-		if (user->limit == user->curr) {
-			php_ion_writer_buffer_grow(writer);
-		}
-	}
-	user->curr = (BYTE *) &writer->buffer.str.s->val[writer->buffer.str.s->len];
-	user->limit = user->curr + writer->buffer.str.a - writer->buffer.str.s->len;
-	
+	php_ion_writer_buffer_grow(writer);
 	return IERR_OK;
 }
 
@@ -1428,8 +1449,6 @@ LOCAL void php_ion_writer_options_init_shared_imports(php_ion_writer_options *op
 			ION_COLLECTION_NEXT(cur, ptr);
 			if (*ptr) {
 				ION_CHECK(ion_writer_options_add_shared_imports_symbol_tables(&opt->opt, ptr, 1));
-			} else {
-				break;
 			}
 		}
 	}
