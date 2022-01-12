@@ -26,4 +26,9 @@ clean-ion:
 gcov-ion:
 	@rm -rf $@
 	@mkdir -p $@
-	@gcovr -j $$(nproc) -sr . --html --html-details --html-title $@ -o $@/index.html -f '.*/(php_)?ion.*' 2>/dev/null
+	@echo
+	@echo "Generating coverage in $@..."
+	@echo "************************************"
+	@gcovr -j $$(nproc) -sr . -f '.*/(php_)?ion.*' 2>/dev/null \
+ 		--html-title $@ --html-details $@/index.html
+	@echo "************************************"
