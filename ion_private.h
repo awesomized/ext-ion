@@ -2052,9 +2052,13 @@ LOCAL void php_ion_unserialize_object_iface(php_ion_unserializer *ser, zval *ret
 		zval *backref = zend_hash_next_index_insert(ser->ids, return_value);
 		if (SUCCESS == ce->unserialize(backref, ce, (BYTE *) s->val, s->len, NULL)) {
 			RETVAL_ZVAL(backref, 0, 0);
-		} else if (!EG(exception)) {
-			zend_throw_exception_ex(spl_ce_UnexpectedValueException, IERR_INTERNAL_ERROR,
-					"Failed to unserialize class %s", ce->name->val);
+		} else {
+			zval_ptr_dtor(backref);
+			ZVAL_NULL(backref);
+			if (!EG(exception)) {
+				zend_throw_exception_ex(spl_ce_UnexpectedValueException, IERR_INTERNAL_ERROR,
+										"Failed to unserialize class %s", ce->name->val);
+			}
 		}
 		zend_string_release(s);
 	} else {

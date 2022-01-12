@@ -38,6 +38,18 @@ class recursive implements Serializable {
 	}
 }
 
+class except implements Serializable {
+	function __construct (public $onserialize = false) {}
+	function serialize() : string {
+		if ($this->onserialize)
+			throw new Exception("except on serialize");
+		return "<<data>>";
+	}
+	function unserialize(string $data) : void {
+		throw new Exception("except on unserialize");
+	}
+}
+
 echo "\n";
 
 $t = new test;
@@ -50,6 +62,17 @@ var_dump($tree);
 $s = ion\serialize($tree);
 echo $s,"\n";
 debug_zval_dump(ion\unserialize($s));
+
+try {
+	ion\serialize(new except(true));
+} catch (Exception $e) {
+	printf("caught %s: %s\n", get_class($e), $e->getMessage());
+}
+try {
+	ion\unserialize(ion\serialize(new except()));
+} catch (Exception $e) {
+	printf("caught %s: %s\n", get_class($e), $e->getMessage());
+}
 ?>
 DONE
 --EXPECTF--
@@ -58,6 +81,8 @@ TEST
 Deprecated: test implements the Serializable interface, which is deprecated. Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary) in %sserialize/serializable.php on line %d
 
 Deprecated: recursive implements the Serializable interface, which is deprecated. Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary) in %sserialize/serializable.php on line %d
+
+Deprecated: except implements the Serializable interface, which is deprecated. Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary) in %sserialize/serializable.php on line %d
 
 [S::test::{{"foobar"}},r::1]
 array(2) refcount(2){
@@ -95,4 +120,6 @@ object(recursive)#%d (2) refcount(1){
     NULL
   }
 }
+caught Exception: except on serialize
+caught Exception: except on unserialize
 DONE
