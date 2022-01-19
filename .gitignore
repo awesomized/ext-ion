@@ -21,7 +21,7 @@ include
 install-sh
 libtool
 ltmain.sh
-Makefile
+/Makefile
 Makefile.fragments
 Makefile.global
 Makefile.objects
@@ -46,4 +46,5 @@ tmp-php.ini
 *.gcno
 .idea
 docs/vendor
+docs/src
 docs/composer.*
