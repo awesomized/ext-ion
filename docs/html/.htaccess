@@ -1,0 +1,11 @@
+Options -Indexes +MultiViews +FollowSymLinks
+DirectorySlash Off
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.+)$ $1.html [L]
+
+<Files *.php>
+    ForceType text/x-php
+    SetHandler default-handler
+</Files>

@@ -1,0 +1,187 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+							Options -
+						mdref
+		</title>
+		<meta name="viewport" content="width=1200, initial-scale=0.5">
+					<base href="/">
+			<meta http-equiv="Content-Location" content="/ion/Writer/Options">
+			<link rel="stylesheet" href="index.css">
+		
+		<link href="https://fonts.googleapis.com/css?family=Inconsolata&amp;subset=latin-ext" rel="stylesheet">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<link rel="shortcut icon" href="/favicon.ico">
+	</head>
+	<body>
+		<div class="page">
+		
+<div class="sidebar">
+	
+	<div class="edit">
+		<a href="./ion/Writer/Options">Edit</a>
+	</div>
+	
+	
+	<ul>
+		<li>&lsh; <a href="./">Home</a>
+			
+			<ul>
+				<li>
+											
+					&uarr; <a href="./ion">
+							ion
+						</a>
+						<ul>
+							<li>
+																	
+					&uarr; <a href="./ion/Writer">
+							Writer
+						</a>
+						<ul>
+							<li>
+											
+							&circlearrowright; <strong><a href="./ion/Writer/Options">Options</a></strong>
+
+							
+							<ul>
+								
+								<li>
+									&rdsh; <a href="./ion/Writer/Options/__construct">Options::__construct</a>
+									
+								</li>
+								
+							</ul>
+							
+																																
+						</ul>
+																			
+						<li>&ldsh; <a href="./ion/Writer/Buffer">Buffer</a></li>
+																													
+						<li>&ldsh; <a href="./ion/Writer/Stream">Stream</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/Writer">Writer</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/appendLob">Writer::appendLob</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/finish">Writer::finish</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/finishContainer">Writer::finishContainer</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/finishLob">Writer::finishLob</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/flush">Writer::flush</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/getDepth">Writer::getDepth</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/startContainer">Writer::startContainer</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/startLob">Writer::startLob</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeAnnotation">Writer::writeAnnotation</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeBLob">Writer::writeBLob</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeBool">Writer::writeBool</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeCLob">Writer::writeCLob</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeDecimal">Writer::writeDecimal</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeFieldName">Writer::writeFieldName</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeFloat">Writer::writeFloat</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeInt">Writer::writeInt</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeNull">Writer::writeNull</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeString">Writer::writeString</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeSymbol">Writer::writeSymbol</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeTimestamp">Writer::writeTimestamp</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer/writeTypedNull">Writer::writeTypedNull</a></li>
+																																																																																										
+					</ul>
+													
+				</li>
+			</ul>
+			
+		</li>
+	</ul>
+</div>
+					
+<h1>class ion\Writer\Options</h1>
+<p>ION writer options.</p>
+<h2>Constants:<a id="Constants:" href="#Constants:" class="permalink" aria-hidden="true" title="">#</a></h2>
+<p>None.</p>
+<h2>Properties:<a id="Properties:" href="#Properties:" class="permalink" aria-hidden="true" title="">#</a></h2>
+<ul>
+<li>public ?ion\Catalog $catalog<br />
+ION catalog to use for symbol lookup.</li>
+<li>public ?ion\Decimal\Context $decimalContext<br />
+Decimal context to use.</li>
+<li>public bool $outputBinary<br />
+Whether to output binary ION.</li>
+<li>public bool $compactFloats<br />
+Whether to write doubles which fit in 32 bits as floats.</li>
+<li>public bool $escapeNonAscii<br />
+Whether to slash-escape all non ASCII bytes.</li>
+<li>public bool $prettyPrint<br />
+Whether to produce pretty-printed output.</li>
+<li>public bool $indentTabs<br />
+Whether to indent with tabs, when pretty-printing.</li>
+<li>public int $indentSize<br />
+The number of spaces to use for indentation instead of tabs, when pretty-printing.</li>
+<li>public bool $flushEveryValue<br />
+Whether to immediately flush every value written.</li>
+<li>public int $maxContainerDepth<br />
+Maximum depth of nested containers.</li>
+<li>public int $maxAnnotations<br />
+The maximum number of annotations allowed on a single value.</li>
+<li>public int $tempBufferSize<br />
+Temporary buffer size.</li>
+</ul>
+
+
+
+<h2 id="Functions:">Functions:</h2>
+<ul>
+	
+	<li>
+		<h3><a href="ion/Writer/Options/__construct">Options::__construct</a></h3>
+		<p>Create custom ION writer options.</p>
+
+		<p>void ion\Writer\Options::__construct([?ion\Catalog $catalog = NULL, [?ion\Decimal\Context $decimalContext = NULL, [bool $outputBinary = false, [bool $compactFloats = false, [bool $escapeNonAscii = false, [bool $prettyPrint = false, [bool $indentTabs = true, [int $indentSize = 2, [bool $flushEveryValue = false, [int $maxContainerDepth = 10, [int $maxAnnotations = 10, [int $tempBufferSize = 16384]]]]]]]]]]]])</p>
+	</li>
+	
+</ul>
+
+		
+			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
+			<script>
+				var disqus_shortname = 'mdref';
+				var disqus_identifier = 'ion/Writer/Options';
+			</script>
+
+			<footer>
+				
+<ul>
+	<li><a href="https://github.com/m6w6/mdref">mdref-v2.0
+</a></li>
+	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
+	<li>
+</li>
+</ul>
+
+			</footer>
+		
+			<script src="index.js"></script>
+		
+		</div>
+	</body>
+</html>

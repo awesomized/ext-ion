@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+							Catalog -
+						mdref
+		</title>
+		<meta name="viewport" content="width=1200, initial-scale=0.5">
+					<base href="/">
+			<meta http-equiv="Content-Location" content="/ion/Catalog">
+			<link rel="stylesheet" href="index.css">
+		
+		<link href="https://fonts.googleapis.com/css?family=Inconsolata&amp;subset=latin-ext" rel="stylesheet">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<link rel="shortcut icon" href="/favicon.ico">
+	</head>
+	<body>
+		<div class="page">
+		
+<div class="sidebar">
+	
+	<div class="edit">
+		<a href="./ion/Catalog">Edit</a>
+	</div>
+	
+	
+	<ul>
+		<li>&lsh; <a href="./">Home</a>
+			
+			<ul>
+				<li>
+											
+					&uarr; <a href="./ion">
+							ion
+						</a>
+						<ul>
+							<li>
+											
+							&circlearrowright; <strong><a href="./ion/Catalog">Catalog</a></strong>
+
+							
+							<ul>
+								
+								<li>
+									&rdsh; <a href="./ion/Catalog/__construct">Catalog::__construct</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Catalog/add">Catalog::add</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Catalog/find">Catalog::find</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Catalog/findBest">Catalog::findBest</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Catalog/remove">Catalog::remove</a>
+									
+								</li>
+								
+							</ul>
+							
+																																
+						</ul>
+																													
+						<li>&ldsh; <a href="./ion/Decimal">Decimal</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Exception">Exception</a></li>
+																			
+						<li>&ldsh; <a href="./ion/LOB">LOB</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Reader">Reader</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Serializer">Serializer</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Symbol">Symbol</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Timestamp">Timestamp</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Type">Type</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Unserializer">Unserializer</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer">Writer</a></li>
+																			
+						<li>&ldsh; <a href="./ion/serialize">serialize</a></li>
+																			
+						<li>&ldsh; <a href="./ion/unserialize">unserialize</a></li>
+																																																										
+				</li>
+			</ul>
+			
+		</li>
+	</ul>
+</div>
+					
+<h1>class ion\Catalog implements Countable</h1>
+<p>The Catalog holds a collection of ion\Symbol\Table instances queried from ion\Reader and ion\Writer instances.</p>
+<p>See also <a href="https://amzn.github.io/ion-docs/docs/symbols.html#the-catalog">the ION spec's symbol guide chapter on catalog.</a>.</p>
+<h2>Constants:<a id="Constants:" href="#Constants:" class="permalink" aria-hidden="true" title="">#</a></h2>
+<p>None.</p>
+<h2>Properties:<a id="Properties:" href="#Properties:" class="permalink" aria-hidden="true" title="">#</a></h2>
+<ul>
+<li>private array $symbolTables = array (
+)<br />
+Internal cache.</li>
+</ul>
+
+
+
+<h2 id="Functions:">Functions:</h2>
+<ul>
+	
+	<li>
+		<h3><a href="ion/Catalog/__construct">Catalog::__construct</a></h3>
+		<p>Create a new Catalog.</p>
+
+		<p>void ion\Catalog::__construct()</p>
+	</li>
+	
+	<li>
+		<h3><a href="ion/Catalog/add">Catalog::add</a></h3>
+		<p>Add a shared symbol table to the catalog.</p>
+
+		<p>void ion\Catalog::add(ion\Symbol\Table $table)</p>
+	</li>
+	
+	<li>
+		<h3><a href="ion/Catalog/find">Catalog::find</a></h3>
+		<p>Find a shared symbol table within the catalog.</p>
+
+		<p>?ion\Symbol\Table ion\Catalog::find(string $name, [int $version = 0])</p>
+	</li>
+	
+	<li>
+		<h3><a href="ion/Catalog/findBest">Catalog::findBest</a></h3>
+		<p>Find a &quot;best match&quot; for a shared symbol table within the catalog.</p>
+
+		<p>?ion\Symbol\Table ion\Catalog::findBest(string $name, [int $version = 0])</p>
+	</li>
+	
+	<li>
+		<h3><a href="ion/Catalog/remove">Catalog::remove</a></h3>
+		<p>Remove a shared symbol table from the catalog.</p>
+
+		<p>bool ion\Catalog::remove(ion\Symbol\Table|string $table)</p>
+	</li>
+	
+</ul>
+
+		
+			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
+			<script>
+				var disqus_shortname = 'mdref';
+				var disqus_identifier = 'ion/Catalog';
+			</script>
+
+			<footer>
+				
+<ul>
+	<li><a href="https://github.com/m6w6/mdref">mdref-v2.0
+</a></li>
+	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
+	<li>
+</li>
+</ul>
+
+			</footer>
+		
+			<script src="index.js"></script>
+		
+		</div>
+	</body>
+</html>
