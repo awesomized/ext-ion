@@ -8,6 +8,7 @@ on:
     types: [published]
   pull_request:
     paths-ignore:
+      - .dockerignore
       - .editorconfig
       - .gitignore
       - AUTHORS
@@ -21,6 +22,7 @@ on:
       - README.md
   push:
     paths-ignore:
+      - .dockerignore
       - .editorconfig
       - .gitignore
       - AUTHORS
