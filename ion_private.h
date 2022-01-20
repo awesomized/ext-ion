@@ -1251,7 +1251,7 @@ LOCAL void php_ion_reader_ctor(php_ion_reader *obj)
 		PTR_CHECK(obj->stream.ptr);
 		GC_ADDREF(obj->stream.ptr->res);
 
-		obj->stream.buf.length = opt && opt->opt.allocation_page_size ? opt->opt.allocation_page_size : 0x10000;
+		obj->stream.buf.length = opt && opt->opt.chunk_threshold ? opt->opt.chunk_threshold : 0x4000;
 		obj->stream.buf.value = emalloc(obj->stream.buf.length);
 		err = ion_reader_open_stream(&obj->reader, obj, php_ion_reader_stream_handler, opt ? &opt->opt : NULL);
 
@@ -1353,7 +1353,7 @@ LOCAL void php_ion_writer_stream_init(php_ion_writer *obj, php_ion_writer_option
 	PTR_CHECK(obj->stream.ptr);
 	GC_ADDREF(obj->stream.ptr->res);
 
-	obj->stream.buf.length = opt ? opt->opt.allocation_page_size : 0x1000;
+	obj->stream.buf.length = opt ? opt->opt.temp_buffer_size : 0x1000;
 	obj->stream.buf.value = emalloc(obj->stream.buf.length);
 }
 

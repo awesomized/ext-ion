@@ -21,7 +21,7 @@ DONE
 TEST
 object(ion\Unserializer\PHP)#%d (4) {
   ["readerOptions"]=>
-  object(ion\Reader\Options)#%d (13) {
+  object(ion\Reader\Options)#%d (9) {
     ["catalog"]=>
     NULL
     ["decimalContext"]=>
@@ -30,22 +30,14 @@ object(ion\Unserializer\PHP)#%d (4) {
     NULL
     ["returnSystemValues"]=>
     bool(false)
-    ["newLine"]=>
-    int(10)
     ["maxContainerDepth"]=>
     int(10)
     ["maxAnnotations"]=>
     int(10)
-    ["maxAnnotationBuffered"]=>
-    int(512)
-    ["symbolThreshold"]=>
+    ["annotationBufferSize"]=>
     int(16384)
-    ["userValueThreshold"]=>
+    ["tempBufferSize"]=>
     int(16384)
-    ["chunkThreshold"]=>
-    int(16384)
-    ["allocationPageSize"]=>
-    int(65536)
     ["skipCharacterValidation"]=>
     bool(false)
   }

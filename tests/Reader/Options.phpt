@@ -20,7 +20,7 @@ var_dump($o, clone $o);
 DONE
 --EXPECTF--
 TEST
-object(ion\Reader\Options)#%d (13) {
+object(ion\Reader\Options)#%d (9) {
   ["catalog"]=>
   NULL
   ["decimalContext"]=>
@@ -29,26 +29,18 @@ object(ion\Reader\Options)#%d (13) {
   NULL
   ["returnSystemValues"]=>
   bool(false)
-  ["newLine"]=>
-  int(10)
   ["maxContainerDepth"]=>
   int(10)
   ["maxAnnotations"]=>
   int(10)
-  ["maxAnnotationBuffered"]=>
-  int(512)
-  ["symbolThreshold"]=>
+  ["annotationBufferSize"]=>
   int(16384)
-  ["userValueThreshold"]=>
+  ["tempBufferSize"]=>
   int(16384)
-  ["chunkThreshold"]=>
-  int(16384)
-  ["allocationPageSize"]=>
-  int(65536)
   ["skipCharacterValidation"]=>
   bool(false)
 }
-object(ion\Reader\Options)#%d (13) {
+object(ion\Reader\Options)#%d (9) {
   ["catalog"]=>
   NULL
   ["decimalContext"]=>
@@ -57,26 +49,18 @@ object(ion\Reader\Options)#%d (13) {
   NULL
   ["returnSystemValues"]=>
   bool(false)
-  ["newLine"]=>
-  int(10)
   ["maxContainerDepth"]=>
   int(10)
   ["maxAnnotations"]=>
   int(10)
-  ["maxAnnotationBuffered"]=>
-  int(512)
-  ["symbolThreshold"]=>
+  ["annotationBufferSize"]=>
   int(16384)
-  ["userValueThreshold"]=>
+  ["tempBufferSize"]=>
   int(16384)
-  ["chunkThreshold"]=>
-  int(16384)
-  ["allocationPageSize"]=>
-  int(65536)
   ["skipCharacterValidation"]=>
   bool(false)
 }
-object(ion\Reader\Options)#%d (13) {
+object(ion\Reader\Options)#%d (9) {
   ["catalog"]=>
   object(ion\Catalog)#%d (1) {
     ["symbolTables":"ion\Catalog":private]=>
@@ -106,26 +90,18 @@ object(ion\Reader\Options)#%d (13) {
   }
   ["returnSystemValues"]=>
   bool(true)
-  ["newLine"]=>
-  int(10)
   ["maxContainerDepth"]=>
   int(10)
   ["maxAnnotations"]=>
   int(10)
-  ["maxAnnotationBuffered"]=>
-  int(512)
-  ["symbolThreshold"]=>
+  ["annotationBufferSize"]=>
   int(16384)
-  ["userValueThreshold"]=>
+  ["tempBufferSize"]=>
   int(16384)
-  ["chunkThreshold"]=>
-  int(16384)
-  ["allocationPageSize"]=>
-  int(65536)
   ["skipCharacterValidation"]=>
   bool(true)
 }
-object(ion\Reader\Options)#%d (13) {
+object(ion\Reader\Options)#%d (9) {
   ["catalog"]=>
   object(ion\Catalog)#%d (1) {
     ["symbolTables":"ion\Catalog":private]=>
@@ -155,22 +131,14 @@ object(ion\Reader\Options)#%d (13) {
   }
   ["returnSystemValues"]=>
   bool(true)
-  ["newLine"]=>
-  int(10)
   ["maxContainerDepth"]=>
   int(10)
   ["maxAnnotations"]=>
   int(10)
-  ["maxAnnotationBuffered"]=>
-  int(512)
-  ["symbolThreshold"]=>
+  ["annotationBufferSize"]=>
   int(16384)
-  ["userValueThreshold"]=>
+  ["tempBufferSize"]=>
   int(16384)
-  ["chunkThreshold"]=>
-  int(16384)
-  ["allocationPageSize"]=>
-  int(65536)
   ["skipCharacterValidation"]=>
   bool(true)
 }

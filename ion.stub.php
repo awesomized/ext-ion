@@ -152,7 +152,6 @@ class Catalog implements \Countable {
      * Add a shared symbol table to the catalog.
      *
      * @param Symbol\Table $table The new table to add.
-     * @return void
      */
     public function add(Symbol\Table $table) : void {}
 

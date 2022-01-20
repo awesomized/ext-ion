@@ -597,12 +597,11 @@ static ZEND_METHOD(ion_Reader_Options, __construct)
 {
 	php_ion_reader_options *opt = php_ion_obj(reader_options, Z_OBJ_P(ZEND_THIS));
 	zend_bool ret_sys_val = false, skip_validation = false;
-	zend_long ch_nl = 0xa, max_depth = 10, max_ann = 10, max_ann_buf = 512,
-			sym_thr = 0x4000, uval_thr = 0x4000, chunk_thr = 0x4000, alloc_pgsz = 0x10000;
+	zend_long max_depth = 10, max_ann = 10, ann_buf_siz = 0x4000, tmp_buf_siz = 0x4000;
 
 	PTR_CHECK(opt);
 
-	ZEND_PARSE_PARAMETERS_START(0, 13)
+	ZEND_PARSE_PARAMETERS_START(0, 9)
 		Z_PARAM_OPTIONAL
         // public readonly ?\ion\Catalog $catalog = null,
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(opt->cat, ce_Catalog)
@@ -612,22 +611,14 @@ static ZEND_METHOD(ion_Reader_Options, __construct)
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(opt->cb, zend_ce_closure);
         // public readonly bool $returnSystemValues = false,
 		Z_PARAM_BOOL(ret_sys_val)
-        // public readonly int $newLine = 0xa,
-		Z_PARAM_LONG(ch_nl)
         // public readonly int $maxContainerDepth = 10,
 		Z_PARAM_LONG(max_depth)
         // public readonly int $maxAnnotations = 10,
 		Z_PARAM_LONG(max_ann)
-        // public readonly int $maxAnnotationBuffered = 512,
-		Z_PARAM_LONG(max_ann_buf)
-        // public readonly int $symbolThreshold = 0x4000,
-		Z_PARAM_LONG(sym_thr)
-        // public readonly int $userValueThreshold = 0x4000,
-		Z_PARAM_LONG(uval_thr)
-        // public readonly int $chunkThreshold = 0x4000,
-		Z_PARAM_LONG(chunk_thr)
-        // public readonly int $allocationPageSize = 0x10000,
-		Z_PARAM_LONG(alloc_pgsz)
+        // public readonly int $annotationBufferSize = 0x4000,
+		Z_PARAM_LONG(ann_buf_siz)
+        // public readonly int $tempBufferSize = 0x4000,
+		Z_PARAM_LONG(tmp_buf_siz)
         // public readonly bool $skipCharacterValidation = false,
 		Z_PARAM_BOOL(skip_validation)
 	ZEND_PARSE_PARAMETERS_END();
@@ -655,22 +646,14 @@ static ZEND_METHOD(ion_Reader_Options, __construct)
 	}
 	zend_update_property_bool(opt->std.ce, &opt->std, ZEND_STRL("returnSystemValues"),
 		opt->opt.return_system_values = ret_sys_val);
-	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("newLine"),
-		opt->opt.new_line_char = (int) ch_nl);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("maxContainerDepth"),
 		opt->opt.max_container_depth = (SIZE) max_depth);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("maxAnnotations"),
 		opt->opt.max_annotation_count = (SIZE) max_ann);
-	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("maxAnnotationBuffered"),
-		opt->opt.max_annotation_buffered = (SIZE) max_ann_buf);
-	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("symbolThreshold"),
-		opt->opt.symbol_threshold = (SIZE) sym_thr);
-	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("userValueThreshold"),
-		opt->opt.user_value_threshold = (SIZE) uval_thr);
-	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("chunkThreshold"),
-		opt->opt.chunk_threshold = (SIZE) chunk_thr);
-	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("allocationPageSize"),
-		opt->opt.allocation_page_size = (SIZE) alloc_pgsz);
+	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("annotationBufferSize"),
+		opt->opt.max_annotation_buffered = (SIZE) ann_buf_siz);
+	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("tempBufferSize"),
+		opt->opt.chunk_threshold = opt->opt.user_value_threshold = opt->opt.symbol_threshold = (SIZE) tmp_buf_siz);
 	zend_update_property_long(opt->std.ce, &opt->std, ZEND_STRL("skipCharacterValidation"),
 		opt->opt.skip_character_validation = (SIZE) skip_validation);
 }
@@ -1223,9 +1206,9 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 	PTR_CHECK(obj);
 
 	zend_bool binary = false, compact_floats = false, escape = false, pretty = false,
-			tabs = true, small_cntr_inl = true, suppress_sys = false, flush = false;
-	zend_long indent = 2, max_depth = 10, max_ann = 10, temp = 0x4000, alloc = 0x10000;
-	ZEND_PARSE_PARAMETERS_START(0, 15)
+			tabs = true, flush = false;
+	zend_long indent = 2, max_depth = 10, max_ann = 10, temp = 0x4000;
+	ZEND_PARSE_PARAMETERS_START(0, 12)
 		Z_PARAM_OPTIONAL
 		//public readonly ?\ion\Catalog $catalog = null,
 		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->cat, ce_Catalog)
@@ -1243,10 +1226,6 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 		Z_PARAM_BOOL(tabs)
 		//public readonly int $indentSize = 2,
 		Z_PARAM_LONG(indent)
-		//public readonly bool $smallContainersInline = true,
-		Z_PARAM_BOOL(small_cntr_inl)
-		//public readonly bool $suppressSystemValues = false,
-		Z_PARAM_BOOL(suppress_sys)
 		//public readonly bool $flushEveryValue = false,
 		Z_PARAM_BOOL(flush)
 		//public readonly int $maxContainerDepth = 10,
@@ -1255,8 +1234,6 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 		Z_PARAM_LONG(max_ann)
 		//public readonly int $tempBufferSize = 0x4000,
 		Z_PARAM_LONG(temp)
-		//public readonly int $allocationPageSize = 0x10000,
-		Z_PARAM_LONG(alloc)
 	ZEND_PARSE_PARAMETERS_END();
 
 	if (obj->cat) {
@@ -1283,10 +1260,6 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 			obj->opt.indent_with_tabs = tabs);
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("indentSize"),
 			obj->opt.indent_size = (SIZE) indent);
-	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("smallContainersInline"),
-			obj->opt.small_containers_in_line = small_cntr_inl);
-	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("suppressSystemValues"),
-			obj->opt.supress_system_values = suppress_sys);
 	zend_update_property_bool(obj->std.ce, &obj->std, ZEND_STRL("flushEveryValue"),
 			obj->opt.flush_every_value = flush);
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("maxContainerDepth"),
@@ -1295,8 +1268,6 @@ static ZEND_METHOD(ion_Writer_Options, __construct)
 			obj->opt.max_annotation_count = (SIZE) max_ann);
 	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("tempBufferSize"),
 			obj->opt.temp_buffer_size = (SIZE) temp);
-	zend_update_property_long(obj->std.ce, &obj->std, ZEND_STRL("allocationPageSize"),
-			obj->opt.allocation_page_size = (SIZE) alloc);
 }
 static ZEND_METHOD(ion_Writer_Writer, writeNull)
 {

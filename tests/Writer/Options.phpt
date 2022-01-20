@@ -13,14 +13,14 @@ $o = new ion\Writer\Options(
 	decimalContext: ion\Decimal\Context::Dec64(),
 	outputBinary: true,
 	maxContainerDepth: 20,
-	allocationPageSize: 0x20000
+	tempBufferSize: 0x20000
 );
 var_dump($o, clone $o);
 ?>
 DONE
 --EXPECTF--
 TEST
-object(ion\Writer\Options)#%d (15) {
+object(ion\Writer\Options)#%d (12) {
   ["catalog"]=>
   NULL
   ["decimalContext"]=>
@@ -37,10 +37,6 @@ object(ion\Writer\Options)#%d (15) {
   bool(true)
   ["indentSize"]=>
   int(2)
-  ["smallContainersInline"]=>
-  bool(true)
-  ["suppressSystemValues"]=>
-  bool(false)
   ["flushEveryValue"]=>
   bool(false)
   ["maxContainerDepth"]=>
@@ -49,10 +45,8 @@ object(ion\Writer\Options)#%d (15) {
   int(10)
   ["tempBufferSize"]=>
   int(16384)
-  ["allocationPageSize"]=>
-  int(65536)
 }
-object(ion\Writer\Options)#%d (15) {
+object(ion\Writer\Options)#%d (12) {
   ["catalog"]=>
   NULL
   ["decimalContext"]=>
@@ -69,10 +63,6 @@ object(ion\Writer\Options)#%d (15) {
   bool(true)
   ["indentSize"]=>
   int(2)
-  ["smallContainersInline"]=>
-  bool(true)
-  ["suppressSystemValues"]=>
-  bool(false)
   ["flushEveryValue"]=>
   bool(false)
   ["maxContainerDepth"]=>
@@ -81,10 +71,8 @@ object(ion\Writer\Options)#%d (15) {
   int(10)
   ["tempBufferSize"]=>
   int(16384)
-  ["allocationPageSize"]=>
-  int(65536)
 }
-object(ion\Writer\Options)#%d (15) {
+object(ion\Writer\Options)#%d (12) {
   ["catalog"]=>
   object(ion\Catalog)#%d (1) {
     ["symbolTables":"ion\Catalog":private]=>
@@ -116,10 +104,6 @@ object(ion\Writer\Options)#%d (15) {
   bool(true)
   ["indentSize"]=>
   int(2)
-  ["smallContainersInline"]=>
-  bool(true)
-  ["suppressSystemValues"]=>
-  bool(false)
   ["flushEveryValue"]=>
   bool(false)
   ["maxContainerDepth"]=>
@@ -127,11 +111,9 @@ object(ion\Writer\Options)#%d (15) {
   ["maxAnnotations"]=>
   int(10)
   ["tempBufferSize"]=>
-  int(16384)
-  ["allocationPageSize"]=>
   int(131072)
 }
-object(ion\Writer\Options)#%d (15) {
+object(ion\Writer\Options)#%d (12) {
   ["catalog"]=>
   object(ion\Catalog)#%d (1) {
     ["symbolTables":"ion\Catalog":private]=>
@@ -163,10 +145,6 @@ object(ion\Writer\Options)#%d (15) {
   bool(true)
   ["indentSize"]=>
   int(2)
-  ["smallContainersInline"]=>
-  bool(true)
-  ["suppressSystemValues"]=>
-  bool(false)
   ["flushEveryValue"]=>
   bool(false)
   ["maxContainerDepth"]=>
@@ -174,8 +152,6 @@ object(ion\Writer\Options)#%d (15) {
   ["maxAnnotations"]=>
   int(10)
   ["tempBufferSize"]=>
-  int(16384)
-  ["allocationPageSize"]=>
   int(131072)
 }
 DONE

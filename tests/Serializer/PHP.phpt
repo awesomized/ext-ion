@@ -21,7 +21,7 @@ DONE
 TEST
 object(ion\Serializer\PHP)#%d (4) {
   ["writerOptions"]=>
-  object(ion\Writer\Options)#%d (15) {
+  object(ion\Writer\Options)#%d (12) {
     ["catalog"]=>
     NULL
     ["decimalContext"]=>
@@ -38,10 +38,6 @@ object(ion\Serializer\PHP)#%d (4) {
     bool(true)
     ["indentSize"]=>
     int(2)
-    ["smallContainersInline"]=>
-    bool(true)
-    ["suppressSystemValues"]=>
-    bool(false)
     ["flushEveryValue"]=>
     bool(false)
     ["maxContainerDepth"]=>
@@ -50,8 +46,6 @@ object(ion\Serializer\PHP)#%d (4) {
     int(10)
     ["tempBufferSize"]=>
     int(16384)
-    ["allocationPageSize"]=>
-    int(65536)
   }
   ["multiSequence"]=>
   bool(false)

@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: fd212a098afd1b87f56162838ed409653a9c7a69 */
+ * Stub hash: 6dcf67bb6d8b532d66b378544582f68e2508b7b2 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -317,14 +317,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Options___construct, 0, 0, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, decimalContext, ion\\Decimal\\Context, 1, "null")
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, onContextChange, Closure, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, returnSystemValues, _IS_BOOL, 0, "false")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, newLine, IS_LONG, 0, "0xa")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, maxContainerDepth, IS_LONG, 0, "10")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, maxAnnotations, IS_LONG, 0, "10")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, maxAnnotationBuffered, IS_LONG, 0, "512")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, symbolThreshold, IS_LONG, 0, "0x4000")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, userValueThreshold, IS_LONG, 0, "0x4000")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, chunkThreshold, IS_LONG, 0, "0x4000")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, allocationPageSize, IS_LONG, 0, "0x10000")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, annotationBufferSize, IS_LONG, 0, "0x4000")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, tempBufferSize, IS_LONG, 0, "0x4000")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, skipCharacterValidation, _IS_BOOL, 0, "false")
 ZEND_END_ARG_INFO()
 
@@ -440,13 +436,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Options___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, prettyPrint, _IS_BOOL, 0, "false")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, indentTabs, _IS_BOOL, 0, "true")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, indentSize, IS_LONG, 0, "2")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, smallContainersInline, _IS_BOOL, 0, "true")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, suppressSystemValues, _IS_BOOL, 0, "false")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flushEveryValue, _IS_BOOL, 0, "false")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, maxContainerDepth, IS_LONG, 0, "10")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, maxAnnotations, IS_LONG, 0, "10")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, tempBufferSize, IS_LONG, 0, "0x4000")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, allocationPageSize, IS_LONG, 0, "0x10000")
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_Writer_writeNull arginfo_class_ion_Writer_writeNull
@@ -653,6 +646,11 @@ static const zend_function_entry class_ion_Serializer_methods[] = {
 
 static const zend_function_entry class_ion_Unserializer_methods[] = {
 	ZEND_ABSTRACT_ME_WITH_FLAGS(ion_Unserializer, unserialize, arginfo_class_ion_Unserializer_unserialize, ZEND_ACC_PUBLIC|ZEND_ACC_ABSTRACT)
+	ZEND_FE_END
+};
+
+
+static const zend_function_entry class_ion_Exception_methods[] = {
 	ZEND_FE_END
 };
 
@@ -1019,6 +1017,16 @@ static zend_class_entry *register_class_ion_Unserializer(void)
 	return class_entry;
 }
 
+static zend_class_entry *register_class_ion_Exception(zend_class_entry *class_entry_Exception)
+{
+	zend_class_entry ce, *class_entry;
+
+	INIT_NS_CLASS_ENTRY(ce, "ion", "Exception", class_ion_Exception_methods);
+	class_entry = zend_register_internal_class_ex(&ce, class_entry_Exception);
+
+	return class_entry;
+}
+
 static zend_class_entry *register_class_ion_Type(void)
 {
 	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Type", IS_LONG, class_ion_Type_methods);
@@ -1119,13 +1127,13 @@ static zend_class_entry *register_class_ion_Symbol(void)
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Catalog(zend_class_entry *class_entry_ion_Countable)
+static zend_class_entry *register_class_ion_Catalog(zend_class_entry *class_entry_Countable)
 {
 	zend_class_entry ce, *class_entry;
 
 	INIT_NS_CLASS_ENTRY(ce, "ion", "Catalog", class_ion_Catalog_methods);
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
-	zend_class_implements(class_entry, 1, class_entry_ion_Countable);
+	zend_class_implements(class_entry, 1, class_entry_Countable);
 
 	zval property_symbolTables_default_value;
 	ZVAL_EMPTY_ARRAY(&property_symbolTables_default_value);
@@ -1639,12 +1647,6 @@ static zend_class_entry *register_class_ion_Reader_Options(void)
 	zend_declare_typed_property(class_entry, property_returnSystemValues_name, &property_returnSystemValues_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
 	zend_string_release(property_returnSystemValues_name);
 
-	zval property_newLine_default_value;
-	ZVAL_UNDEF(&property_newLine_default_value);
-	zend_string *property_newLine_name = zend_string_init("newLine", sizeof("newLine") - 1, 1);
-	zend_declare_typed_property(class_entry, property_newLine_name, &property_newLine_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
-	zend_string_release(property_newLine_name);
-
 	zval property_maxContainerDepth_default_value;
 	ZVAL_UNDEF(&property_maxContainerDepth_default_value);
 	zend_string *property_maxContainerDepth_name = zend_string_init("maxContainerDepth", sizeof("maxContainerDepth") - 1, 1);
@@ -1657,35 +1659,17 @@ static zend_class_entry *register_class_ion_Reader_Options(void)
 	zend_declare_typed_property(class_entry, property_maxAnnotations_name, &property_maxAnnotations_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
 	zend_string_release(property_maxAnnotations_name);
 
-	zval property_maxAnnotationBuffered_default_value;
-	ZVAL_UNDEF(&property_maxAnnotationBuffered_default_value);
-	zend_string *property_maxAnnotationBuffered_name = zend_string_init("maxAnnotationBuffered", sizeof("maxAnnotationBuffered") - 1, 1);
-	zend_declare_typed_property(class_entry, property_maxAnnotationBuffered_name, &property_maxAnnotationBuffered_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
-	zend_string_release(property_maxAnnotationBuffered_name);
+	zval property_annotationBufferSize_default_value;
+	ZVAL_UNDEF(&property_annotationBufferSize_default_value);
+	zend_string *property_annotationBufferSize_name = zend_string_init("annotationBufferSize", sizeof("annotationBufferSize") - 1, 1);
+	zend_declare_typed_property(class_entry, property_annotationBufferSize_name, &property_annotationBufferSize_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_annotationBufferSize_name);
 
-	zval property_symbolThreshold_default_value;
-	ZVAL_UNDEF(&property_symbolThreshold_default_value);
-	zend_string *property_symbolThreshold_name = zend_string_init("symbolThreshold", sizeof("symbolThreshold") - 1, 1);
-	zend_declare_typed_property(class_entry, property_symbolThreshold_name, &property_symbolThreshold_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
-	zend_string_release(property_symbolThreshold_name);
-
-	zval property_userValueThreshold_default_value;
-	ZVAL_UNDEF(&property_userValueThreshold_default_value);
-	zend_string *property_userValueThreshold_name = zend_string_init("userValueThreshold", sizeof("userValueThreshold") - 1, 1);
-	zend_declare_typed_property(class_entry, property_userValueThreshold_name, &property_userValueThreshold_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
-	zend_string_release(property_userValueThreshold_name);
-
-	zval property_chunkThreshold_default_value;
-	ZVAL_UNDEF(&property_chunkThreshold_default_value);
-	zend_string *property_chunkThreshold_name = zend_string_init("chunkThreshold", sizeof("chunkThreshold") - 1, 1);
-	zend_declare_typed_property(class_entry, property_chunkThreshold_name, &property_chunkThreshold_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
-	zend_string_release(property_chunkThreshold_name);
-
-	zval property_allocationPageSize_default_value;
-	ZVAL_UNDEF(&property_allocationPageSize_default_value);
-	zend_string *property_allocationPageSize_name = zend_string_init("allocationPageSize", sizeof("allocationPageSize") - 1, 1);
-	zend_declare_typed_property(class_entry, property_allocationPageSize_name, &property_allocationPageSize_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
-	zend_string_release(property_allocationPageSize_name);
+	zval property_tempBufferSize_default_value;
+	ZVAL_UNDEF(&property_tempBufferSize_default_value);
+	zend_string *property_tempBufferSize_name = zend_string_init("tempBufferSize", sizeof("tempBufferSize") - 1, 1);
+	zend_declare_typed_property(class_entry, property_tempBufferSize_name, &property_tempBufferSize_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_tempBufferSize_name);
 
 	zval property_skipCharacterValidation_default_value;
 	ZVAL_UNDEF(&property_skipCharacterValidation_default_value);
@@ -1816,18 +1800,6 @@ static zend_class_entry *register_class_ion_Writer_Options(void)
 	zend_declare_typed_property(class_entry, property_indentSize_name, &property_indentSize_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
 	zend_string_release(property_indentSize_name);
 
-	zval property_smallContainersInline_default_value;
-	ZVAL_UNDEF(&property_smallContainersInline_default_value);
-	zend_string *property_smallContainersInline_name = zend_string_init("smallContainersInline", sizeof("smallContainersInline") - 1, 1);
-	zend_declare_typed_property(class_entry, property_smallContainersInline_name, &property_smallContainersInline_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
-	zend_string_release(property_smallContainersInline_name);
-
-	zval property_suppressSystemValues_default_value;
-	ZVAL_UNDEF(&property_suppressSystemValues_default_value);
-	zend_string *property_suppressSystemValues_name = zend_string_init("suppressSystemValues", sizeof("suppressSystemValues") - 1, 1);
-	zend_declare_typed_property(class_entry, property_suppressSystemValues_name, &property_suppressSystemValues_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
-	zend_string_release(property_suppressSystemValues_name);
-
 	zval property_flushEveryValue_default_value;
 	ZVAL_UNDEF(&property_flushEveryValue_default_value);
 	zend_string *property_flushEveryValue_name = zend_string_init("flushEveryValue", sizeof("flushEveryValue") - 1, 1);
@@ -1851,12 +1823,6 @@ static zend_class_entry *register_class_ion_Writer_Options(void)
 	zend_string *property_tempBufferSize_name = zend_string_init("tempBufferSize", sizeof("tempBufferSize") - 1, 1);
 	zend_declare_typed_property(class_entry, property_tempBufferSize_name, &property_tempBufferSize_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
 	zend_string_release(property_tempBufferSize_name);
-
-	zval property_allocationPageSize_default_value;
-	ZVAL_UNDEF(&property_allocationPageSize_default_value);
-	zend_string *property_allocationPageSize_name = zend_string_init("allocationPageSize", sizeof("allocationPageSize") - 1, 1);
-	zend_declare_typed_property(class_entry, property_allocationPageSize_name, &property_allocationPageSize_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
-	zend_string_release(property_allocationPageSize_name);
 
 	return class_entry;
 }
