@@ -4,8 +4,34 @@
 name: ci
 on:
   workflow_dispatch:
-  push:
+  release:
+    types: [published]
   pull_request:
+    paths-ignore:
+      - .editorconfig
+      - .gitignore
+      - AUTHORS
+      - CONTRIBUTING.md
+      - CREDITS
+      - Dockerfile
+      - 'docs/**'
+      - EXPERIMENTAL
+      - gen_stub.php*.diff
+      - LICENSE
+      - README.md
+  push:
+    paths-ignore:
+      - .editorconfig
+      - .gitignore
+      - AUTHORS
+      - CONTRIBUTING.md
+      - CREDITS
+      - Dockerfile
+      - 'docs/**'
+      - EXPERIMENTAL
+      - gen_stub.php*.diff
+      - LICENSE
+      - README.md
 
 jobs:
 <?php
@@ -57,6 +83,7 @@ foreach ($job as $id => $env) {
       - name: Coverage
         if: success()
         run: |
+          find . -name '*.gc*'
           cd .libs
           bash <(curl -s https://codecov.io/bash) -X xcode -X coveragepy
 <?php endif; ?>
