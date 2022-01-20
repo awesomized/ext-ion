@@ -13,14 +13,6 @@ AC_ARG_VAR([CMAKE], [cmake executable])
 AC_PATH_PROG([CMAKE], [cmake])
 PHP_SUBST([CMAKE])
 
-AC_ARG_VAR([AR], [system library archiver])
-AC_PATH_PROG([AR], [ar])
-PHP_SUBST([AR])
-
-AC_ARG_VAR([RANLIB], [system library archive indexer])
-AC_PATH_PROG([RANLIB], [ranlib])
-PHP_SUBST([RANLIB])
-
 use_bundled_ionc=false
 AC_DEFUN([ION_BUNDLE], [dnl
 
@@ -33,6 +25,8 @@ AC_DEFUN([ION_BUNDLE], [dnl
         "$GIT" submodule update --init --depth 1 --recursive ion-c; then
       AC_MSG_ERROR([giving up])
     fi
+  elif "$GIT" clone -q --depth 1 --recursive https://github.com/amzn/ion-c PHP_EXT_SRCDIR([ion])/ion-c; then
+    AC_MSG_RESULT([git clone])
   else
     AC_MSG_RESULT([not found])
     AC_MSG_ERROR([invalid bundle: PHP_EXT_SRCDIR([ion])/ion-c])
