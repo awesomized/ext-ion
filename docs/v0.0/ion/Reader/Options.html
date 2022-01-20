@@ -135,23 +135,23 @@
 <p>None.</p>
 <h2>Properties:<a id="Properties:" href="#Properties:" class="permalink" aria-hidden="true" title="">#</a></h2>
 <ul>
-<li>public ?ion\Catalog $catalog<br />
+<li>public ?ion\Catalog $catalog = NULL<br />
 ION catalog to use for symbol lookup.</li>
-<li>public ?ion\Decimal\Context $decimalContext<br />
+<li>public ?ion\Decimal\Context $decimalContext = NULL<br />
 Decimal context to use.</li>
-<li>public ?Closure $onContextChange<br />
+<li>public ?Closure $onContextChange = NULL<br />
 Callback as function(\ion\Reader):void called upon local symbol table context change.</li>
-<li>public bool $returnSystemValues<br />
+<li>public bool $returnSystemValues = false<br />
 Whether to return otherwise hidden system values.</li>
-<li>public int $maxContainerDepth<br />
+<li>public int $maxContainerDepth = 10<br />
 The maximum depth of nested containers.</li>
-<li>public int $maxAnnotations<br />
+<li>public int $maxAnnotations = 10<br />
 The maximum number of annotations allowed on a single value.</li>
-<li>public int $annotationBufferSize<br />
+<li>public int $annotationBufferSize = 16384<br />
 The maximum number of bytes of all annotations on a single value.</li>
-<li>public int $tempBufferSize<br />
+<li>public int $tempBufferSize = 16384<br />
 The maximum number of bytes of a symbol/value/chunk.</li>
-<li>public bool $skipCharacterValidation<br />
+<li>public bool $skipCharacterValidation = false<br />
 Whether to skip UTF-8 validation.</li>
 </ul>
 
