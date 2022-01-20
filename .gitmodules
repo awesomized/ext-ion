@@ -1,7 +1,6 @@
 [submodule "ion-c"]
 	path = ion-c
-	url = https://github.com/m6w6/ion-c
-	branch = all-fixes-merged
+	url = https://github.com/amzn/ion-c
 [submodule "scripts/ci"]
 	path = scripts/ci
 	url = https://github.com/m6w6/pecl-ci
