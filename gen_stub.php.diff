@@ -1,8 +1,19 @@
 diff --git a/build/gen_stub.php b/build/gen_stub.php
-index 5f74d26dbc..400619bdbb 100755
+index 486ff67949..71265c12fa 100755
 --- a/build/gen_stub.php
 +++ b/build/gen_stub.php
-@@ -793,7 +793,7 @@ class FunctionName implements FunctionOrMethodName {
+@@ -733,10 +733,6 @@ class ArgInfo {
+ 
+     private function setTypes(?Type $type, ?Type $phpDocType): void
+     {
+-        if ($phpDocType !== null && Type::equals($type, $phpDocType)) {
+-            throw new Exception('PHPDoc param type "' . $phpDocType->__toString() . '" is unnecessary');
+-        }
+-
+         $this->type = $type;
+         $this->phpDocType = $phpDocType;
+     }
+@@ -793,7 +789,7 @@ class FunctionName implements FunctionOrMethodName {
      }
  
      public function getDeclarationName(): string {
@@ -11,7 +22,18 @@ index 5f74d26dbc..400619bdbb 100755
      }
  
      public function getDeclaration(): string {
-@@ -1152,8 +1152,8 @@ class FuncInfo {
+@@ -910,10 +906,6 @@ class ReturnInfo {
+ 
+     private function setTypes(?Type $type, ?Type $phpDocType, bool $tentativeReturnType): void
+     {
+-        if ($phpDocType !== null && Type::equals($type, $phpDocType)) {
+-            throw new Exception('PHPDoc return type "' . $phpDocType->__toString() . '" is unnecessary');
+-        }
+-
+         $this->type = $type;
+         $this->phpDocType = $phpDocType;
+         $this->tentativeReturnType = $tentativeReturnType;
+@@ -1152,8 +1144,8 @@ class FuncInfo {
              if ($namespace) {
                  // Render A\B as "A\\B" in C strings for namespaces
                  return sprintf(
@@ -22,7 +44,7 @@ index 5f74d26dbc..400619bdbb 100755
              } else {
                  return sprintf("\tZEND_FE(%s, %s)\n", $declarationName, $this->getArgInfoName());
              }
-@@ -1608,7 +1608,7 @@ class EnumCaseInfo {
+@@ -1616,7 +1608,7 @@ class EnumCaseInfo {
      public function getDeclaration(): string {
          $escapedName = addslashes($this->name);
          if ($this->value === null) {
@@ -31,7 +53,7 @@ index 5f74d26dbc..400619bdbb 100755
          } else {
              $evaluator = new ConstExprEvaluator(function (Expr $expr) {
                  throw new Exception("Enum case $this->name has an unsupported value");
-@@ -2369,7 +2369,7 @@ function parseFunctionLike(
+@@ -2373,7 +2365,7 @@ function parseFunctionLike(
  function parseProperty(
      Name $class,
      int $flags,
@@ -40,7 +62,7 @@ index 5f74d26dbc..400619bdbb 100755
      ?Node $type,
      ?DocComment $comment,
      PrettyPrinterAbstract $prettyPrinter
-@@ -2404,13 +2404,23 @@ function parseProperty(
+@@ -2411,13 +2403,23 @@ function parseProperty(
          }
      }
  
@@ -64,10 +86,10 @@ index 5f74d26dbc..400619bdbb 100755
 -        $property->default ? $prettyPrinter->prettyPrintExpr($property->default) : null,
 +        $default,
 +        $default ? $prettyPrinter->prettyPrintExpr($default) : null,
-         $isDocReadonly
+         $isDocReadonly,
+         $link
      );
- }
-@@ -2594,6 +2604,20 @@ function handleStatements(FileInfo $fileInfo, array $stmts, PrettyPrinterAbstrac
+@@ -2602,6 +2604,20 @@ function handleStatements(FileInfo $fileInfo, array $stmts, PrettyPrinterAbstrac
                          $classStmt,
                          $cond
                      );
@@ -88,7 +110,7 @@ index 5f74d26dbc..400619bdbb 100755
                  } else if ($classStmt instanceof Stmt\EnumCase) {
                      $enumCaseInfos[] = new EnumCaseInfo(
                          $classStmt->name->toString(), $classStmt->expr);
-@@ -2821,7 +2845,9 @@ function generateArgInfoCode(FileInfo $fileInfo, string $stubHash): string {
+@@ -2829,7 +2845,9 @@ function generateArgInfoCode(FileInfo $fileInfo, string $stubHash): string {
                  }
  
                  $generatedFunctionDeclarations[$key] = true;
@@ -99,7 +121,7 @@ index 5f74d26dbc..400619bdbb 100755
              }
          );
  
-@@ -3265,7 +3291,7 @@ function initPhpParser() {
+@@ -3275,7 +3293,7 @@ function initPhpParser() {
      }
  
      $isInitialized = true;
