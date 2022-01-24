@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0"
+ xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="
+  http://pear.php.net/dtd/tasks-1.0
+  http://pear.php.net/dtd/tasks-1.0.xsd
+  http://pear.php.net/dtd/package-2.0
+  http://pear.php.net/dtd/package-2.0.xsd">
+ <name>ion</name>
+ <channel>pecl.php.net</channel>
+ <summary>Amazon ION support</summary>
+ <description><![CDATA[
+This PHP extension  provides support for the Amazon ION serialization format.
+https://awesomized.github.io/ext-ion/
+]]></description>
+ <lead>
+  <name>Michael Wallner</name>
+  <user>mike</user>
+  <email>mike@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2022-01-24</date>
+ <version>
+  <release>0.1.0</release>
+  <api>0.1.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://copyfree.org/content/standard/licenses/2bsd/license.txt">BSD-2-Clause</license>
+ <notes><![CDATA[
+* Initial release.
+]]></notes>
+ <contents>
+  <dir name="/">
+   <file role="doc" name="AUTHORS"/>
+   <file role="doc" name="CONTRIBUTING.md"/>
+   <file role="doc" name="CREDITS"/>
+   <file role="doc" name="LICENSE"/>
+   <file role="doc" name="README.md"/>
+   <dir name="docs">
+    <file role="doc" name=".nojekyll"/>
+    <file role="doc" name="index.html"/>
+    <file role="doc" name="Makefile"/>
+   </dir>
+   <file role="src" name="config.m4"/>
+   <file role="src" name="Makefile.frag"/>
+   <file role="src" name="php_ion.h"/>
+   <file role="src" name="ion.c"/>
+   <file role="src" name="ion_arginfo.h"/>
+   <file role="src" name="ion_private.h"/>
+   <file role="data" name="ion.stub.php"/>
+   <dir name="tests">
+    <file role="test" name="Catalog.phpt"/>
+    <file role="test" name="Decimal.phpt"/>
+    <dir name="Decimal">
+     <file role="test" name="Context.phpt"/>
+     <dir name="Context">
+      <file role="test" name="__construct.phpt"/>
+      </dir>
+     <file role="test" name="__construct.phpt"/>
+     <file role="test" name="__toString.phpt"/>
+     <file role="test" name="equals.phpt"/>
+     <file role="test" name="isInt.phpt"/>
+     <file role="test" name="toInt.phpt"/>
+     <file role="test" name="toString.phpt"/>
+     </dir>
+    <file role="test" name="LOB.phpt"/>
+    <dir name="LOB">
+     <file role="test" name="RW.phpt"/>
+     </dir>
+    <file role="test" name="Reader.phpt"/>
+    <dir name="Reader">
+     <file role="test" name="seek.phpt"/>
+     <file role="test" name="Buffer.phpt"/>
+     <file role="test" name="Stream.phpt"/>
+     <file role="test" name="Iterator.phpt"/>
+     <file role="test" name="Options.phpt"/>
+     <file role="test" name="RecursiveIterator.phpt"/>
+     </dir>
+    <dir name="Serializer">
+     <file role="test" name="PHP.phpt"/>
+     </dir>
+    <file role="test" name="Symbol.phpt"/>
+    <dir name="Symbol">
+     <file role="test" name="Enum.phpt"/>
+     <file role="test" name="ImportLocation.phpt"/>
+     <file role="test" name="Table.phpt"/>
+     <file role="test" name="equals.phpt"/>
+     <dir name="Table">
+      <file role="test" name="Local.phpt"/>
+      <file role="test" name="Shared.phpt"/>
+      <dir name="Shared">
+       <file role="test" name="roundtrip.phpt"/>
+       </dir>
+      </dir>
+     </dir>
+    <file role="test" name="Timestamp.phpt"/>
+    <file role="test" name="Type.phpt"/>
+    <dir name="serialize">
+     <file role="test" name="popo.phpt"/>
+     <file role="test" name="resource.phpt"/>
+     <file role="test" name="magic.phpt"/>
+     <file role="test" name="backref.phpt"/>
+     <file role="test" name="timestamp.phpt"/>
+     <file role="test" name="custom.phpt"/>
+     <file role="test" name="enum.phpt"/>
+     <file role="test" name="multisequence.phpt"/>
+     <file role="test" name="serializable.phpt"/>
+     <file role="test" name="basic.phpt"/>
+    </dir>
+    <dir name="Unserializer">
+     <file role="test" name="PHP.phpt"/>
+    </dir>
+    <dir name="unserialize">
+     <file role="test" name="multifield.phpt"/>
+     <file role="test" name="argtype.phpt"/>
+     <file role="test" name="sid.phpt"/>
+     <file role="test" name="invalid_annotation.phpt"/>
+     <file role="test" name="multisequence.phpt"/>
+     <file role="test" name="stream.phpt"/>
+    </dir>
+    <file role="test" name="Writer.phpt"/>
+    <dir name="Writer">
+     <file role="test" name="Buffer.phpt"/>
+     <file role="test" name="Stream.phpt"/>
+     <file role="test" name="Options.phpt"/>
+    </dir>
+   </dir>
+   <dir name="scripts">
+    <file role="src" name="gen_github_workflow_ci.php"/>
+   </dir>
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>8.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.1</min>
+   </pearinstaller>
+  </required>
+  <optional/>
+ </dependencies>
+ <providesextension>ion</providesextension>
+ <extsrcrelease>
+  <configureoption
+   name="with-ion"
+   prompt="where to find libion"
+   default="bundled" />
+  </extsrcrelease>
+ <changelog />
+</package>
