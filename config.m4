@@ -16,33 +16,36 @@ PHP_SUBST([CMAKE])
 use_bundled_ionc=false
 AC_DEFUN([ION_BUNDLE], [dnl
 
+  sdir=PHP_EXT_SRCDIR([ion])
   AC_MSG_CHECKING([for bundled ion-c])
-  if test -f PHP_EXT_SRCDIR([ion])/ion-c/CMakeLists.txt; then
+  if test -f $sdir/ion-c/CMakeLists.txt; then
     AC_MSG_RESULT([ion-c])
-  elif test -d PHP_EXT_SRCDIR([ion])/.git; then
+  elif test -d $sdir/.git; then
     AC_MSG_RESULT([git submodule])
-    if ! GIT_DIR=PHP_EXT_SRCDIR([ion])/.git GIT_WORK_TREE=PHP_EXT_SRCDIR([ion])/ \
-        "$GIT" submodule update --init --depth 1 --recursive ion-c; then
-      AC_MSG_ERROR([giving up])
+    cd $sdir
+    if ! "$GIT" submodule update --init --depth 1 --recursive ion-c; then
+      cd -
+      AC_MSG_ERROR([giving up on path "$sdir"])
     fi
-  elif "$GIT" clone -q --depth 1 --recursive https://github.com/amzn/ion-c PHP_EXT_SRCDIR([ion])/ion-c; then
+    cd -
+  elif "$GIT" clone -q --depth 1 --recursive https://github.com/amzn/ion-c $sdir/ion-c; then
     AC_MSG_RESULT([git clone])
   else
     AC_MSG_RESULT([not found])
-    AC_MSG_ERROR([invalid bundle: PHP_EXT_SRCDIR([ion])/ion-c])
+    AC_MSG_ERROR([invalid bundle: $sdir/ion-c])
   fi
 
   PHP_ADD_INCLUDE(PHP_EXT_SRCDIR([ion])/ion-c/ionc/include)
   PHP_ADD_INCLUDE(PHP_EXT_SRCDIR([ion])/ion-c/decNumber/include)
 
-  PHP_EXPAND_PATH(PHP_EXT_BUILDDIR([ion]), builddir)
-  builddir="$builddir/ion-c/build"
+  PHP_EXPAND_PATH(PHP_EXT_BUILDDIR([ion]), bdir)
+  bdir="$bdir/ion-c/build"
   if test "$ext_shared" = yes; then
-    ION_SHARED_LIBADD="-lionc_static -ldecNumber_static -L$builddir/ionc -L$builddir/decNumber"
+    ION_SHARED_LIBADD="-lionc_static -ldecNumber_static -L$bdir/ionc -L$bdir/decNumber"
   else
     DLIBS="$DLIBS -lionc_static -ldecNumber_static"
-    EXTRA_LDFLAGS="$EXTRA_LDFLAGS -L$builddir/ionc -L$builddir/decNumber"
-    EXTRA_LDFLAGS_PROGRAM="$EXTRA_LDFLAGS_PROGRAM -L$builddir/ionc -L$builddir/decNumber"
+    EXTRA_LDFLAGS="$EXTRA_LDFLAGS -L$bdir/ionc -L$bdir/decNumber"
+    EXTRA_LDFLAGS_PROGRAM="$EXTRA_LDFLAGS_PROGRAM -L$bdir/ionc -L$bdir/decNumber"
   fi
 
   if test "$PHP_DEBUG" = 1; then
