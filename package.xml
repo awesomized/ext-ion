@@ -40,6 +40,7 @@ https://awesomized.github.io/ext-ion/
    <file role="doc" name="CREDITS"/>
    <file role="doc" name="LICENSE"/>
    <file role="doc" name="README.md"/>
+   <file role="doc" name="SECURITY.md"/>
    <dir name="docs">
     <file role="doc" name=".nojekyll"/>
     <file role="doc" name="index.html"/>

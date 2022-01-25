@@ -5,9 +5,9 @@
 This project is still in its early development stages, so please consider 
 any release not explicitly labeled as stable as experimental.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.x     | :white_check_mark: |
+| Version | Supported |
+| ------- | --------- |
+| 0.x     |        ✓ |
 
 ## Reporting a Vulnerability
 

@@ -1,0 +1,9 @@
+version: '3'
+services:
+  composer:
+    container_name: m6w6/ext-ion-docs-composer
+    restart: "no"
+    volumes:
+      - ./:/app
+    build: .
+    user: "1000"
