@@ -8,7 +8,7 @@ TEST
 
 $c = new ion\Catalog;
 var_dump(count($c));
-$c->add($php = ion\Symbol\Table\PHP());
+$c->add($php = ion\Symbol\PHP::asTable());
 var_dump(count($c));
 $c->add(new ion\Symbol\Table\Shared("shared", 1, ["foo", "bar", "baz"]));
 var_dump(count($c));

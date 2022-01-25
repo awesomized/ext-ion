@@ -447,24 +447,6 @@ interface Table {
     public function findLocal(string|int $id) : ?\ion\Symbol;
 }
 
-namespace ion\Symbol\Table;
-
-/**
- * Get the built-in PHP shared symbol table.
- *
- * @see \ion\Symbol\Table\PHP
- * @return \ion\Symbol\Table The builtin PHP shared symbol table.
- */
-function PHP() : \ion\Symbol\Table {}
-
-/**
- * Get the built-in ION system shared symbol table.
- *
- * @see \ion\Symbol\Table\System
- * @return \ion\Symbol\Table The builtin ION system shared symbol table.
- */
-function System() : \ion\Symbol\Table {}
-
 /**
  * The built-in ION system symbols.
  */
@@ -485,6 +467,13 @@ enum System : string implements \ion\Symbol\Enum {
     public function toSID() : int {}
     /** @alias ion\Symbol\Enum::toString */
     public function toString() : string {}
+
+    /**
+     * Get the built-in ION system shared symbol table.
+     *
+     * @return Table\Shared The system symbol table.
+     */
+    public static function asTable() : Table\Shared {}
 }
 
 /**
@@ -508,7 +497,16 @@ enum PHP : string implements \ion\Symbol\Enum {
     public function toSID() : int {}
     /** @alias ion\Symbol\Enum::toString */
     public function toString() : string {}
+
+    /**
+     * Get the built-in PHP shared symbol table.
+     *
+     * @return Table\Shared The builtin PHP shared symbol table.
+     */
+    public static function asTable() : Table\Shared {}
 }
+
+namespace ion\Symbol\Table;
 
 /**
  * A local symbol table.

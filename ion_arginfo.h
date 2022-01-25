@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 6dcf67bb6d8b532d66b378544582f68e2508b7b2 */
+ * Stub hash: 82f37b032b109ad08cffc965a75843e57210debf */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -10,11 +10,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_unserialize, 0, 1, IS_MIXED,
 	ZEND_ARG_INFO(0, data)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, unserializer, ion\\Unserializer, 1, "null")
 ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_ion_Symbol_Table_PHP, 0, 0, ion\\Symbol\\Table, 0)
-ZEND_END_ARG_INFO()
-
-#define arginfo_ion_Symbol_Table_System arginfo_ion_Symbol_Table_PHP
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Serializer_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -255,17 +250,22 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Symbol_Table_findLocal arginfo_class_ion_Symbol_Table_find
 
-#define arginfo_class_ion_Symbol_Table_System_toSymbol arginfo_class_ion_Reader_getFieldNameSymbol
+#define arginfo_class_ion_Symbol_System_toSymbol arginfo_class_ion_Reader_getFieldNameSymbol
 
-#define arginfo_class_ion_Symbol_Table_System_toSID arginfo_class_ion_Catalog_count
+#define arginfo_class_ion_Symbol_System_toSID arginfo_class_ion_Catalog_count
 
-#define arginfo_class_ion_Symbol_Table_System_toString arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Symbol_System_toString arginfo_class_ion_Symbol___toString
 
-#define arginfo_class_ion_Symbol_Table_PHP_toSymbol arginfo_class_ion_Reader_getFieldNameSymbol
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Symbol_System_asTable, 0, 0, ion\\Symbol\\Table\\Shared, 0)
+ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Symbol_Table_PHP_toSID arginfo_class_ion_Catalog_count
+#define arginfo_class_ion_Symbol_PHP_toSymbol arginfo_class_ion_Reader_getFieldNameSymbol
 
-#define arginfo_class_ion_Symbol_Table_PHP_toString arginfo_class_ion_Symbol___toString
+#define arginfo_class_ion_Symbol_PHP_toSID arginfo_class_ion_Catalog_count
+
+#define arginfo_class_ion_Symbol_PHP_toString arginfo_class_ion_Symbol___toString
+
+#define arginfo_class_ion_Symbol_PHP_asTable arginfo_class_ion_Symbol_System_asTable
 
 #define arginfo_class_ion_Symbol_Table_Local___construct arginfo_class_ion_Catalog___construct
 
@@ -526,8 +526,6 @@ ZEND_END_ARG_INFO()
 
 static ZEND_FUNCTION(ion_serialize);
 static ZEND_FUNCTION(ion_unserialize);
-static ZEND_FUNCTION(ion_Symbol_Table_PHP);
-static ZEND_FUNCTION(ion_Symbol_Table_System);
 static ZEND_METHOD(ion_Symbol, __construct);
 static ZEND_METHOD(ion_Symbol, equals);
 static ZEND_METHOD(ion_Symbol, __toString);
@@ -546,6 +544,8 @@ static ZEND_METHOD(ion_Decimal, toInt);
 static ZEND_METHOD(ion_Timestamp, __construct);
 static ZEND_METHOD(ion_Timestamp, __toString);
 static ZEND_METHOD(ion_Symbol_ImportLocation, __construct);
+static ZEND_METHOD(ion_Symbol_System, asTable);
+static ZEND_METHOD(ion_Symbol_PHP, asTable);
 static ZEND_METHOD(ion_Symbol_Table_Local, __construct);
 static ZEND_METHOD(ion_Symbol_Table_Local, import);
 static ZEND_METHOD(ion_Symbol_Table_Shared, __construct);
@@ -632,8 +632,6 @@ static ZEND_METHOD(ion_Unserializer_PHP, unserialize);
 static const zend_function_entry ext_functions[] = {
 	ZEND_NS_RAW_FENTRY("ion", "serialize", ZEND_FN(ion_serialize), arginfo_ion_serialize, 0)
 	ZEND_NS_RAW_FENTRY("ion", "unserialize", ZEND_FN(ion_unserialize), arginfo_ion_unserialize, 0)
-	ZEND_NS_RAW_FENTRY("ion\\Symbol\\Table", "PHP", ZEND_FN(ion_Symbol_Table_PHP), arginfo_ion_Symbol_Table_PHP, 0)
-	ZEND_NS_RAW_FENTRY("ion\\Symbol\\Table", "System", ZEND_FN(ion_Symbol_Table_System), arginfo_ion_Symbol_Table_System, 0)
 	ZEND_FE_END
 };
 
@@ -786,18 +784,20 @@ static const zend_function_entry class_ion_Symbol_Table_methods[] = {
 };
 
 
-static const zend_function_entry class_ion_Symbol_Table_System_methods[] = {
-	ZEND_MALIAS(ion_Symbol_Enum, toSymbol, toSymbol, arginfo_class_ion_Symbol_Table_System_toSymbol, ZEND_ACC_PUBLIC)
-	ZEND_MALIAS(ion_Symbol_Enum, toSID, toSID, arginfo_class_ion_Symbol_Table_System_toSID, ZEND_ACC_PUBLIC)
-	ZEND_MALIAS(ion_Symbol_Enum, toString, toString, arginfo_class_ion_Symbol_Table_System_toString, ZEND_ACC_PUBLIC)
+static const zend_function_entry class_ion_Symbol_System_methods[] = {
+	ZEND_MALIAS(ion_Symbol_Enum, toSymbol, toSymbol, arginfo_class_ion_Symbol_System_toSymbol, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Enum, toSID, toSID, arginfo_class_ion_Symbol_System_toSID, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Enum, toString, toString, arginfo_class_ion_Symbol_System_toString, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Symbol_System, asTable, arginfo_class_ion_Symbol_System_asTable, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_FE_END
 };
 
 
-static const zend_function_entry class_ion_Symbol_Table_PHP_methods[] = {
-	ZEND_MALIAS(ion_Symbol_Enum, toSymbol, toSymbol, arginfo_class_ion_Symbol_Table_PHP_toSymbol, ZEND_ACC_PUBLIC)
-	ZEND_MALIAS(ion_Symbol_Enum, toSID, toSID, arginfo_class_ion_Symbol_Table_PHP_toSID, ZEND_ACC_PUBLIC)
-	ZEND_MALIAS(ion_Symbol_Enum, toString, toString, arginfo_class_ion_Symbol_Table_PHP_toString, ZEND_ACC_PUBLIC)
+static const zend_function_entry class_ion_Symbol_PHP_methods[] = {
+	ZEND_MALIAS(ion_Symbol_Enum, toSymbol, toSymbol, arginfo_class_ion_Symbol_PHP_toSymbol, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Enum, toSID, toSID, arginfo_class_ion_Symbol_PHP_toSID, ZEND_ACC_PUBLIC)
+	ZEND_MALIAS(ion_Symbol_Enum, toString, toString, arginfo_class_ion_Symbol_PHP_toString, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Symbol_PHP, asTable, arginfo_class_ion_Symbol_PHP_asTable, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_FE_END
 };
 
@@ -1275,9 +1275,9 @@ static zend_class_entry *register_class_ion_Symbol_Table(void)
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Symbol_Table_System(zend_class_entry *class_entry_ion_Symbol_Enum)
+static zend_class_entry *register_class_ion_Symbol_System(zend_class_entry *class_entry_ion_Symbol_Enum)
 {
-	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Symbol\\Table\\System", IS_STRING, class_ion_Symbol_Table_System_methods);
+	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Symbol\\System", IS_STRING, class_ion_Symbol_System_methods);
 	zend_class_implements(class_entry, 1, class_entry_ion_Symbol_Enum);
 
 	zval enum_case_Ion_value;
@@ -1328,9 +1328,9 @@ static zend_class_entry *register_class_ion_Symbol_Table_System(zend_class_entry
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Symbol_Table_PHP(zend_class_entry *class_entry_ion_Symbol_Enum)
+static zend_class_entry *register_class_ion_Symbol_PHP(zend_class_entry *class_entry_ion_Symbol_Enum)
 {
-	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Symbol\\Table\\PHP", IS_STRING, class_ion_Symbol_Table_PHP_methods);
+	zend_class_entry *class_entry = zend_register_internal_enum("ion\\Symbol\\PHP", IS_STRING, class_ion_Symbol_PHP_methods);
 	zend_class_implements(class_entry, 1, class_entry_ion_Symbol_Enum);
 
 	zval enum_case_PHP_value;

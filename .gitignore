@@ -49,3 +49,4 @@ tmp-php.ini
 docs/vendor
 docs/src
 docs/composer.*
+*.tgz

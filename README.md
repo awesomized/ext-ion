@@ -30,7 +30,7 @@ sudo make install # INSTALL=install
 ### Try with Docker:
 ```shell
 docker build -t php-ion
-docker run --rm php-ion -r 'echo ion\serialize(ion\Symbol\Table\PHP());'
+docker run --rm php-ion -r 'echo ion\serialize(ion\Symbol\PHP::asTable());'
 ```
 
 ## Editor Stub:

@@ -8,7 +8,7 @@
 		</title>
 		<meta name="viewport" content="width=1200, initial-scale=0.5">
 					<base href="/v0.0/">
-			<meta http-equiv="Content-Location" content="/v0.0/ion/Symbol/Table/System">
+			<meta http-equiv="Content-Location" content="/v0.0/ion/Symbol/System">
 			<link rel="stylesheet" href="index.css">
 		
 		<link href="https://fonts.googleapis.com/css?family=Inconsolata&amp;subset=latin-ext" rel="stylesheet">
@@ -21,7 +21,7 @@
 <div class="sidebar">
 	
 	<div class="edit">
-		<a href="./ion/Symbol/Table/System">Edit</a>
+		<a href="./ion/Symbol/System">Edit</a>
 	</div>
 	
 	
@@ -42,37 +42,36 @@
 						</a>
 						<ul>
 							<li>
-																	
-					&uarr; <a href="./ion/Symbol/Table">
-							Table
-						</a>
-						<ul>
-							<li>
 											
-							&circlearrowright; <strong><a href="./ion/Symbol/Table/System">System</a></strong>
+							&circlearrowright; <strong><a href="./ion/Symbol/System">System</a></strong>
 
+							
+							<ul>
+								
+								<li>
+									&rdsh; <a href="./ion/Symbol/System/asTable">System::asTable</a>
+									
+								</li>
+								
+							</ul>
 							
 																																
 						</ul>
 																			
-						<li>&ldsh; <a href="./ion/Symbol/Table/Local">Local</a></li>
+						<li>&ldsh; <a href="./ion/Symbol/Enum">Enum</a></li>
 																			
-						<li>&ldsh; <a href="./ion/Symbol/Table/PHP">PHP</a></li>
+						<li>&ldsh; <a href="./ion/Symbol/ImportLocation">ImportLocation</a></li>
 																			
-						<li>&ldsh; <a href="./ion/Symbol/Table/Shared">Shared</a></li>
+						<li>&ldsh; <a href="./ion/Symbol/PHP">PHP</a></li>
 																													
-						<li>&ldsh; <a href="./ion/Symbol/Table/add">Table::add</a></li>
+						<li>&ldsh; <a href="./ion/Symbol/Table">Table</a></li>
 																			
-						<li>&ldsh; <a href="./ion/Symbol/Table/find">Table::find</a></li>
+						<li>&ldsh; <a href="./ion/Symbol/__construct">Symbol::__construct</a></li>
 																			
-						<li>&ldsh; <a href="./ion/Symbol/Table/findLocal">Table::findLocal</a></li>
+						<li>&ldsh; <a href="./ion/Symbol/equals">Symbol::equals</a></li>
 																			
-						<li>&ldsh; <a href="./ion/Symbol/Table/getMaxId">Table::getMaxId</a></li>
+						<li>&ldsh; <a href="./ion/Symbol/toString">Symbol::toString</a></li>
 																																																																																										
-					</ul>
-																												
-						</li>
-								
 					</ul>
 													
 				</li>
@@ -82,7 +81,7 @@
 	</ul>
 </div>
 					
-<h1>enum ion\Symbol\Table\System implements BackedEnum, UnitEnum, ion\Symbol\Enum</h1>
+<h1>enum ion\Symbol\System implements BackedEnum, UnitEnum, ion\Symbol\Enum</h1>
 <p>The built-in ION system symbols.</p>
 <h2>Constants:<a id="Constants:" href="#Constants:" class="permalink" aria-hidden="true" title="">#</a></h2>
 <ul>
@@ -124,11 +123,23 @@ The built-in ION system symbols.</li>
 
 
 
+<h2 id="Functions:">Functions:</h2>
+<ul>
+	
+	<li>
+		<h3><a href="ion/Symbol/System/asTable">System::asTable</a></h3>
+		<p>Get the built-in ION system shared symbol table.</p>
+
+		<p>static ion\Symbol\Table\Shared ion\Symbol\System::asTable()</p>
+	</li>
+	
+</ul>
+
 		
 			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
 			<script>
 				var disqus_shortname = 'mdref';
-				var disqus_identifier = 'ion/Symbol/Table/System';
+				var disqus_identifier = 'ion/Symbol/System';
 			</script>
 
 			<footer>

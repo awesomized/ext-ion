@@ -5,7 +5,7 @@ ion
 --FILE--
 TEST
 <?php
-$t = ion\Symbol\Table\PHP::PHP;
+$t = ion\Symbol\PHP::PHP;
 var_dump($t instanceof ion\Symbol\Enum);
 var_dump($t->toSymbol(), $t->toSID(), $t->toString());
 ?>

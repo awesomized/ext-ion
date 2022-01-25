@@ -125,7 +125,7 @@ static ZEND_METHOD(ion_Symbol_Enum, toString)
 	zval tmp;
 	RETVAL_ZVAL(zend_read_property(Z_OBJCE_P(zsym), Z_OBJ_P(zsym), ZEND_STRL("value"), 0, &tmp), 1, 0);
 }
-static ZEND_FUNCTION(ion_Symbol_Table_System)
+static ZEND_METHOD(ion_Symbol_System, asTable)
 {
 	ZEND_PARSE_PARAMETERS_NONE();
 
@@ -135,7 +135,7 @@ static ZEND_FUNCTION(ion_Symbol_Table_System)
 	php_ion_symbol_table_ctor(obj);
 	ion_symbol_table_lock(obj->tab);
 }
-static ZEND_FUNCTION(ion_Symbol_Table_PHP)
+static ZEND_METHOD(ion_Symbol_PHP, asTable)
 {
 	ZEND_PARSE_PARAMETERS_NONE();
 
@@ -1802,8 +1802,8 @@ PHP_MINIT_FUNCTION(ion)
 	ce_Symbol_Table_Shared = register_class_ion_Symbol_Table_Shared(ce_Symbol_Table);
 	ce_Symbol_Table_Shared->create_object = create_ion_Symbol_Table;
 	ce_Symbol_Enum = register_class_ion_Symbol_Enum();
-	ce_Symbol_Table_System = register_class_ion_Symbol_Table_System(ce_Symbol_Enum);
-	ce_Symbol_Table_PHP = register_class_ion_Symbol_Table_PHP(ce_Symbol_Enum);
+	ce_Symbol_Table_System = register_class_ion_Symbol_System(ce_Symbol_Enum);
+	ce_Symbol_Table_PHP = register_class_ion_Symbol_PHP(ce_Symbol_Enum);
 
 	// Timestamp
 	ce_Timestamp = register_class_ion_Timestamp(php_date_get_date_ce());

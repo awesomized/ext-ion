@@ -7,9 +7,9 @@ TEST
 <?php
 
 echo "global\n";
-var_dump(ion\Symbol\Table\System());
-var_dump(ion\Symbol\Table\PHP());
-var_dump(ion\Symbol\Table\PHP()->find(1));
+var_dump(ion\Symbol\System::asTable());
+var_dump(ion\Symbol\PHP::asTable());
+var_dump(ion\Symbol\PHP::asTable()->find(1));
 
 echo "shared\n";
 $shared = new ion\Symbol\Table\Shared("shared");
@@ -31,7 +31,7 @@ var_dump($shared->find($sid3));
 echo "local\n";
 $local = new ion\Symbol\Table\Local;
 echo "import PHP\n";
-$local->import(ion\Symbol\Table\PHP());
+$local->import(ion\Symbol\PHP::asTable());
 echo "import shared\n";
 $local->import($shared);
 

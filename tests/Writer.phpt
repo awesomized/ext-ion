@@ -55,7 +55,7 @@ $w->finishLob();
 echo "\n";
 $w->startContainer(ion\Type::Struct);
 $w->writeFieldName("prop");
-$w->writeAnnotation(ion\Symbol\Table\PHP::Property->toSymbol());
+$w->writeAnnotation(ion\Symbol\PHP::Property->toSymbol());
 $w->writeInt($w->getDepth());
 $w->writeFieldName(new ion\Symbol("priv"));
 $w->writeAnnotation("a","b","c");
