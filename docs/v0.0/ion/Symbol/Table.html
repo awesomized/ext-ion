@@ -105,69 +105,71 @@
 		</li>
 	</ul>
 </div>
-					
-<h1>interface ion\Symbol\Table</h1>
-<p>Base interface of an ION symbol table.</p>
-<h2>Constants:<a id="Constants:" href="#Constants:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<p>None.</p>
-<h2>Properties:<a id="Properties:" href="#Properties:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<p>None.</p>
-
-
-
-<h2 id="Functions:">Functions:</h2>
-<ul>
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/Symbol/Table#">#</a><em>interface</em> <a href="ion/Symbol/Table">ion\Symbol\Table</a>
+</h1><p>Base <em>interface</em> of an ION symbol table.</p><h2 id="Constants:">Constants:<a class="permalink" href="ion/Symbol/Table#Constants:">#</a>
+</h2><p>None.</p><h2 id="Properties:">Properties:<a class="permalink" href="ion/Symbol/Table#Properties:">#</a>
+</h2><p>None.</p><h2 id="Functions:">Functions:<a class="permalink" href="ion/Symbol/Table#Functions:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Symbol/Table/add">Table::add</a></h3>
+		<h3 id="Table::add">
+<a href="ion/Symbol/Table/add">Table::add</a><a class="permalink" href="ion/Symbol/Table#Table::add">#</a>
+</h3>
 		<p>Add a symbol to the table.</p>
 
-		<p>int ion\Symbol\Table::add(ion\Symbol|string $symbol)</p>
+		<p><code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <a href="ion/Symbol/Table/add">ion\Symbol\Table::add</a>(<a href="ion/Symbol">ion\Symbol</a>|<code><a href="https://php.net/manual/en/language.types.string">string</a></code> <span class="var">$symbol</span>)</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Symbol/Table/find">Table::find</a></h3>
+		<h3 id="Table::find">
+<a href="ion/Symbol/Table/find">Table::find</a><a class="permalink" href="ion/Symbol/Table#Table::find">#</a>
+</h3>
 		<p>Find a symbol within the symbol table, including imports.</p>
 
-		<p>?ion\Symbol ion\Symbol\Table::find(string|int $id)</p>
+		<p>?<a href="ion/Symbol">ion\Symbol</a> <a href="ion/Symbol/Table/find">ion\Symbol\Table::find</a>(<code><a href="https://php.net/manual/en/language.types.string">string</a></code>|<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$id</span>)</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Symbol/Table/findLocal">Table::findLocal</a></h3>
+		<h3 id="Table::findLocal">
+<a href="ion/Symbol/Table/findLocal">Table::findLocal</a><a class="permalink" href="ion/Symbol/Table#Table::findLocal">#</a>
+</h3>
 		<p>Find a symbol within <strong>only this</strong> symbol table, ignoring imports.</p>
 
-		<p>?ion\Symbol ion\Symbol\Table::findLocal(string|int $id)</p>
+		<p>?<a href="ion/Symbol">ion\Symbol</a> <a href="ion/Symbol/Table/findLocal">ion\Symbol\Table::findLocal</a>(<code><a href="https://php.net/manual/en/language.types.string">string</a></code>|<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$id</span>)</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Symbol/Table/getMaxId">Table::getMaxId</a></h3>
+		<h3 id="Table::getMaxId">
+<a href="ion/Symbol/Table/getMaxId">Table::getMaxId</a><a class="permalink" href="ion/Symbol/Table#Table::getMaxId">#</a>
+</h3>
 		<p>Get the maximum symbol ID within the symbol table.</p>
 
-		<p>int ion\Symbol\Table::getMaxId()</p>
+		<p><code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <a href="ion/Symbol/Table/getMaxId">ion\Symbol\Table::getMaxId</a>()</p>
 	</li>
 	
-</ul>
-
-
-<h2 id="Namespaces,.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:</h2>
-<ul>
+</ul><h2 id="Namespaces.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:<a class="permalink" href="ion/Symbol/Table#Namespaces.Interfaces.and.Classes:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Symbol/Table/Local">Local</a></h3>
+		<h3 id="Local">
+<a href="ion/Symbol/Table/Local">Local</a><a class="permalink" href="ion/Symbol/Table#Local">#</a>
+</h3>
 		<p>A local symbol table.</p>
 
-		<p>class ion\Symbol\Table\Local implements ion\Symbol\Table</p>
+		<p><em>class</em> <a href="ion/Symbol/Table/Local">ion\Symbol\Table\Local</a> <em>implements</em> <a href="ion/Symbol/Table">ion\Symbol\Table</a></p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Symbol/Table/Shared">Shared</a></h3>
+		<h3 id="Shared">
+<a href="ion/Symbol/Table/Shared">Shared</a><a class="permalink" href="ion/Symbol/Table#Shared">#</a>
+</h3>
 		<p>A shared symbol table.</p>
 
-		<p>class ion\Symbol\Table\Shared implements ion\Symbol\Table</p>
+		<p><em>class</em> <a href="ion/Symbol/Table/Shared">ion\Symbol\Table\Shared</a> <em>implements</em> <a href="ion/Symbol/Table">ion\Symbol\Table</a></p>
 	</li>
 	
-</ul>
-		
+</ul>		
 			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
 			<script>
 				var disqus_shortname = 'mdref';
@@ -177,7 +179,7 @@
 			<footer>
 				
 <ul>
-	<li><a href="https://github.com/m6w6/mdref">mdref-v2.0
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
 </a></li>
 	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
 	<li>

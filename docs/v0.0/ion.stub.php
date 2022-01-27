@@ -23,14 +23,14 @@ namespace ion;
  *  * int
  *  * float
  *  * string
- *  * references
- *  * arrays
- *  * objects (incl. \Serializable, and classes implementing magic and custom __serialize)
+ *  * reference
+ *  * array
+ *  * object (incl. \Serializable, and classes implementing magic and custom __serialize)
  *
  * @param mixed $data PHP value(s).
  * @param Serializer|null $serializer Custom serializer.
  * @return string serialized ION data
- * @throws ion\Exception
+ * @throws \ion\Exception
  */
 function serialize(mixed $data, ?Serializer $serializer = null) : string {}
 
@@ -39,7 +39,7 @@ function serialize(mixed $data, ?Serializer $serializer = null) : string {}
  *
  * @param string|resource $data Serialized ION data, either as string buffer or stream,.
  * @return mixed unserialized PHP values
- * @throws ion\Exception
+ * @throws \ion\Exception
  */
 function unserialize($data, ?Unserializer $unserializer = null) : mixed {}
 

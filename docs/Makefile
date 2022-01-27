@@ -35,7 +35,7 @@ src/ion/\\\:\\\ Contributing.md: ../CONTRIBUTING.md | src/ion
 	-test -e $@ || ln $^ $@
 
 vendor/%:
-	$(COMPOSER) require m6w6/mdref:dev-master
+	COMPOSER= $(COMPOSER) require m6w6/mdref:dev-master
 
 .PHONY: clean
 clean:

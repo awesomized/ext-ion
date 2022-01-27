@@ -131,89 +131,98 @@
 		</li>
 	</ul>
 </div>
-					
-<h1>class ion\Symbol implements Stringable</h1>
-<p>See also <a href="https://amzn.github.io/ion-docs/docs/spec.html#symbol">ION spec's symbol definition</a>, and <a href="https://amzn.github.io/ion-docs/guides/symbols-guide.html">ION spec's symbol guide</a>.</p>
-<h2>Constants:<a id="Constants:" href="#Constants:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<p>None.</p>
-<h2>Properties:<a id="Properties:" href="#Properties:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<ul>
-<li>public ?string $value = NULL<br />
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/Symbol#">#</a><em>class</em> <a href="ion/Symbol">ion\Symbol</a> <br>&nbsp;<em>implements</em> <code><a href="https://php.net/manual/en/class.stringable">Stringable</a></code>
+</h1><p>See also <a href="https://amzn.github.io/ion-docs/docs/spec.html#symbol">ION spec's symbol definition</a>, and <a href="https://amzn.github.io/ion-docs/guides/symbols-guide.html">ION spec's symbol guide</a>.</p><h2 id="Constants:">Constants:<a class="permalink" href="ion/Symbol#Constants:">#</a>
+</h2><p>None.</p><h2 id="Properties:">Properties:<a class="permalink" href="ion/Symbol#Properties:">#</a>
+</h2><ul>
+<li>
+<em>public</em> ?<code><a href="https://php.net/manual/en/language.types.string">string</a></code> <span class="var" id="$value">$value<a class="permalink" href="ion/Symbol#%24value">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
 The symbol's text representation.</li>
-<li>public int $sid = -1<br />
-The symbols ID, referencing its location within a shared symbol table.</li>
-<li>public ?ion\Symbol\ImportLocation $importLocation = NULL<br />
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$sid">$sid<a class="permalink" href="ion/Symbol#%24sid">#</a></span> = -1<br>
+The symbols <span class="constant">ID</span>, referencing its location within a shared symbol table.</li>
+<li>
+<em>public</em> ?<a href="ion/Symbol/ImportLocation">ion\Symbol\ImportLocation</a> <span class="var" id="$importLocation">$importLocation<a class="permalink" href="ion/Symbol#%24importLocation">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
 The import location referencing a shared symbol table.</li>
-</ul>
-
-
-
-<h2 id="Functions:">Functions:</h2>
-<ul>
+</ul><h2 id="Functions:">Functions:<a class="permalink" href="ion/Symbol#Functions:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Symbol/__construct">Symbol::__construct</a></h3>
+		<h3 id="Symbol::__construct">
+<a href="ion/Symbol/__construct">Symbol::__construct</a><a class="permalink" href="ion/Symbol#Symbol::__construct">#</a>
+</h3>
 		<p>Create an ION symbol.</p>
 
-		<p>void ion\Symbol::__construct([?string $value = NULL, [int $sid = -1, [?ion\Symbol\ImportLocation $importLocation = NULL]]])</p>
+		<p><code><a href="https://php.net/manual/en/language.types.declarations#language.types.declarations.void">void</a></code> <a href="ion/Symbol/__construct">ion\Symbol::__construct</a>([?<code><a href="https://php.net/manual/en/language.types.string">string</a></code> <span class="var">$value</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$sid</span> = -1, [?<a href="ion/Symbol/ImportLocation">ion\Symbol\ImportLocation</a> <span class="var">$importLocation</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>]]])</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Symbol/equals">Symbol::equals</a></h3>
+		<h3 id="Symbol::equals">
+<a href="ion/Symbol/equals">Symbol::equals</a><a class="permalink" href="ion/Symbol#Symbol::equals">#</a>
+</h3>
 		<p>Compare two symbols for equality.</p>
 
-		<p>bool ion\Symbol::equals(ion\Symbol $symbol)</p>
+		<p><code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <a href="ion/Symbol/equals">ion\Symbol::equals</a>(<a href="ion/Symbol">ion\Symbol</a> <span class="var">$symbol</span>)</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Symbol/toString">Symbol::toString</a></h3>
+		<h3 id="Symbol::toString">
+<a href="ion/Symbol/toString">Symbol::toString</a><a class="permalink" href="ion/Symbol#Symbol::toString">#</a>
+</h3>
 		
-		<p>string ion\Symbol::toString()</p>
+		<p><code><a href="https://php.net/manual/en/language.types.string">string</a></code> <a href="ion/Symbol/toString">ion\Symbol::toString</a>()</p>
 	</li>
 	
-</ul>
-
-
-<h2 id="Namespaces,.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:</h2>
-<ul>
+</ul><h2 id="Namespaces.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:<a class="permalink" href="ion/Symbol#Namespaces.Interfaces.and.Classes:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Symbol/Enum">Enum</a></h3>
-		<p>Base interface of built-in shared symbol tables.</p>
+		<h3 id="Enum">
+<a href="ion/Symbol/Enum">Enum</a><a class="permalink" href="ion/Symbol#Enum">#</a>
+</h3>
+		<p>Base <em>interface</em> of built-in shared symbol tables.</p>
 
-		<p>interface ion\Symbol\Enum</p>
+		<p><em>interface</em> <a href="ion/Symbol/Enum">ion\Symbol\Enum</a></p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Symbol/ImportLocation">ImportLocation</a></h3>
+		<h3 id="ImportLocation">
+<a href="ion/Symbol/ImportLocation">ImportLocation</a><a class="permalink" href="ion/Symbol#ImportLocation">#</a>
+</h3>
 		<p>The import location (referring to a shared table= of a symbol.</p>
 
-		<p>class ion\Symbol\ImportLocation</p>
+		<p><em>class</em> <a href="ion/Symbol/ImportLocation">ion\Symbol\ImportLocation</a></p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Symbol/PHP">PHP</a></h3>
+		<h3 id="PHP">
+<a href="ion/Symbol/PHP">PHP</a><a class="permalink" href="ion/Symbol#PHP">#</a>
+</h3>
 		<p>The built-in PHP symbols.</p>
 
-		<p>enum ion\Symbol\PHP implements BackedEnum, UnitEnum, ion\Symbol\Enum</p>
+		<p><code><a href="https://php.net/manual/en/language.types.enumerations">enum</a></code> <a href="ion/Symbol/PHP">ion\Symbol\PHP</a> <em>implements</em> <code><a href="https://php.net/manual/en/class.backedenum">BackedEnum</a></code>, <a href="ion/Symbol/Enum">ion\Symbol\Enum</a></p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Symbol/System">System</a></h3>
+		<h3 id="System">
+<a href="ion/Symbol/System">System</a><a class="permalink" href="ion/Symbol#System">#</a>
+</h3>
 		<p>The built-in ION system symbols.</p>
 
-		<p>enum ion\Symbol\System implements BackedEnum, UnitEnum, ion\Symbol\Enum</p>
+		<p><code><a href="https://php.net/manual/en/language.types.enumerations">enum</a></code> <a href="ion/Symbol/System">ion\Symbol\System</a> <em>implements</em> <code><a href="https://php.net/manual/en/class.backedenum">BackedEnum</a></code>, <a href="ion/Symbol/Enum">ion\Symbol\Enum</a></p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Symbol/Table">Table</a></h3>
-		<p>Base interface of an ION symbol table.</p>
+		<h3 id="Table">
+<a href="ion/Symbol/Table">Table</a><a class="permalink" href="ion/Symbol#Table">#</a>
+</h3>
+		<p>Base <em>interface</em> of an ION symbol table.</p>
 
-		<p>interface ion\Symbol\Table</p>
+		<p><em>interface</em> <a href="ion/Symbol/Table">ion\Symbol\Table</a></p>
 	</li>
 	
-</ul>
-		
+</ul>		
 			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
 			<script>
 				var disqus_shortname = 'mdref';
@@ -223,7 +232,7 @@ The import location referencing a shared symbol table.</li>
 			<footer>
 				
 <ul>
-	<li><a href="https://github.com/m6w6/mdref">mdref-v2.0
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
 </a></li>
 	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
 	<li>

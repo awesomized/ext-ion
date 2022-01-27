@@ -96,54 +96,51 @@
 		</li>
 	</ul>
 </div>
-					
-<h1>class ion\Timestamp extends DateTime implements DateTimeInterface, Stringable</h1>
-<p>An ION Timestamp.</p>
-<p>See also <a href="https://amzn.github.io/ion-docs/docs/spec.html#timestamp">the ION sepc's timestamp definintion</a>, and <a href="https://php.net/date">PHP's date documentation</a>.</p>
-<h2>Constants:<a id="Constants:" href="#Constants:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<p>None.</p>
-<h2>Properties:<a id="Properties:" href="#Properties:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<ul>
-<li>public int $precision<br />
-The timestamp's precision. See ion\Timestamp\Precision.</li>
-<li>public string $format = NULL<br />
-The timestamp's format. See ion\Timestamp\Format.</li>
-</ul>
-
-
-
-<h2 id="Functions:">Functions:</h2>
-<ul>
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/Timestamp#">#</a><em>class</em> <a href="ion/Timestamp">ion\Timestamp</a> <br>&nbsp;<em>extends</em> <code><a href="https://php.net/manual/en/class.datetime">DateTime</a></code> <br>&nbsp;<em>implements</em> <code><a href="https://php.net/manual/en/class.datetimeinterface">DateTimeInterface</a></code>, <code><a href="https://php.net/manual/en/class.stringable">Stringable</a></code>
+</h1><p>An ION Timestamp.</p><p>See also <a href="https://amzn.github.io/ion-docs/docs/spec.html#timestamp">the ION sepc's timestamp definintion</a>, and <a href="https://php.net/date">PHP's date documentation</a>.</p><h2 id="Constants:">Constants:<a class="permalink" href="ion/Timestamp#Constants:">#</a>
+</h2><p>None.</p><h2 id="Properties:">Properties:<a class="permalink" href="ion/Timestamp#Properties:">#</a>
+</h2><ul>
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$precision">$precision<a class="permalink" href="ion/Timestamp#%24precision">#</a></span><br>
+The timestamp's precision. See <a href="ion/Timestamp/Precision">ion\Timestamp\Precision</a>.</li>
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.string">string</a></code> <span class="var" id="$format">$format<a class="permalink" href="ion/Timestamp#%24format">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
+The timestamp's format. See <a href="ion/Timestamp/Format">ion\Timestamp\Format</a>.</li>
+</ul><h2 id="Functions:">Functions:<a class="permalink" href="ion/Timestamp#Functions:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Timestamp/__construct">Timestamp::__construct</a></h3>
+		<h3 id="Timestamp::__construct">
+<a href="ion/Timestamp/__construct">Timestamp::__construct</a><a class="permalink" href="ion/Timestamp#Timestamp::__construct">#</a>
+</h3>
 		<p>Create a new ION timestamp.</p>
 
-		<p>void ion\Timestamp::__construct(ion\Timestamp\Precision|int $precision, [ion\Timestamp\Format|string|null $format = NULL, [?string $datetime = NULL, [?DateTimeZone $timezone = NULL]]])</p>
+		<p><code><a href="https://php.net/manual/en/language.types.declarations#language.types.declarations.void">void</a></code> <a href="ion/Timestamp/__construct">ion\Timestamp::__construct</a>(<a href="ion/Timestamp/Precision">ion\Timestamp\Precision</a>|<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$precision</span>, [<a href="ion/Timestamp/Format">ion\Timestamp\Format</a>|<code><a href="https://php.net/manual/en/language.types.string">string</a></code>|<code><a href="https://php.net/manual/en/language.types.null">null</a></code> <span class="var">$format</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [?<code><a href="https://php.net/manual/en/language.types.string">string</a></code> <span class="var">$datetime</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [?<code><a href="https://php.net/manual/en/class.datetimezone">DateTimeZone</a></code> <span class="var">$timezone</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>]]])</p>
 	</li>
 	
-</ul>
-
-
-<h2 id="Namespaces,.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:</h2>
-<ul>
+</ul><h2 id="Namespaces.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:<a class="permalink" href="ion/Timestamp#Namespaces.Interfaces.and.Classes:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Timestamp/Format">Format</a></h3>
+		<h3 id="Format">
+<a href="ion/Timestamp/Format">Format</a><a class="permalink" href="ion/Timestamp#Format">#</a>
+</h3>
 		<p>Timestamp format.</p>
 
-		<p>enum ion\Timestamp\Format implements BackedEnum, UnitEnum</p>
+		<p><code><a href="https://php.net/manual/en/language.types.enumerations">enum</a></code> <a href="ion/Timestamp/Format">ion\Timestamp\Format</a> <em>implements</em> <code><a href="https://php.net/manual/en/class.backedenum">BackedEnum</a></code></p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Timestamp/Precision">Precision</a></h3>
+		<h3 id="Precision">
+<a href="ion/Timestamp/Precision">Precision</a><a class="permalink" href="ion/Timestamp#Precision">#</a>
+</h3>
 		<p>Timestamp precision.</p>
 
-		<p>enum ion\Timestamp\Precision implements BackedEnum, UnitEnum</p>
+		<p><code><a href="https://php.net/manual/en/language.types.enumerations">enum</a></code> <a href="ion/Timestamp/Precision">ion\Timestamp\Precision</a> <em>implements</em> <code><a href="https://php.net/manual/en/class.backedenum">BackedEnum</a></code></p>
 	</li>
 	
-</ul>
-		
+</ul>		
 			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
 			<script>
 				var disqus_shortname = 'mdref';
@@ -153,7 +150,7 @@ The timestamp's format. See ion\Timestamp\Format.</li>
 			<footer>
 				
 <ul>
-	<li><a href="https://github.com/m6w6/mdref">mdref-v2.0
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
 </a></li>
 	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
 	<li>

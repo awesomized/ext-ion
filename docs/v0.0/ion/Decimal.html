@@ -130,75 +130,78 @@
 		</li>
 	</ul>
 </div>
-					
-<h1>class ion\Decimal implements Stringable</h1>
-<p>An arbitrary precision fixed point decimal.</p>
-<p>See also \ion\Decimal\Context, and <a href="https://amzn.github.io/ion-docs/docs/decimal.html">the ION spec's decimal docs</a>.</p>
-<h2>Constants:<a id="Constants:" href="#Constants:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<p>None.</p>
-<h2>Properties:<a id="Properties:" href="#Properties:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<ul>
-<li>public string|int $number<br />
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/Decimal#">#</a><em>class</em> <a href="ion/Decimal">ion\Decimal</a> <br>&nbsp;<em>implements</em> <code><a href="https://php.net/manual/en/class.stringable">Stringable</a></code>
+</h1><p>An arbitrary precision fixed point decimal.</p><p>See also <a href="ion/Decimal/Context">\ion\Decimal\Context</a>, and <a href="https://amzn.github.io/ion-docs/docs/decimal.html">the ION spec's decimal docs</a>.</p><h2 id="Constants:">Constants:<a class="permalink" href="ion/Decimal#Constants:">#</a>
+</h2><p>None.</p><h2 id="Properties:">Properties:<a class="permalink" href="ion/Decimal#Properties:">#</a>
+</h2><ul>
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.string">string</a></code>|<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$number">$number<a class="permalink" href="ion/Decimal#%24number">#</a></span><br>
 The decimal number.</li>
-<li>public ?ion\Decimal\Context $context = NULL<br />
+<li>
+<em>public</em> ?<a href="ion/Decimal/Context">ion\Decimal\Context</a> <span class="var" id="$context">$context<a class="permalink" href="ion/Decimal#%24context">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
 The decimal context.</li>
-</ul>
-
-
-
-<h2 id="Functions:">Functions:</h2>
-<ul>
+</ul><h2 id="Functions:">Functions:<a class="permalink" href="ion/Decimal#Functions:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Decimal/__construct">Decimal::__construct</a></h3>
+		<h3 id="Decimal::__construct">
+<a href="ion/Decimal/__construct">Decimal::__construct</a><a class="permalink" href="ion/Decimal#Decimal::__construct">#</a>
+</h3>
 		<p>Create a new fixed point decimal.</p>
 
-		<p>void ion\Decimal::__construct(string|int $number, [?ion\Decimal\Context $context = NULL])</p>
+		<p><code><a href="https://php.net/manual/en/language.types.declarations#language.types.declarations.void">void</a></code> <a href="ion/Decimal/__construct">ion\Decimal::__construct</a>(<code><a href="https://php.net/manual/en/language.types.string">string</a></code>|<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$number</span>, [?<a href="ion/Decimal/Context">ion\Decimal\Context</a> <span class="var">$context</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>])</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Decimal/equals">Decimal::equals</a></h3>
+		<h3 id="Decimal::equals">
+<a href="ion/Decimal/equals">Decimal::equals</a><a class="permalink" href="ion/Decimal#Decimal::equals">#</a>
+</h3>
 		<p>Check two decimals for equality.</p>
 
-		<p>bool ion\Decimal::equals(ion\Decimal $decimal)</p>
+		<p><code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <a href="ion/Decimal/equals">ion\Decimal::equals</a>(<a href="ion/Decimal">ion\Decimal</a> <span class="var">$decimal</span>)</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Decimal/isInt">Decimal::isInt</a></h3>
-		<p>Check whether the decimal is actually a big integer.</p>
+		<h3 id="Decimal::isInt">
+<a href="ion/Decimal/isInt">Decimal::isInt</a><a class="permalink" href="ion/Decimal#Decimal::isInt">#</a>
+</h3>
+		<p>Check whether the decimal is actually a big <code><a href="https://php.net/manual/en/language.types.integer">integer</a></code>.</p>
 
-		<p>bool ion\Decimal::isInt()</p>
+		<p><code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <a href="ion/Decimal/isInt">ion\Decimal::isInt</a>()</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Decimal/toInt">Decimal::toInt</a></h3>
-		<p>Get the integer represention of the decimal.</p>
+		<h3 id="Decimal::toInt">
+<a href="ion/Decimal/toInt">Decimal::toInt</a><a class="permalink" href="ion/Decimal#Decimal::toInt">#</a>
+</h3>
+		<p>Get the <code><a href="https://php.net/manual/en/language.types.integer">integer</a></code> represention of the decimal.</p>
 
-		<p>int ion\Decimal::toInt()</p>
+		<p><code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <a href="ion/Decimal/toInt">ion\Decimal::toInt</a>()</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Decimal/toString">Decimal::toString</a></h3>
-		<p>Get the string representation of the decimal.</p>
+		<h3 id="Decimal::toString">
+<a href="ion/Decimal/toString">Decimal::toString</a><a class="permalink" href="ion/Decimal#Decimal::toString">#</a>
+</h3>
+		<p>Get the <code><a href="https://php.net/manual/en/language.types.string">string</a></code> representation of the decimal.</p>
 
-		<p>string ion\Decimal::toString()</p>
+		<p><code><a href="https://php.net/manual/en/language.types.string">string</a></code> <a href="ion/Decimal/toString">ion\Decimal::toString</a>()</p>
 	</li>
 	
-</ul>
-
-
-<h2 id="Namespaces,.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:</h2>
-<ul>
+</ul><h2 id="Namespaces.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:<a class="permalink" href="ion/Decimal#Namespaces.Interfaces.and.Classes:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Decimal/Context">Context</a></h3>
-		<p>An ion\Decimal's context.</p>
+		<h3 id="Context">
+<a href="ion/Decimal/Context">Context</a><a class="permalink" href="ion/Decimal#Context">#</a>
+</h3>
+		<p>An <a href="ion/Decimal">ion\Decimal</a>'s context.</p>
 
-		<p>class ion\Decimal\Context</p>
+		<p><em>class</em> <a href="ion/Decimal/Context">ion\Decimal\Context</a></p>
 	</li>
 	
-</ul>
-		
+</ul>		
 			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
 			<script>
 				var disqus_shortname = 'mdref';
@@ -208,7 +211,7 @@ The decimal context.</li>
 			<footer>
 				
 <ul>
-	<li><a href="https://github.com/m6w6/mdref">mdref-v2.0
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
 </a></li>
 	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
 	<li>

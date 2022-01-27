@@ -7,7 +7,7 @@ any release not explicitly labeled as stable as experimental.
 
 | Version | Supported |
 | ------- | --------- |
-| 0.x     |        ✓ |
+| 0.x     |  ✓        |
 
 ## Reporting a Vulnerability
 

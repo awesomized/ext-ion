@@ -67,40 +67,34 @@
 		</li>
 	</ul>
 </div>
-					
-<h1>void ion\Writer\Options::__construct([?ion\Catalog $catalog = NULL, [?ion\Decimal\Context $decimalContext = NULL, [bool $outputBinary = false, [bool $compactFloats = false, [bool $escapeNonAscii = false, [bool $prettyPrint = false, [bool $indentTabs = true, [int $indentSize = 2, [bool $flushEveryValue = false, [int $maxContainerDepth = 10, [int $maxAnnotations = 10, [int $tempBufferSize = 16384]]]]]]]]]]]])</h1>
-<p>Create custom ION writer options.</p>
-<h2>Params:<a id="Params:" href="#Params:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<ul>
-<li>Optional ?ion\Catalog $catalog = NULL<br />
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/Writer/Options/__construct#">#</a><code><a href="https://php.net/manual/en/language.types.declarations#language.types.declarations.void">void</a></code> <a href="ion/Writer/Options/__construct">ion\Writer\Options::__construct</a>([?<a href="ion/Catalog">ion\Catalog</a> <span class="var">$catalog</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [?<a href="ion/Decimal/Context">ion\Decimal\Context</a> <span class="var">$decimalContext</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$outputBinary</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$compactFloats</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$escapeNonAscii</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$prettyPrint</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$indentTabs</span> = <code><a href="https://php.net/manual/en/language.types.boolean">true</a></code>, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$indentSize</span> = 2, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$flushEveryValue</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$maxContainerDepth</span> = 10, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$maxAnnotations</span> = 10, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$tempBufferSize</span> = 16384]]]]]]]]]]]])</h1><p>Create custom ION writer options.</p><h2 id="Params:">Params:<a class="permalink" href="ion/Writer/Options/__construct#Params:">#</a>
+</h2><ul>
+<li>Optional ?<a href="ion/Catalog">ion\Catalog</a> <span class="var" id="$catalog">$catalog<a class="permalink" href="ion/Writer/Options/__construct#%24catalog">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
 ION catalog to use for symbol lookup.</li>
-<li>Optional ?ion\Decimal\Context $decimalContext = NULL<br />
+<li>Optional ?<a href="ion/Decimal/Context">ion\Decimal\Context</a> <span class="var" id="$decimalContext">$decimalContext<a class="permalink" href="ion/Writer/Options/__construct#%24decimalContext">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
 Decimal context to use.</li>
-<li>Optional bool $outputBinary = false<br />
+<li>Optional <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$outputBinary">$outputBinary<a class="permalink" href="ion/Writer/Options/__construct#%24outputBinary">#</a></span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code><br>
 Whether to output binary ION.</li>
-<li>Optional bool $compactFloats = false<br />
+<li>Optional <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$compactFloats">$compactFloats<a class="permalink" href="ion/Writer/Options/__construct#%24compactFloats">#</a></span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code><br>
 Whether to write doubles which fit in 32 bits as floats.</li>
-<li>Optional bool $escapeNonAscii = false<br />
+<li>Optional <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$escapeNonAscii">$escapeNonAscii<a class="permalink" href="ion/Writer/Options/__construct#%24escapeNonAscii">#</a></span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code><br>
 Whether to slash-escape all non ASCII bytes.</li>
-<li>Optional bool $prettyPrint = false<br />
+<li>Optional <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$prettyPrint">$prettyPrint<a class="permalink" href="ion/Writer/Options/__construct#%24prettyPrint">#</a></span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code><br>
 Whether to produce pretty-printed output.</li>
-<li>Optional bool $indentTabs = true<br />
+<li>Optional <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$indentTabs">$indentTabs<a class="permalink" href="ion/Writer/Options/__construct#%24indentTabs">#</a></span> = <code><a href="https://php.net/manual/en/language.types.boolean">true</a></code><br>
 Whether to indent with tabs, when pretty-printing.</li>
-<li>Optional int $indentSize = 2<br />
+<li>Optional <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$indentSize">$indentSize<a class="permalink" href="ion/Writer/Options/__construct#%24indentSize">#</a></span> = 2<br>
 The number of spaces to use for indentation instead of tabs, when pretty-printing.</li>
-<li>Optional bool $flushEveryValue = false<br />
+<li>Optional <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$flushEveryValue">$flushEveryValue<a class="permalink" href="ion/Writer/Options/__construct#%24flushEveryValue">#</a></span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code><br>
 Whether to immediately flush every value written.</li>
-<li>Optional int $maxContainerDepth = 10<br />
+<li>Optional <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$maxContainerDepth">$maxContainerDepth<a class="permalink" href="ion/Writer/Options/__construct#%24maxContainerDepth">#</a></span> = 10<br>
 Maximum depth of nested containers.</li>
-<li>Optional int $maxAnnotations = 10<br />
+<li>Optional <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$maxAnnotations">$maxAnnotations<a class="permalink" href="ion/Writer/Options/__construct#%24maxAnnotations">#</a></span> = 10<br>
 The maximum number of annotations allowed on a single value.</li>
-<li>Optional int $tempBufferSize = 16384<br />
+<li>Optional <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$tempBufferSize">$tempBufferSize<a class="permalink" href="ion/Writer/Options/__construct#%24tempBufferSize">#</a></span> = 16384<br>
 Temporary buffer size.</li>
-</ul>
-
-
-
-		
+</ul>		
 			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
 			<script>
 				var disqus_shortname = 'mdref';
@@ -110,7 +104,7 @@ Temporary buffer size.</li>
 			<footer>
 				
 <ul>
-	<li><a href="https://github.com/m6w6/mdref">mdref-v2.0
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
 </a></li>
 	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
 	<li>

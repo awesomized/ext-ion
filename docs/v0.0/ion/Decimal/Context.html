@@ -101,80 +101,87 @@
 		</li>
 	</ul>
 </div>
-					
-<h1>class ion\Decimal\Context</h1>
-<p>An ion\Decimal's context.</p>
-<h2>Constants:<a id="Constants:" href="#Constants:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<p>None.</p>
-<h2>Properties:<a id="Properties:" href="#Properties:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<ul>
-<li>public int $digits<br />
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/Decimal/Context#">#</a><em>class</em> <a href="ion/Decimal/Context">ion\Decimal\Context</a>
+</h1><p>An <a href="ion/Decimal">ion\Decimal</a>'s context.</p><h2 id="Constants:">Constants:<a class="permalink" href="ion/Decimal/Context#Constants:">#</a>
+</h2><p>None.</p><h2 id="Properties:">Properties:<a class="permalink" href="ion/Decimal/Context#Properties:">#</a>
+</h2><ul>
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$digits">$digits<a class="permalink" href="ion/Decimal/Context#%24digits">#</a></span><br>
 Maximum digits.</li>
-<li>public int $eMax<br />
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$eMax">$eMax<a class="permalink" href="ion/Decimal/Context#%24eMax">#</a></span><br>
 Maximum exponent.</li>
-<li>public int $eMin<br />
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$eMin">$eMin<a class="permalink" href="ion/Decimal/Context#%24eMin">#</a></span><br>
 Minimum exponent.</li>
-<li>public ion\Decimal\Context\Rounding|int $round<br />
+<li>
+<em>public</em> <a href="ion/Decimal/Context/Rounding">ion\Decimal\Context\Rounding</a>|<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$round">$round<a class="permalink" href="ion/Decimal/Context#%24round">#</a></span><br>
 Rounding mode.</li>
-<li>public bool $clamp<br />
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$clamp">$clamp<a class="permalink" href="ion/Decimal/Context#%24clamp">#</a></span><br>
 Whether to clamp.</li>
-</ul>
-
-
-
-<h2 id="Functions:">Functions:</h2>
-<ul>
+</ul><h2 id="Functions:">Functions:<a class="permalink" href="ion/Decimal/Context#Functions:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Decimal/Context/__construct">Context::__construct</a></h3>
+		<h3 id="Context::__construct">
+<a href="ion/Decimal/Context/__construct">Context::__construct</a><a class="permalink" href="ion/Decimal/Context#Context::__construct">#</a>
+</h3>
 		<p>Create a new decimal context.</p>
 
-		<p>void ion\Decimal\Context::__construct(int $digits, int $eMax, int $eMin, ion\Decimal\Context\Rounding|int $round, bool $clamp)</p>
+		<p><code><a href="https://php.net/manual/en/language.types.declarations#language.types.declarations.void">void</a></code> <a href="ion/Decimal/Context/__construct">ion\Decimal\Context::__construct</a>(<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$digits</span>, <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$eMax</span>, <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$eMin</span>, <a href="ion/Decimal/Context/Rounding">ion\Decimal\Context\Rounding</a>|<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$round</span>, <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$clamp</span>)</p>
 	</li>
 	
-</ul>
-
-
-<h2 id="Namespaces,.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:</h2>
-<ul>
+</ul><h2 id="Namespaces.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:<a class="permalink" href="ion/Decimal/Context#Namespaces.Interfaces.and.Classes:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Decimal/Context/Dec128">Dec128</a></h3>
+		<h3 id="Dec128">
+<a href="ion/Decimal/Context/Dec128">Dec128</a><a class="permalink" href="ion/Decimal/Context#Dec128">#</a>
+</h3>
 		<p>Create a context suitable for 128bit decimals.</p>
 
-		<p>static ion\Decimal\Context ion\Decimal\Context::Dec128()</p>
+		<p><em>static</em> <a href="ion/Decimal/Context">ion\Decimal\Context</a> <a href="ion/Decimal/Context/Dec128">ion\Decimal\Context::Dec128</a>()</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Decimal/Context/Dec32">Dec32</a></h3>
+		<h3 id="Dec32">
+<a href="ion/Decimal/Context/Dec32">Dec32</a><a class="permalink" href="ion/Decimal/Context#Dec32">#</a>
+</h3>
 		<p>Create a context suitable for 32bit decimals.</p>
 
-		<p>static ion\Decimal\Context ion\Decimal\Context::Dec32()</p>
+		<p><em>static</em> <a href="ion/Decimal/Context">ion\Decimal\Context</a> <a href="ion/Decimal/Context/Dec32">ion\Decimal\Context::Dec32</a>()</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Decimal/Context/Dec64">Dec64</a></h3>
+		<h3 id="Dec64">
+<a href="ion/Decimal/Context/Dec64">Dec64</a><a class="permalink" href="ion/Decimal/Context#Dec64">#</a>
+</h3>
 		<p>Create a context suitable for 64bit decimals.</p>
 
-		<p>static ion\Decimal\Context ion\Decimal\Context::Dec64()</p>
+		<p><em>static</em> <a href="ion/Decimal/Context">ion\Decimal\Context</a> <a href="ion/Decimal/Context/Dec64">ion\Decimal\Context::Dec64</a>()</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Decimal/Context/DecMax">DecMax</a></h3>
+		<h3 id="DecMax">
+<a href="ion/Decimal/Context/DecMax">DecMax</a><a class="permalink" href="ion/Decimal/Context#DecMax">#</a>
+</h3>
 		<p>Create a context with maximum settings.</p>
 
-		<p>static ion\Decimal\Context ion\Decimal\Context::DecMax([ion\Decimal\Context\Rounding|int $round = ion\Decimal\Context\Rounding::HalfEven])</p>
+		<p><em>static</em> <a href="ion/Decimal/Context">ion\Decimal\Context</a> <a href="ion/Decimal/Context/DecMax">ion\Decimal\Context::DecMax</a>([<a href="ion/Decimal/Context/Rounding">ion\Decimal\Context\Rounding</a>|<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$round</span> = <a href="ion/Decimal/Context/Rounding#HalfEven">ion\Decimal\Context\Rounding::HalfEven</a>])</p>
 	</li>
 	
 	<li>
-		<h3><a href="ion/Decimal/Context/Rounding">Rounding</a></h3>
+		<h3 id="Rounding">
+<a href="ion/Decimal/Context/Rounding">Rounding</a><a class="permalink" href="ion/Decimal/Context#Rounding">#</a>
+</h3>
 		<p>Rounding mode.</p>
 
-		<p>enum ion\Decimal\Context\Rounding implements BackedEnum, UnitEnum</p>
+		<p><code><a href="https://php.net/manual/en/language.types.enumerations">enum</a></code> <a href="ion/Decimal/Context/Rounding">ion\Decimal\Context\Rounding</a> <em>implements</em> <code><a href="https://php.net/manual/en/class.backedenum">BackedEnum</a></code></p>
 	</li>
 	
-</ul>
-		
+</ul>		
 			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
 			<script>
 				var disqus_shortname = 'mdref';
@@ -184,7 +191,7 @@ Whether to clamp.</li>
 			<footer>
 				
 <ul>
-	<li><a href="https://github.com/m6w6/mdref">mdref-v2.0
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
 </a></li>
 	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
 	<li>

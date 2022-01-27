@@ -128,47 +128,50 @@
 		</li>
 	</ul>
 </div>
-					
-<h1>class ion\Reader\Options</h1>
-<p>Reader options.</p>
-<h2>Constants:<a id="Constants:" href="#Constants:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<p>None.</p>
-<h2>Properties:<a id="Properties:" href="#Properties:" class="permalink" aria-hidden="true" title="">#</a></h2>
-<ul>
-<li>public ?ion\Catalog $catalog = NULL<br />
-ION catalog to use for symbol lookup.</li>
-<li>public ?ion\Decimal\Context $decimalContext = NULL<br />
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/Reader/Options#">#</a><em>class</em> <a href="ion/Reader/Options">ion\Reader\Options</a>
+</h1><p>Reader options.</p><h2 id="Constants:">Constants:<a class="permalink" href="ion/Reader/Options#Constants:">#</a>
+</h2><p>None.</p><h2 id="Properties:">Properties:<a class="permalink" href="ion/Reader/Options#Properties:">#</a>
+</h2><ul>
+<li>
+<em>public</em> ?<a href="ion/Catalog">ion\Catalog</a> <span class="var" id="$catalog">$catalog<a class="permalink" href="ion/Reader/Options#%24catalog">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
+<span class="constant">ION</span> catalog to use for symbol lookup.</li>
+<li>
+<em>public</em> ?<a href="ion/Decimal/Context">ion\Decimal\Context</a> <span class="var" id="$decimalContext">$decimalContext<a class="permalink" href="ion/Reader/Options#%24decimalContext">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
 Decimal context to use.</li>
-<li>public ?Closure $onContextChange = NULL<br />
-Callback as function(\ion\Reader):void called upon local symbol table context change.</li>
-<li>public bool $returnSystemValues = false<br />
+<li>
+<em>public</em> ?<code><a href="https://php.net/manual/en/class.closure">Closure</a></code> <span class="var" id="$onContextChange">$onContextChange<a class="permalink" href="ion/Reader/Options#%24onContextChange">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
+Callback as function(<a href="ion/Reader">\ion\Reader</a>):void called upon local symbol table context change.</li>
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$returnSystemValues">$returnSystemValues<a class="permalink" href="ion/Reader/Options#%24returnSystemValues">#</a></span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code><br>
 Whether to return otherwise hidden system values.</li>
-<li>public int $maxContainerDepth = 10<br />
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$maxContainerDepth">$maxContainerDepth<a class="permalink" href="ion/Reader/Options#%24maxContainerDepth">#</a></span> = 10<br>
 The maximum depth of nested containers.</li>
-<li>public int $maxAnnotations = 10<br />
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$maxAnnotations">$maxAnnotations<a class="permalink" href="ion/Reader/Options#%24maxAnnotations">#</a></span> = 10<br>
 The maximum number of annotations allowed on a single value.</li>
-<li>public int $annotationBufferSize = 16384<br />
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$annotationBufferSize">$annotationBufferSize<a class="permalink" href="ion/Reader/Options#%24annotationBufferSize">#</a></span> = 16384<br>
 The maximum number of bytes of all annotations on a single value.</li>
-<li>public int $tempBufferSize = 16384<br />
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var" id="$tempBufferSize">$tempBufferSize<a class="permalink" href="ion/Reader/Options#%24tempBufferSize">#</a></span> = 16384<br>
 The maximum number of bytes of a symbol/value/chunk.</li>
-<li>public bool $skipCharacterValidation = false<br />
-Whether to skip UTF-8 validation.</li>
-</ul>
-
-
-
-<h2 id="Functions:">Functions:</h2>
-<ul>
+<li>
+<em>public</em> <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$skipCharacterValidation">$skipCharacterValidation<a class="permalink" href="ion/Reader/Options#%24skipCharacterValidation">#</a></span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code><br>
+Whether to skip <span class="constant">UTF</span>-8 validation.</li>
+</ul><h2 id="Functions:">Functions:<a class="permalink" href="ion/Reader/Options#Functions:">#</a>
+</h2><ul>
 	
 	<li>
-		<h3><a href="ion/Reader/Options/__construct">Options::__construct</a></h3>
+		<h3 id="Options::__construct">
+<a href="ion/Reader/Options/__construct">Options::__construct</a><a class="permalink" href="ion/Reader/Options#Options::__construct">#</a>
+</h3>
 		
-		<p>void ion\Reader\Options::__construct([?ion\Catalog $catalog = NULL, [?ion\Decimal\Context $decimalContext = NULL, [?Closure $onContextChange = NULL, [bool $returnSystemValues = false, [int $maxContainerDepth = 10, [int $maxAnnotations = 10, [int $annotationBufferSize = 16384, [int $tempBufferSize = 16384, [bool $skipCharacterValidation = false]]]]]]]]])</p>
+		<p><code><a href="https://php.net/manual/en/language.types.declarations#language.types.declarations.void">void</a></code> <a href="ion/Reader/Options/__construct">ion\Reader\Options::__construct</a>([?<a href="ion/Catalog">ion\Catalog</a> <span class="var">$catalog</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [?<a href="ion/Decimal/Context">ion\Decimal\Context</a> <span class="var">$decimalContext</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [?<code><a href="https://php.net/manual/en/class.closure">Closure</a></code> <span class="var">$onContextChange</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$returnSystemValues</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$maxContainerDepth</span> = 10, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$maxAnnotations</span> = 10, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$annotationBufferSize</span> = 16384, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$tempBufferSize</span> = 16384, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$skipCharacterValidation</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>]]]]]]]]])</p>
 	</li>
 	
-</ul>
-
-		
+</ul>		
 			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
 			<script>
 				var disqus_shortname = 'mdref';
@@ -178,7 +181,7 @@ Whether to skip UTF-8 validation.</li>
 			<footer>
 				
 <ul>
-	<li><a href="https://github.com/m6w6/mdref">mdref-v2.0
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
 </a></li>
 	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
 	<li>
