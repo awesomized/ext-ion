@@ -16,7 +16,9 @@ latest: $(TAG)
 
 $(TAG): markdown | vendor/bin/ref2html
 	mkdir -p $@
+	ln -s . ext-ion
 	$(PHP) $| ext-ion/$@ src
+	unlink ext-ion
 	touch $@
 
 .PHONY: markdown
