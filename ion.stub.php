@@ -37,7 +37,7 @@ function serialize(mixed $data, ?Serializer $serializer = null) : string {}
 /**
  * Unserialize ION data (stream) as PHP value(s).
  *
- * @param string|resource $data Serialized ION data, either as string buffer or stream,.
+ * @param string|resource $data Serialized ION data, either as string buffer or stream.
  * @return mixed unserialized PHP values
  * @throws \ion\Exception
  */
@@ -256,7 +256,7 @@ class Decimal {
 
 /**
  * An ION Timestamp.
- * @see https://amzn.github.io/ion-docs/docs/spec.html#timestamp the ION sepc's timestamp definintion
+ * @see https://amzn.github.io/ion-docs/docs/spec.html#timestamp the ION spec's timestamp definition
  * @see https://php.net/date PHP's date documentation
  */
 class Timestamp extends \DateTime {
@@ -374,7 +374,7 @@ interface Writer {
 namespace ion\Symbol;
 
 /**
- * The import location (referring to a shared table= of a symbol.
+ * The import location (referring to a shared table) of a symbol.
  */
 class ImportLocation {
     /**
@@ -830,7 +830,7 @@ interface Stream extends \ion\Reader {
 namespace ion\Reader\Buffer;
 
 /**
- * ION string buffer reader.
+ * ION buffer reader.
  */
 class Reader extends \ion\Reader\Reader implements \ion\Reader\Buffer {
     /**
