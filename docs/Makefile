@@ -1,6 +1,6 @@
 PHP ?= php
 COMPOSER ?= composer
-TAG := $(shell (git describe --tags --exact-match --match=v[1-9]*  2>/dev/null || echo v0.0) | cut -d. -f-2)
+TAG := $(shell (git describe --tags --exact-match --match=v[0-9]*  2>/dev/null || echo v0.0) | cut -d. -f-2)
 
 # ---
 
