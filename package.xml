@@ -22,8 +22,8 @@ https://awesomized.github.io/ext-ion/
  </lead>
  <date>2022-02-01</date>
  <version>
-  <release>0.1.0</release>
-  <api>0.1.0</api>
+  <release>0.2.0</release>
+  <api>0.2.0</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -31,7 +31,7 @@ https://awesomized.github.io/ext-ion/
  </stability>
  <license uri="http://copyfree.org/content/standard/licenses/2bsd/license.txt">BSD-2-Clause</license>
  <notes><![CDATA[
-* Initial release.
+* WIP
 ]]></notes>
  <contents>
   <dir name="/">
