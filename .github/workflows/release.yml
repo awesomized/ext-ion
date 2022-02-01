@@ -1,0 +1,39 @@
+name: release
+on:
+  push:
+    tags: "v**"
+
+jobs:
+  pharext:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install
+        run: |
+          sudo apt-get install -y \
+            php-cli \
+            php-phar \
+            php-posix
+      - name: Composer
+        run: composer require m6w6/pharext
+      - name: Pharext
+        run: ./vendor/bin/pharext -vps . --release ${GITHUB_REF_NAME:1}
+      - name: Release
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const release = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: process.env.GITHUB_REF_NAME,
+              body: context.payload.head_commit.message
+            });
+            const phar_file = "ion-" + process.env.GITHUB_REF_NAME.substring(1) + ".ext.phar";
+            const asset = await github.rest.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.data.id,
+              body: context.payload.head_commit.message,
+              data: require("fs").readFileSync(phar_file)
+            });
+

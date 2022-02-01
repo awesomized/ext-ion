@@ -1,0 +1,551 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+							Reader -
+						mdref
+		</title>
+		<meta name="viewport" content="width=1200, initial-scale=0.5">
+					<base href="/ext-ion/v0.1/">
+			<meta http-equiv="Content-Location" content="/ext-ion/v0.1/ion/Reader">
+			<link rel="stylesheet" href="index.css">
+		
+		<link href="https://fonts.googleapis.com/css?family=Inconsolata&amp;subset=latin-ext" rel="stylesheet">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<link rel="shortcut icon" href="/ext-ion/v0.1/favicon.ico">
+	</head>
+	<body>
+		<div class="page">
+		
+<div class="sidebar">
+	
+	<div class="edit">
+		<a href="./ion/Reader">Edit</a>
+	</div>
+	
+	
+	<ul>
+		<li>&lsh; <a href="./">Home</a>
+			
+			<ul>
+				<li>
+											
+					&uarr; <a href="./ion">
+							ion
+						</a>
+						<ul>
+							<li>
+											
+							&circlearrowright; <strong><a href="./ion/Reader">Reader</a></strong>
+
+							
+							<ul>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/Buffer">Buffer</a>
+										
+									<ul>
+												
+										<li>&rdsh; <a href="./ion/Reader/Buffer/Reader">Reader</a>
+										</li>
+																		
+									</ul>
+
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/Options">Options</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/Reader">Reader</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/Stream">Stream</a>
+										
+									<ul>
+												
+										<li>&rdsh; <a href="./ion/Reader/Stream/Reader">Reader</a>
+										</li>
+																																						
+									</ul>
+
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/countAnnotations">Reader::countAnnotations</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getAnnotation">Reader::getAnnotation</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getAnnotationSymbol">Reader::getAnnotationSymbol</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getAnnotationSymbols">Reader::getAnnotationSymbols</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getAnnotations">Reader::getAnnotations</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getDepth">Reader::getDepth</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getFieldName">Reader::getFieldName</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getFieldNameSymbol">Reader::getFieldNameSymbol</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getPosition">Reader::getPosition</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getType">Reader::getType</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getValueLength">Reader::getValueLength</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/getValueOffset">Reader::getValueOffset</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/hasAnnotation">Reader::hasAnnotation</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/hasAnnotations">Reader::hasAnnotations</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/isInStruct">Reader::isInStruct</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/isNull">Reader::isNull</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readBool">Reader::readBool</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readDecimal">Reader::readDecimal</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readFloat">Reader::readFloat</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readInt">Reader::readInt</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readLob">Reader::readLob</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readLobPart">Reader::readLobPart</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readNull">Reader::readNull</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readString">Reader::readString</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readStringPart">Reader::readStringPart</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readSymbol">Reader::readSymbol</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/readTimestamp">Reader::readTimestamp</a>
+									
+								</li>
+								
+								<li>
+									&rdsh; <a href="./ion/Reader/seek">Reader::seek</a>
+									
+								</li>
+								
+							</ul>
+							
+																																
+						</ul>
+																			
+						<li>&ldsh; <a href="./ion/: Contributing">★ Contributing</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Security">★ Security</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Catalog">Catalog</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Decimal">Decimal</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Exception">Exception</a></li>
+																			
+						<li>&ldsh; <a href="./ion/LOB">LOB</a></li>
+																													
+						<li>&ldsh; <a href="./ion/Serializer">Serializer</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Symbol">Symbol</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Timestamp">Timestamp</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Type">Type</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Unserializer">Unserializer</a></li>
+																			
+						<li>&ldsh; <a href="./ion/Writer">Writer</a></li>
+																			
+						<li>&ldsh; <a href="./ion/serialize">serialize</a></li>
+																			
+						<li>&ldsh; <a href="./ion/unserialize">unserialize</a></li>
+																																																										
+				</li>
+			</ul>
+			
+		</li>
+	</ul>
+</div>
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/Reader#">#</a><em>interface</em> <a href="ion/Reader">ion\Reader</a> <br>&nbsp;<em>implements</em> <code><a href="https://php.net/manual/en/class.recursiveiterator">RecursiveIterator</a></code>
+</h1><p>ION reader API.</p><h2 id="Constants:">Constants:<a class="permalink" href="ion/Reader#Constants:">#</a>
+</h2><p>None.</p><h2 id="Properties:">Properties:<a class="permalink" href="ion/Reader#Properties:">#</a>
+</h2><p>None.</p><h2 id="Functions:">Functions:<a class="permalink" href="ion/Reader#Functions:">#</a>
+</h2><ul>
+	
+	<li>
+		<h3 id="Reader::countAnnotations">
+<a href="ion/Reader/countAnnotations">Reader::countAnnotations</a><a class="permalink" href="ion/Reader#Reader::countAnnotations">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <a href="ion/Reader/countAnnotations">ion\Reader::countAnnotations</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getAnnotation">
+<a href="ion/Reader/getAnnotation">Reader::getAnnotation</a><a class="permalink" href="ion/Reader#Reader::getAnnotation">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.string">string</a></code> <a href="ion/Reader/getAnnotation">ion\Reader::getAnnotation</a>(<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$index</span>)</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getAnnotationSymbol">
+<a href="ion/Reader/getAnnotationSymbol">Reader::getAnnotationSymbol</a><a class="permalink" href="ion/Reader#Reader::getAnnotationSymbol">#</a>
+</h3>
+		
+		<p><a href="ion/Symbol">ion\Symbol</a> <a href="ion/Reader/getAnnotationSymbol">ion\Reader::getAnnotationSymbol</a>(<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$index</span>)</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getAnnotationSymbols">
+<a href="ion/Reader/getAnnotationSymbols">Reader::getAnnotationSymbols</a><a class="permalink" href="ion/Reader#Reader::getAnnotationSymbols">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.array">array</a></code> <a href="ion/Reader/getAnnotationSymbols">ion\Reader::getAnnotationSymbols</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getAnnotations">
+<a href="ion/Reader/getAnnotations">Reader::getAnnotations</a><a class="permalink" href="ion/Reader#Reader::getAnnotations">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.array">array</a></code> <a href="ion/Reader/getAnnotations">ion\Reader::getAnnotations</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getDepth">
+<a href="ion/Reader/getDepth">Reader::getDepth</a><a class="permalink" href="ion/Reader#Reader::getDepth">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <a href="ion/Reader/getDepth">ion\Reader::getDepth</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getFieldName">
+<a href="ion/Reader/getFieldName">Reader::getFieldName</a><a class="permalink" href="ion/Reader#Reader::getFieldName">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.string">string</a></code> <a href="ion/Reader/getFieldName">ion\Reader::getFieldName</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getFieldNameSymbol">
+<a href="ion/Reader/getFieldNameSymbol">Reader::getFieldNameSymbol</a><a class="permalink" href="ion/Reader#Reader::getFieldNameSymbol">#</a>
+</h3>
+		
+		<p><a href="ion/Symbol">ion\Symbol</a> <a href="ion/Reader/getFieldNameSymbol">ion\Reader::getFieldNameSymbol</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getPosition">
+<a href="ion/Reader/getPosition">Reader::getPosition</a><a class="permalink" href="ion/Reader#Reader::getPosition">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <a href="ion/Reader/getPosition">ion\Reader::getPosition</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getType">
+<a href="ion/Reader/getType">Reader::getType</a><a class="permalink" href="ion/Reader#Reader::getType">#</a>
+</h3>
+		
+		<p><a href="ion/Type">ion\Type</a> <a href="ion/Reader/getType">ion\Reader::getType</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getValueLength">
+<a href="ion/Reader/getValueLength">Reader::getValueLength</a><a class="permalink" href="ion/Reader#Reader::getValueLength">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <a href="ion/Reader/getValueLength">ion\Reader::getValueLength</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::getValueOffset">
+<a href="ion/Reader/getValueOffset">Reader::getValueOffset</a><a class="permalink" href="ion/Reader#Reader::getValueOffset">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <a href="ion/Reader/getValueOffset">ion\Reader::getValueOffset</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::hasAnnotation">
+<a href="ion/Reader/hasAnnotation">Reader::hasAnnotation</a><a class="permalink" href="ion/Reader#Reader::hasAnnotation">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <a href="ion/Reader/hasAnnotation">ion\Reader::hasAnnotation</a>(<code><a href="https://php.net/manual/en/language.types.string">string</a></code> <span class="var">$annotation</span>)</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::hasAnnotations">
+<a href="ion/Reader/hasAnnotations">Reader::hasAnnotations</a><a class="permalink" href="ion/Reader#Reader::hasAnnotations">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <a href="ion/Reader/hasAnnotations">ion\Reader::hasAnnotations</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::isInStruct">
+<a href="ion/Reader/isInStruct">Reader::isInStruct</a><a class="permalink" href="ion/Reader#Reader::isInStruct">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <a href="ion/Reader/isInStruct">ion\Reader::isInStruct</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::isNull">
+<a href="ion/Reader/isNull">Reader::isNull</a><a class="permalink" href="ion/Reader#Reader::isNull">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <a href="ion/Reader/isNull">ion\Reader::isNull</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readBool">
+<a href="ion/Reader/readBool">Reader::readBool</a><a class="permalink" href="ion/Reader#Reader::readBool">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <a href="ion/Reader/readBool">ion\Reader::readBool</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readDecimal">
+<a href="ion/Reader/readDecimal">Reader::readDecimal</a><a class="permalink" href="ion/Reader#Reader::readDecimal">#</a>
+</h3>
+		
+		<p><a href="ion/Decimal">ion\Decimal</a> <a href="ion/Reader/readDecimal">ion\Reader::readDecimal</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readFloat">
+<a href="ion/Reader/readFloat">Reader::readFloat</a><a class="permalink" href="ion/Reader#Reader::readFloat">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.float">float</a></code> <a href="ion/Reader/readFloat">ion\Reader::readFloat</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readInt">
+<a href="ion/Reader/readInt">Reader::readInt</a><a class="permalink" href="ion/Reader#Reader::readInt">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.string">string</a></code>|<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <a href="ion/Reader/readInt">ion\Reader::readInt</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readLob">
+<a href="ion/Reader/readLob">Reader::readLob</a><a class="permalink" href="ion/Reader#Reader::readLob">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.string">string</a></code> <a href="ion/Reader/readLob">ion\Reader::readLob</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readLobPart">
+<a href="ion/Reader/readLobPart">Reader::readLobPart</a><a class="permalink" href="ion/Reader#Reader::readLobPart">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <a href="ion/Reader/readLobPart">ion\Reader::readLobPart</a>( &amp;<span class="var">$string</span>, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$length</span> = 4096])</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readNull">
+<a href="ion/Reader/readNull">Reader::readNull</a><a class="permalink" href="ion/Reader#Reader::readNull">#</a>
+</h3>
+		
+		<p><a href="ion/Type">ion\Type</a> <a href="ion/Reader/readNull">ion\Reader::readNull</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readString">
+<a href="ion/Reader/readString">Reader::readString</a><a class="permalink" href="ion/Reader#Reader::readString">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.string">string</a></code> <a href="ion/Reader/readString">ion\Reader::readString</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readStringPart">
+<a href="ion/Reader/readStringPart">Reader::readStringPart</a><a class="permalink" href="ion/Reader#Reader::readStringPart">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <a href="ion/Reader/readStringPart">ion\Reader::readStringPart</a>( &amp;<span class="var">$string</span>, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$length</span> = 4096])</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readSymbol">
+<a href="ion/Reader/readSymbol">Reader::readSymbol</a><a class="permalink" href="ion/Reader#Reader::readSymbol">#</a>
+</h3>
+		
+		<p><a href="ion/Symbol">ion\Symbol</a> <a href="ion/Reader/readSymbol">ion\Reader::readSymbol</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::readTimestamp">
+<a href="ion/Reader/readTimestamp">Reader::readTimestamp</a><a class="permalink" href="ion/Reader#Reader::readTimestamp">#</a>
+</h3>
+		
+		<p><a href="ion/Timestamp">ion\Timestamp</a> <a href="ion/Reader/readTimestamp">ion\Reader::readTimestamp</a>()</p>
+	</li>
+	
+	<li>
+		<h3 id="Reader::seek">
+<a href="ion/Reader/seek">Reader::seek</a><a class="permalink" href="ion/Reader#Reader::seek">#</a>
+</h3>
+		
+		<p><code><a href="https://php.net/manual/en/language.types.declarations#language.types.declarations.void">void</a></code> <a href="ion/Reader/seek">ion\Reader::seek</a>(<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$offset</span>, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$length</span> = -1])</p>
+	</li>
+	
+</ul><h2 id="Namespaces.Interfaces.and.Classes:">Namespaces, Interfaces and Classes:<a class="permalink" href="ion/Reader#Namespaces.Interfaces.and.Classes:">#</a>
+</h2><ul>
+	
+	<li>
+		<h3 id="Buffer">
+<a href="ion/Reader/Buffer">Buffer</a><a class="permalink" href="ion/Reader#Buffer">#</a>
+</h3>
+		<p>ION <code><a href="https://php.net/manual/en/language.types.string">string</a></code> buffer reader API.</p>
+
+		<p><em>interface</em> <a href="ion/Reader/Buffer">ion\Reader\Buffer</a> <em>implements</em> <a href="ion/Reader">ion\Reader</a></p>
+	</li>
+	
+	<li>
+		<h3 id="Options">
+<a href="ion/Reader/Options">Options</a><a class="permalink" href="ion/Reader#Options">#</a>
+</h3>
+		<p>Reader options.</p>
+
+		<p><em>class</em> <a href="ion/Reader/Options">ion\Reader\Options</a></p>
+	</li>
+	
+	<li>
+		<h3 id="Reader">
+<a href="ion/Reader/Reader">Reader</a><a class="permalink" href="ion/Reader#Reader">#</a>
+</h3>
+		<p>Base implementation of ION readers.</p>
+
+		<p><em>abstract</em> <em>class</em> <a href="ion/Reader/Reader">ion\Reader\Reader</a> <em>implements</em> <a href="ion/Reader">ion\Reader</a></p>
+	</li>
+	
+	<li>
+		<h3 id="Stream">
+<a href="ion/Reader/Stream">Stream</a><a class="permalink" href="ion/Reader#Stream">#</a>
+</h3>
+		<p>ION stream reader API.</p>
+
+		<p><em>interface</em> <a href="ion/Reader/Stream">ion\Reader\Stream</a> <em>implements</em> <a href="ion/Reader">ion\Reader</a></p>
+	</li>
+	
+</ul>		
+			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
+			<script>
+				var disqus_shortname = 'mdref';
+				var disqus_identifier = 'ion/Reader';
+			</script>
+
+			<footer>
+				
+<ul>
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
+</a></li>
+	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
+	<li>
+</li>
+</ul>
+
+			</footer>
+		
+			<script src="index.js"></script>
+		
+		</div>
+	</body>
+</html>
