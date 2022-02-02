@@ -10,10 +10,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install
         run: |
+          PHP_V=$(basename $(readlink /etc/alternatives/php)); \
           sudo apt-get install -y \
-            php-cli \
-            php-phar \
-            php-posix
+            $PHP_V-phar \
+            $PHP_V-posix
       - name: Composer
         run: composer require m6w6/pharext
       - name: Pharext
