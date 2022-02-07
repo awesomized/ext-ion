@@ -10,27 +10,6 @@ see [spdx.org](https://spdx.org/licenses/BSD-2-Clause.html).
 
 ## Installation:
 
-### PECL
-
-	pecl install ion
-
-
-### PHARext
-
-Watch out for [PECL replicates](https://replicator.pharext.org?ion)
-and pharext packages attached to [releases](./releases).
-
-### Checkout
-
-	git clone github.com:awesomized/ext-ion
-
-	cd ext-ion
-
-	/path/to/phpize
-	./configure --with-php-config=/path/to/php-config
-	make
-	sudo make install
-
 ### Dependencies:
 #### Required:
 * PHP-8.1
@@ -42,10 +21,20 @@ and pharext packages attached to [releases](./releases).
 ### Trinity:
 ```shell
 phpize
-./configure
+./configure # --with-php-config=<path/to/php-config>
 make # -j$(nproc)
 sudo make install # INSTALL=install
 ```
+
+### PECL
+
+	pecl install ion
+
+### PHARext
+
+Watch out for [PECL replicates](https://replicator.pharext.org?ion)
+and pharext packages attached to [releases](./releases).
+
 ### Try with Docker:
 ```shell
 docker build -t php-ion
