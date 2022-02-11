@@ -1,16 +1,23 @@
 <?php
 
-$file = __DIR__ . urldecode($_SERVER["REQUEST_URI"]);
-error_log("uri:$file\n");
+$uri = urldecode($_SERVER["REQUEST_URI"]);
 
-if (is_file($file)) {
-	return false;
+if (strpos($uri, "/ext-ion") === 0) {
+    $uri = substr($uri, strlen("/ext-ion"));
 }
-
-if (is_dir($file) && file_exists($file."/index.html")) {
-	readfile($file."/index.html");
+$file = rtrim(__DIR__ . $uri, "/");
+if (is_file($file)) {
+    switch (pathinfo($file, PATHINFO_EXTENSION)) {
+        case "js":  header("content-type: text/javascript"); break;
+        case "css": header("content-type: text/css"); break;
+        case "php":
+        case "": header("content-type: text-plain"); break;
+    }
+	readfile($file);
+} elseif (is_dir($file) && file_exists("$file/index.html")) {
+	readfile("$file/index.html");
 } else {
-	$file = rtrim($file, "/").".html";
+	$file .= ".html";
 	if (file_exists($file)) {
 		readfile($file);
 	} else {
