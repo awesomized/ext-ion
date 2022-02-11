@@ -1,0 +1,7 @@
+http://{$CADDY_ADDRESS} {
+	route {
+		uri strip_prefix /ext-ion
+		try_files {path}.html {path}/ {path}/index.html {path} =404
+		file_server
+	}
+}
