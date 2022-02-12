@@ -1,0 +1,9 @@
+FROM ext-ion/docs:php
+
+USER root
+RUN \
+    curl -sSLo /usr/local/bin/composer https://getcomposer.org/download/2.2.5/composer.phar &&\
+    chmod +x /usr/local/bin/composer
+
+USER user
+ENTRYPOINT ["/usr/local/bin/composer"]

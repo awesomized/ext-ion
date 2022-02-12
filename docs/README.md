@@ -1,42 +1,116 @@
-# Read the docs
-Run caddy to read the docs as the would appear on https://awesomized.github.io/ext-ion.
+# ext-ion docs
+https://awesomized.github.io/ext-ion
 
-```sh
+## Howto update docs
+
+1. Edit stub: `$EDITOR ../ion.stub.php`
+2. [Rebuild](#Build)
+3. [Review](#Review); repeat from 2. if necessary
+4. [Deploy](#Deployment)
+
+## Howto make a release
+
+### 1. Create tag
+```
+git tag vX.Y.Z
+```
+
+### 2. Rebuild docs
+See [Rebuild](#Rebuild).
+
+### 3. Review docs
+See [Review](#Review).
+
+### 4. Commit docs with release changelog:  
+```
+git add .
+git commit
+```
+```
+release vX.Y.Z
+
+* Additions ...
+* Changes ...
+```
+### 5. Move tag:
+```
+git tag -f vX.Y.Z
+```
+### 6. Release & [deploy](#Deployment):
+```
+git push
+```
+
+## Build
+### Prerequisites without docker:
+* composer v2
+* PHP with ext-http and ext-dom but **without** ext-ion
+
+```
+   ┌─────────┐
+   │  BUILD  │                     ┌──────────┐
+ ┌─┴─────────┴──────────────┐      │  SOURCE  │
+ │  $ make #docker UID=$UID ├──►┌──┴──────────┴───────────┐
+ └──────────────────────────┘   │ ../README.md            │
+                                │ ../ion.stub.php         │
+ ┌──────────────────────────────┤ ../...                  │
+ │                              └─────────────────────────┘
+ │ ┌────────────────┐
+ │ │  PROCESSED BY  │              ┌────────────┐
+┌▼─┴────────────────┴───────┐      │  MARKDOWN  │
+│ ./vendor/bin/stub2ref     ├──►┌──┴────────────┴─────────┐
+└───────────────────────────┘   │ ./src/mdref.json        │
+                                │ ./src/ion.md            │
+ ┌──────────────────────────────┤ ./src/ion/...           │
+ │                              └─────────────────────────┘
+ │ ┌────────────────┐
+ │ │  PROCESSED BY  │              ┌────────┐
+┌▼─┴────────────────┴───────┐      │  HTML  │
+│ ./vendor/bin/ref2html     ├──►┌──┴────────┴─────────────┐
+└───────────────────────────┘   │ ./docs/latest -> vX.Y/  │
+                                │ ./docs/vX.Y/index.html  │
+                                │ ./docs/vX.Y/ion/...     │
+                                └─────────────────────────┘
+```
+
+## Review
+### Caddy
+Run caddy to read the docs as they would appear on https://awesomized.github.io/ext-ion.
+```shell
 caddy run
 ```
-Use `$CADDY_ADDRESS` envvar to customize the HTTP endpoint, e.g:
-```
-CADDY_ADDRESS=localhost:1234 caddy run
-```
 
-# Build the docs
-
-## Without docker:
-### Prerequsites:
-* composer v2
-* PHP with ext-http and ext-dom
-* GNU make
-
-```sh
-make
+Use `$CADDY_ADDRESS` env var to customize the HTTP endpoint, e.g:
+```shell
+CADDY_ADDRESS=localhost:8080 caddy run
 ```
 
-## With docker:
-### Prerequisites:
-* docker-compose
-* your UID in docker-composer.yml
-* GNU make
-
-```sh
-make COMPOSER="docker-compose run --rm composer" \
-	PHP="docker-compose run --rm --entrypoint php composer"
+Use docker, if you do not have caddy installed:
+```shell
+docker-compose -f docker/compose.yml run -p 8080:80 caddy
+```
+### PHP
+Use PHP CLI server if you're desperate:
+```shell
+php -S localhost:0 -r . .router.php
 ```
 
-# Release procedure
+## Deployment
+```
+   ┌──────────┐
+   │  DEPLOY  │
+┌──┴──────────┴─────────────┐
+│  $ git add .              │      ┌────────────┐
+│  $ git commit             │      │ GH ACTION  │
+│  $ git push               ├──►┌──┴────────────┴─────────┐
+└───────────────────────────┘   │  pages-build-deployment │
+                                └─┬───────────────────────┘
+   ┌──────────────┐               │
+   │  DEPLOYMENT  │               │
+┌──┴──────────────┴───────────────▼───────────────────────┐
+│                                                         │
+│       https://awesomized.github.io/ext-ion/latest/      │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
 
-1. create tag
-2. rebuild docs
-3. review docs
-4. commit
-5. move tag
-6. push
+```

@@ -1,0 +1,28 @@
+version: '3'
+services:
+  php:
+    image: ext-ion/docs:php
+    restart: "no"
+    volumes:
+      - ../:/app
+    build:
+      dockerfile: Dockerfile.php
+      context: .
+      args:
+        USERID: ${UID:-1000}
+  composer:
+    image: ext-ion/docs:composer
+    restart: "no"
+    volumes:
+      - ../:/app
+    build:
+      dockerfile: Dockerfile.composer
+      context: .
+  caddy:
+    image: caddy
+    restart: "no"
+    volumes:
+      - ../:/srv
+    command:
+      - caddy
+      - run

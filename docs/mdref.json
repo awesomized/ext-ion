@@ -1,0 +1,21 @@
+{
+    "name": "ion",
+    "origin": "github.com/awesomized/ext-ion",
+    "branch": "master",
+    "editUrl": "https://github.com/awesomized/ext-ion/edit/master/ion.stub.php",
+    "commentProvider": {
+        "giscus": {
+            "data": {
+                "repo": "awesomized/ext-ion",
+                "category": "Comments on Docs",
+                "repo-id": "R_kgDOGfXEXw",
+                "category-id": "DIC_kwDOGfXEX84CBHuf",
+                "mapping": "og:title",
+                "input-position": "bottom",
+                "reactions-enabled": false,
+                "theme": "light",
+                "lang": "en"
+            }
+        }
+    }
+}

@@ -5,6 +5,7 @@ RUN apt-get update -qy \
     apt-get install -qy \
     	build-essential \
     	git \
+        unzip \
     	libcurl4-openssl-dev \
     	libicu-dev \
     	libssl-dev \
@@ -14,14 +15,18 @@ RUN apt-get update -qy \
 WORKDIR /tmp
 
 RUN \
-	curl -sSLO https://getcomposer.org/download/2.2.5/composer.phar &&\
 	curl -sSLO https://replicator.pharext.org/phars/raphf/raphf-2.0.1.ext.phar &&\
-	curl -sSLO https://replicator.pharext.org/phars/pecl_http/pecl_http-4.2.1.ext.phar
-RUN \
+	curl -sSLO https://replicator.pharext.org/phars/pecl_http/pecl_http-4.2.1.ext.phar &&\
 	touch /usr/local/etc/php/conf.d/pecl.ini &&\
 	php raphf-*.ext.phar -vi /usr/local/etc/php/conf.d/pecl.ini &&\
-	php pecl_http-*.ext.phar -vi /usr/local/etc/php/conf.d/pecl.ini
+	php pecl_http-*.ext.phar -vi /usr/local/etc/php/conf.d/pecl.ini &&\
+    rm -f *.ext.phar
 
 WORKDIR /app
-ENTRYPOINT ["php", "/tmp/composer.phar"]
 
+# UID is readonly in shell env
+ARG USERID=1000
+RUN useradd -M -N -d /app -g users -u $USERID -o user
+
+USER user
+ENTRYPOINT ["/usr/local/bin/php"]

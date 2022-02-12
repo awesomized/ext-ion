@@ -1,12 +1,19 @@
 html {
-	font-size: 18px;
+	font-size: 16px;
 }
 html, body{
 	height: 100%;
 	min-height: 100%;
 }
 body, code {
-	font-family: Inconsolata, 'Inconsolata Awesome', 'Andale Mono', Monaco, 'Courier New', Courier, monospace;
+	font-family:
+			'DejaVu Sans Mono', 'Liberation Mono',
+			'Andale Mono', Monaco, Menlo,
+			monospace;
+	/*
+		Mitra Mono has broken kerning?
+		Ubuntu Mono is too small!
+	 */
 }
 body {
 	line-height: 1.5;
@@ -60,7 +67,6 @@ div.page>ul, div.page>div>ul {
 	position: relative;
 	top: 2em;
 	right: 0;
-	-webkit-transform: rotate(45deg);
 	transform: rotate(45deg);
 	text-decoration: none;
 	font-weight: bold;
@@ -175,6 +181,21 @@ a.permalink {
 	color: #999999;
 	opacity: 0.25;
 }
+.blink {
+	color: red !important;
+}
+.fade-out {
+	opacity: 0;
+}
+.fade-in {
+	opacity: 1;
+}
+.trans-slow {
+	transition: all 600ms;
+}
+.trans-fast {
+	transition: all 200ms;
+}
 
 .var {
 	color: #800000;
@@ -183,7 +204,7 @@ a.permalink {
 	color: #2e8b57;
 }
 
-h1, li h3, th, footer {
+h1, th, footer {
 	background: #708090;
 	color: #f5f5dc;
 }
@@ -209,14 +230,6 @@ h1 a.permalink {
 	margin-right: -.6em;
 }
 
-li h3 {
-	border-radius: 4px;
-	display: inline-block;
-	width: auto;
-	padding: .2em;
-	margin: .5em 0 0 0;
-}
-
 div.page>h3, div.page>div>h3 {
 	margin-left: 1.25em;
 }
@@ -230,11 +243,11 @@ div.page>h6, div.page>div>h6 {
 	margin-left: 2em;
 }
 
-h1 .constant, pre>code .consant, li h3 .constant {
+h1 .constant, pre>code .consant {
 	color: #98fb98;
 }
 
-h1 .var, pre>code .var, li h3 .var {
+h1 .var, pre>code .var {
 	color: #f4a460;
 }
 h1 {
@@ -249,10 +262,13 @@ h3 {
 h4 {
 	font-size: 100%;
 }
-footer a, h1 a, pre>code a, li h3 a {
+footer a, h1 a, pre>code a {
 	color: #b0e0e6;
 }
-li h3 {
+
+ul.sub-entries li {
+	list-style: circle;
+	margin-bottom: 2em;
 }
 li h3 a {
 	text-decoration: none;
@@ -261,13 +277,13 @@ li h3 a:hover {
 	text-decoration: underline;
 }
 
-#disqus_thread {
-	margin-top: 8em;
-	margin-right: 2em;
-}
-#disqus_activator {
-	margin: auto;
+.comments {
 	width: 80%;
+}
+.comments .activator {
+	width: 80%;
+	display: inline-block;
+	margin: auto;
 	padding: 1em;
 	background-color: slategrey;
 	color: white;
@@ -327,6 +343,6 @@ dd {
 	line-height: 1.33;
 	margin-left: 1em;
 }
-h1, footer, table, .sidebar, pre>code, li h3 {
+h1, footer, table, .sidebar, pre>code {
 	box-shadow: 0 0 4px #708090;
 }

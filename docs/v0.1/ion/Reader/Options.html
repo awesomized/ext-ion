@@ -6,13 +6,12 @@
 							Options -
 						mdref
 		</title>
+		<meta property="og:title" content="ion\Reader\Options">
 		<meta name="viewport" content="width=1200, initial-scale=0.5">
 					<base href="/ext-ion/v0.1/">
 			<meta http-equiv="Content-Location" content="/ext-ion/v0.1/ion/Reader/Options">
 			<link rel="stylesheet" href="index.css">
 		
-		<link href="https://fonts.googleapis.com/css?family=Inconsolata&amp;subset=latin-ext" rel="stylesheet">
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<link rel="shortcut icon" href="/ext-ion/v0.1/favicon.ico">
 	</head>
 	<body>
@@ -21,7 +20,7 @@
 <div class="sidebar">
 	
 	<div class="edit">
-		<a href="./ion/Reader/Options">Edit</a>
+		<a href="https://github.com/awesomized/ext-ion/edit/master/ion.stub.php">Edit</a>
 	</div>
 	
 	
@@ -161,7 +160,7 @@ The maximum number of bytes of a symbol/value/chunk.</li>
 <em>public</em> <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$skipCharacterValidation">$skipCharacterValidation<a class="permalink" href="ion/Reader/Options#%24skipCharacterValidation">#</a></span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code><br>
 Whether to skip <span class="constant">UTF</span>-8 validation.</li>
 </ul><h2 id="Functions:">Functions:<a class="permalink" href="ion/Reader/Options#Functions:">#</a>
-</h2><ul>
+</h2><ul class="sub-entries sub-functions">
 	
 	<li>
 		<h3 id="Options::__construct">
@@ -171,13 +170,30 @@ Whether to skip <span class="constant">UTF</span>-8 validation.</li>
 		<p><code><a href="https://php.net/manual/en/language.types.declarations#language.types.declarations.void">void</a></code> <a href="ion/Reader/Options/__construct">ion\Reader\Options::__construct</a>([?<a href="ion/Catalog">ion\Catalog</a> <span class="var">$catalog</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [?<a href="ion/Decimal/Context">ion\Decimal\Context</a> <span class="var">$decimalContext</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [?<code><a href="https://php.net/manual/en/class.closure">Closure</a></code> <span class="var">$onContextChange</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$returnSystemValues</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$maxContainerDepth</span> = 10, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$maxAnnotations</span> = 10, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$annotationBufferSize</span> = 16384, [<code><a href="https://php.net/manual/en/language.types.integer">int</a></code> <span class="var">$tempBufferSize</span> = 16384, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$skipCharacterValidation</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>]]]]]]]]])</p>
 	</li>
 	
-</ul>		
-			<div id="disqus_thread"><button id="disqus_activator">Show <span> </span> Comment(s)</button></div>
-			<script>
-				var disqus_shortname = 'mdref';
-				var disqus_identifier = 'ion/Reader/Options';
-			</script>
-
+</ul>				
+			<div class="comments">
+										<style>.giscus-frame {min-height: 16em;}</style>
+	<script>
+		function giscus_load(button) {
+			let script = document.createElement("script");
+						script.setAttribute("data-repo", 'awesomized/ext-ion');
+						script.setAttribute("data-category", 'Comments on Docs');
+						script.setAttribute("data-repo-id", 'R_kgDOGfXEXw');
+						script.setAttribute("data-category-id", 'DIC_kwDOGfXEX84CBHuf');
+						script.setAttribute("data-mapping", 'og:title');
+						script.setAttribute("data-input-position", 'bottom');
+						script.setAttribute("data-reactions-enabled", false);
+						script.setAttribute("data-theme", 'light');
+						script.setAttribute("data-lang", 'en');
+			
+			script.src = "//giscus.app/client.js";
+			button.parentNode.replaceChild(script, button);
+		}
+	</script>
+	<button class="activator" onclick="giscus_load(this)">Show Comments from Github Discussions</button>
+				
+			</div>
+		
 			<footer>
 				
 <ul>
@@ -190,7 +206,7 @@ Whether to skip <span class="constant">UTF</span>-8 validation.</li>
 
 			</footer>
 		
-			<script src="index.js"></script>
+			<script src="index.js" defer></script>
 		
 		</div>
 	</body>

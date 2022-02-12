@@ -48,5 +48,5 @@ tmp-php.ini
 .idea
 docs/vendor
 docs/src
-docs/composer.*
+docs/*composer*
 *.tgz
