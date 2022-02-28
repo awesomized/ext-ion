@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 82f37b032b109ad08cffc965a75843e57210debf */
+ * Stub hash: f45c86044a99ab4db187da808bdd5cdfdb7e5a26 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -82,7 +82,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Timestamp___construct, 0, 0, 1)
 	ZEND_ARG_OBJ_TYPE_MASK(0, precision, ion\\Timestamp\\Precision, MAY_BE_LONG, NULL)
 	ZEND_ARG_OBJ_TYPE_MASK(0, format, ion\\Timestamp\\Format, MAY_BE_STRING|MAY_BE_NULL, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, datetime, IS_STRING, 1, "null")
-	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, timezone, DateTimeZone, 1, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, timezone, DateTimeZone, MAY_BE_STRING|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Timestamp___toString arginfo_class_ion_Symbol___toString

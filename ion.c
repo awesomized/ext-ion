@@ -410,14 +410,15 @@ static ZEND_METHOD(ion_Timestamp, __construct)
 
 	zend_long precision;
 	zend_object *precision_obj = NULL, *format_obj = NULL;
-	zend_string *fmt = NULL, *dt = NULL;
-	zval *tz = NULL;
+	zend_string *fmt = NULL, *dt = NULL, *tz = NULL;
+	zend_object *tz_obj = NULL;
+	zval z_tz_tmp, *z_tz_ptr = NULL;
 	ZEND_PARSE_PARAMETERS_START(1, 4)
 		Z_PARAM_OBJ_OF_CLASS_OR_LONG(precision_obj, ce_Timestamp_Precision, precision)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_OBJ_OF_CLASS_OR_STR_OR_NULL(format_obj, ce_Timestamp_Format, fmt)
 		Z_PARAM_STR_OR_NULL(dt)
-		Z_PARAM_ZVAL(tz)
+		Z_PARAM_OBJ_OF_CLASS_OR_STR_OR_NULL(tz_obj, php_date_get_timezone_ce(), tz)
 	ZEND_PARSE_PARAMETERS_END();
 
 	if (precision_obj) {
@@ -426,7 +427,21 @@ static ZEND_METHOD(ion_Timestamp, __construct)
 	if (format_obj) {
 		fmt = Z_STR_P(zend_enum_fetch_case_value(format_obj));
 	}
-	php_ion_timestamp_ctor(obj, precision, fmt, dt, tz);
+	if (tz_obj) {
+		ZVAL_OBJ(z_tz_ptr = &z_tz_tmp, tz_obj);
+	} else if (tz) {
+		// there's no public API, so call timezone_open
+		zend_function *tz_open = zend_fetch_function_str(ZEND_STRL("timezone_open"));
+		if (tz_open) {
+			zval z_arg;
+			ZVAL_STR(&z_arg, tz);
+			zend_call_known_function(tz_open, NULL, NULL, z_tz_ptr = &z_tz_tmp, 1, &z_arg, NULL);
+		}
+	}
+	php_ion_timestamp_ctor(obj, precision, fmt, dt, z_tz_ptr);
+	if (tz && z_tz_ptr) {
+		zval_ptr_dtor(z_tz_ptr);
+	}
 }
 static ZEND_METHOD(ion_Timestamp, __toString)
 {

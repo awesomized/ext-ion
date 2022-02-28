@@ -275,13 +275,13 @@ class Timestamp extends \DateTime {
      * @param Timestamp\Precision|int $precision The timestamp's precision.
      * @param Timestamp\Format|string|null $format The timestamp's format.
      * @param string|null $datetime The timestamp's value.
-     * @param \DateTimeZone|null $timezone The timestamp's timezone.
+     * @param \DateTimeZone|string|null $timezone The timestamp's timezone.
      */
     public function __construct(
         Timestamp\Precision|int $precision,
         Timestamp\Format|string|null $format = null,
         ?string $datetime = null,
-        ?\DateTimeZone $timezone = null,
+        \DateTimeZone|string|null $timezone = null,
     ) {}
 
     public function __toString() : string {}
