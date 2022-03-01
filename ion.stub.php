@@ -28,11 +28,11 @@ namespace ion;
  *  * object (incl. \Serializable, and classes implementing magic and custom __serialize)
  *
  * @param mixed $data PHP value(s).
- * @param Serializer|null $serializer Custom serializer.
+ * @param Serializer|array|null $serializer Custom serializer.
  * @return string serialized ION data
  * @throws \ion\Exception
  */
-function serialize(mixed $data, ?Serializer $serializer = null) : string {}
+function serialize(mixed $data, Serializer|array|null $serializer = null) : string {}
 
 /**
  * Unserialize ION data (stream) as PHP value(s).
@@ -41,7 +41,7 @@ function serialize(mixed $data, ?Serializer $serializer = null) : string {}
  * @return mixed unserialized PHP values
  * @throws \ion\Exception
  */
-function unserialize($data, ?Unserializer $unserializer = null) : mixed {}
+function unserialize($data, Unserializer|array|null $unserializer = null) : mixed {}
 
 /**
  * Serializer interface, used to customize ion\serialize()'s behavior.
@@ -1055,7 +1055,7 @@ class PHP implements \ion\Serializer {
         /**
          * Writer options.
          */
-        public readonly ?\ion\Writer\Options $writerOptions = null,
+        public readonly \ion\Writer\Options|array|null $writerOptions = null,
         /**
          * Whether to write the top level array as multiple ION sequences.
          */
@@ -1086,7 +1086,7 @@ class PHP implements \ion\Unserializer {
         /**
          * Reader options.
          */
-        public readonly ?\ion\Reader\Options $readerOptions = null,
+        public readonly \ion\Reader\Options|array|null $readerOptions = null,
         /**
          * Whether to continue reading multiple ION sequences after the first one.
          */

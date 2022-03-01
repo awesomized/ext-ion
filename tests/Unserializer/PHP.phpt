@@ -8,8 +8,15 @@ TEST
 $o1 = ion\unserialize("[foo,{p:1}]");
 $o2 = ion\unserialize("[foo,{p:1}]", $u1 = new ion\Unserializer\PHP);
 $o3 = ion\unserialize("[foo,{p:1}]", $u2 = new ion\Unserializer\PHP(new ion\Reader\Options));
+$o4 = ion\unserialize("[foo,{p:1}]", ["readerOptions" => []]);
 if ($o1 != $o2) {
 	var_dump($o1, $o2);
+}
+if ($o1 != $o3) {
+	var_dump($o1, $o3);
+}
+if ($o1 != $o4) {
+	var_dump($o1, $o4);
 }
 var_dump($u1);
 if ($u1 != $u2) {

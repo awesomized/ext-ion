@@ -1,14 +1,14 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: f45c86044a99ab4db187da808bdd5cdfdb7e5a26 */
+ * Stub hash: 7fcf22ba2096fdecb7319e7a399dbccbb21f89d9 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
-	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, serializer, ion\\Serializer, 1, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, serializer, ion\\Serializer, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_unserialize, 0, 1, IS_MIXED, 0)
 	ZEND_ARG_INFO(0, data)
-	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, unserializer, ion\\Unserializer, 1, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, unserializer, ion\\Unserializer, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Serializer_serialize, 0, 1, IS_STRING, 0)
@@ -506,7 +506,7 @@ ZEND_END_ARG_INFO()
 #define arginfo_class_ion_Writer_Stream_Writer_getStream arginfo_class_ion_Catalog___construct
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Serializer_PHP___construct, 0, 0, 0)
-	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, writerOptions, ion\\Writer\\Options, 1, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, writerOptions, ion\\Writer\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiSequence, _IS_BOOL, 0, "false")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callMagicSerialize, _IS_BOOL, 0, "true")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callCustomSerialize, IS_STRING, 1, "null")
@@ -515,7 +515,7 @@ ZEND_END_ARG_INFO()
 #define arginfo_class_ion_Serializer_PHP_serialize arginfo_class_ion_Serializer_serialize
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Unserializer_PHP___construct, 0, 0, 0)
-	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, readerOptions, ion\\Reader\\Options, 1, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, readerOptions, ion\\Reader\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiSequence, _IS_BOOL, 0, "false")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callMagicUnserialize, _IS_BOOL, 0, "true")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callCustomUnserialize, IS_STRING, 1, "null")
@@ -1895,7 +1895,7 @@ static zend_class_entry *register_class_ion_Serializer_PHP(zend_class_entry *cla
 	zval property_writerOptions_default_value;
 	ZVAL_UNDEF(&property_writerOptions_default_value);
 	zend_string *property_writerOptions_name = zend_string_init("writerOptions", sizeof("writerOptions") - 1, 1);
-	zend_declare_typed_property(class_entry, property_writerOptions_name, &property_writerOptions_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_writerOptions_class_ion_Writer_Options, 0, MAY_BE_NULL));
+	zend_declare_typed_property(class_entry, property_writerOptions_name, &property_writerOptions_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_writerOptions_class_ion_Writer_Options, 0, MAY_BE_ARRAY|MAY_BE_NULL));
 	zend_string_release(property_writerOptions_name);
 
 	zval property_multiSequence_default_value;
@@ -1931,7 +1931,7 @@ static zend_class_entry *register_class_ion_Unserializer_PHP(zend_class_entry *c
 	zval property_readerOptions_default_value;
 	ZVAL_UNDEF(&property_readerOptions_default_value);
 	zend_string *property_readerOptions_name = zend_string_init("readerOptions", sizeof("readerOptions") - 1, 1);
-	zend_declare_typed_property(class_entry, property_readerOptions_name, &property_readerOptions_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_readerOptions_class_ion_Reader_Options, 0, MAY_BE_NULL));
+	zend_declare_typed_property(class_entry, property_readerOptions_name, &property_readerOptions_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_readerOptions_class_ion_Reader_Options, 0, MAY_BE_ARRAY|MAY_BE_NULL));
 	zend_string_release(property_readerOptions_name);
 
 	zval property_multiSequence_default_value;
