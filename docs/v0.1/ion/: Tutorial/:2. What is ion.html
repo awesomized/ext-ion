@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+							★2. What is ion -
+						mdref
+		</title>
+		<meta property="og:title" content="ion/: Tutorial/:2. What is ion">
+		<meta name="viewport" content="width=1200, initial-scale=0.5">
+					<base href="/ext-ion/v0.1/">
+			<meta http-equiv="Content-Location" content="/ext-ion/v0.1/ion/: Tutorial/:2. What is ion">
+			<link rel="stylesheet" href="index.css">
+		
+		<link rel="shortcut icon" href="/ext-ion/v0.1/favicon.ico">
+	</head>
+	<body>
+		<div class="page">
+		
+<div class="sidebar">
+	
+	<div class="edit">
+		<a href="https://github.com/awesomized/ext-ion/edit/master/ion.stub.php">Edit</a>
+	</div>
+	
+	
+	<ul>
+		<li>&lsh; <a href="./">Home</a>
+			
+			<ul>
+				<li>
+											
+					&uarr; <a href="./ion">
+							ion
+						</a>
+						<ul>
+							<li>
+																	
+					&uarr; <a href="./ion/: Tutorial">
+							★ Tutorial
+						</a>
+						<ul>
+							<li>
+											
+							&circlearrowright; <strong><a href="./ion/: Tutorial/:2. What is ion">★2. What is ion</a></strong>
+
+							
+																																
+						</ul>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:1. Getting started">★1. Getting started</a></li>
+																													
+						<li>&ldsh; <a href="./ion/: Tutorial/:3. Standard Datatypes">★3. Standard Datatypes</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:4. Special Datatypes">★4. Special Datatypes</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:5. Symbols, Tables and Catalogs">★5. Symbols, Tables and Catalogs</a></li>
+																																																																																										
+					</ul>
+													
+				</li>
+			</ul>
+			
+		</li>
+	</ul>
+</div>
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#">#</a>What Is Ion?</h1><p>Quoting the <a href="https://amzn.github.io/ion-docs/">official Ion documentation</a>:</p><p><strong>Amazon Ion</strong> is a <a href="ion/:%20Tutorial/:1.%20Getting%20started#Rich.type.system">richly-typed</a>, <a href="ion/:%20Tutorial/:1.%20Getting%20started#Self-describing">self-describing</a>, hierarchical data serialization format offering <a href="https://amzn.github.io/ion-docs/guides/why.html#dual-format-interoperability">interchangeable binary and text</a> representations. The <a href="https://amzn.github.io/ion-docs/docs/spec.html">text format</a> (a superset of <a href="http://json.org/">JSON</a>) is easy to read and author, supporting rapid prototyping.</p><p>The <a href="https://amzn.github.io/ion-docs/docs/binary.html">binary representation</a> is <a href="https://amzn.github.io/ion-docs/guides/why.html#read-optimized-binary-format">efficient to store, transmit, and skip-scan parse</a>.</p><p>The rich type system provides unambiguous semantics for longterm preservation of data which can survive multiple generations of software evolution.</p><p>Ion was built to address rapid development, decoupling, and efficiency challenges faced every day while engineering large-scale, service-oriented architectures.</p><h3 id="Some.simple.examples">Some simple examples<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Some.simple.examples">#</a>
+</h3><h4 id="Serialization:">Serialization:<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Serialization:">#</a>
+</h4><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br>ion\serialize</span><span style="color: inherit" class="keyword">([<br>  </span><span style="color: inherit" class="string">"key" </span><span style="color: inherit" class="keyword">=&gt; </span><span style="color: inherit" class="string">"value"</span><span style="color: inherit" class="keyword">,<br>  </span><span style="color: inherit" class="string">"more" </span><span style="color: inherit" class="keyword">=&gt; [<br>    </span><span style="color: inherit" class="string">"data" </span><span style="color: inherit" class="keyword">=&gt; </span><span style="color: inherit" class="default">123<br>  </span><span style="color: inherit" class="keyword">]<br>]);<br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h5 id="Output:">Output:<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Output:">#</a>
+</h5><pre><code><span style="color: inherit" class="html">
+{key:"value",more:{data:123}}<br></span>
+</code></pre><p>If you now think that this looks a lot like JSON, you're probably right, because Ion is a superset of JSON:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br>json_encode</span><span style="color: inherit" class="keyword">([<br>  </span><span style="color: inherit" class="string">"key" </span><span style="color: inherit" class="keyword">=&gt; </span><span style="color: inherit" class="string">"value"</span><span style="color: inherit" class="keyword">,<br>  </span><span style="color: inherit" class="string">"more" </span><span style="color: inherit" class="keyword">=&gt; [<br>    </span><span style="color: inherit" class="string">"data" </span><span style="color: inherit" class="keyword">=&gt; </span><span style="color: inherit" class="default">123<br>  </span><span style="color: inherit" class="keyword">]<br>]);<br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h5 id="Output:">Output:<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Output:">#</a>
+</h5><pre><code><span style="color: inherit" class="html">
+{"key":"value","more":{"data":123}}<br></span>
+</code></pre><p>So, all valid JSON is also valid Ion. Please refer to the <a href="https://amzn.github.io/ion-docs/docs/spec.html">official spec</a> to learn more about this topic.</p><h4 id="Unserialization:">Unserialization:<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Unserialization:">#</a>
+</h4><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br>var_representation</span><span style="color: inherit" class="keyword">(<br>  </span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">'{key:"value",more:{data:123}}'</span><span style="color: inherit" class="keyword">)<br>);<br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h5 id="Output:">Output:<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Output:">#</a>
+</h5><pre><code><span style="color: inherit" class="html">
+[<br>  'key' =&gt; 'value',<br>  'more' =&gt; [<br>    'data' =&gt; 123,<br>  ],<br>]<br></span>
+</code></pre><p>If you try the same with the JSON equivalent, you'll see that it's basically valid Ion, too:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br>var_representation</span><span style="color: inherit" class="keyword">(<br>  </span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">'{"key":"value","more":{"data":123}}'</span><span style="color: inherit" class="keyword">)<br>);<br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h5 id="Output:">Output:<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Output:">#</a>
+</h5><pre><code><span style="color: inherit" class="html">
+[<br>  'key' =&gt; 'value',<br>  'more' =&gt; [<br>    'data' =&gt; 123,<br>  ],<br>]<br></span>
+</code></pre><h3 id="Multiple.documents">Multiple documents<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Multiple.documents">#</a>
+</h3><p>Ion supports multiple sequences of documents within a single stream; consider the following:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br>var_representation</span><span style="color: inherit" class="keyword">(<br>  </span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">'<br>    {"key":"value","more":{"data":123}}<br>    {"key":"value","more":{"data":456}}<br>  '</span><span style="color: inherit" class="keyword">, new </span><span style="color: inherit" class="default">ion\Unserializer\PHP</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">multiSequence</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="default">true</span><span style="color: inherit" class="keyword">)<br>  )<br>);<br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h4 id="Output:">Output:<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Output:">#</a>
+</h4><pre><code><span style="color: inherit" class="html">
+[<br>  [<br>    'key' =&gt; 'value',<br>    'more' =&gt; [<br>      'data' =&gt; 123,<br>    ],<br>  ],<br>  [<br>    'key' =&gt; 'value',<br>    'more' =&gt; [<br>      'data' =&gt; 456,<br>    ],<br>  ],<br>]<br></span>
+</code></pre><h3 id="Annotations">Annotations<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Annotations">#</a>
+</h3><p>Any Ion value can include one or more annotation symbols denoting the semantics of the content. This can be used to:</p><ul>
+<li>Annotate individual values with schema types, for validation purposes.</li>
+<li>Associate a higher-level datatype (e.g. a Java <em>class</em>) during serialization processes.</li>
+<li>Indicate the notation used within a <code>blob</code> or <code>clob</code> value.</li>
+<li>Apply other application semantics to a single value.</li>
+</ul><p>In the text format, type annotations are denoted by a non-<code><a href="https://php.net/manual/en/language.types.null">null</a></code> symbol token and <code><a href="https://php.net/manual/en/language.types.float">double</a></code>-colons preceding any value. Multiple annotations on the same value are separated by <code><a href="https://php.net/manual/en/language.types.float">double</a></code>-colons:</p><pre><code><span style="color: inherit" class="html">
+int32::12                                // Suggests 32 bits as end-user type<br>degrees::'celsius'::100                  // You can have multiple annotaions on a value<br>'my.custom.type' :: { x : 12 , y : -1 }  // Gives a struct a user-defined type<br><br>{ field: some_annotation::value }        // Field's name must precede annotations of its value<br><br>jpeg :: {{ ... }}                        // Indicates the blob contains jpeg data<br>bool :: null.int                         // A very misleading annotation on the integer null<br>'' :: 1                                  // An empty annotation<br>null.symbol :: 1                         // ERROR: type annotation cannot be null <br></span>
+</code></pre><p>Except for a small number of predefined system and PHP annotations, Ion itself neither defines nor validates such annotations; that behavior is left to applications or tools (such as schema validators).</p><p>It’s important to understand that annotations are symbol <em>tokens</em>, not symbol <em>values</em>. That means they do not have annotations themselves. In particular, the text <code>a::c</code> is a single value consisting of three textual tokens (a symbol, a <code><a href="https://php.net/manual/en/language.types.float">double</a></code>-colon, and another symbol); the first symbol token is an <em>annotation</em> on the value, and the second is the <em>content</em> of the value.</p><h4 id="System.Annotations">System Annotations<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#System.Annotations">#</a>
+</h4><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br><br></span><span style="color: inherit" class="keyword">foreach (</span><span style="color: inherit" class="default">ion\Symbol\System</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">cases</span><span style="color: inherit" class="keyword">() as </span><span style="color: inherit" class="default">$e</span><span style="color: inherit" class="keyword">) {<br>  </span><span style="color: inherit" class="default">printf</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"%30s:: =&gt; %s\n"</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="default">$e</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">value</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="default">$e</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">name</span><span style="color: inherit" class="keyword">);<br>}<br><br></span><span style="color: inherit" class="comment">/*<br>                          $ion:: =&gt; Ion<br>                      $ion_1_0:: =&gt; Ivm_1_0<br>             $ion_symbol_table:: =&gt; IonSymbolTable<br>                          name:: =&gt; Name<br>                       version:: =&gt; Version<br>                       imports:: =&gt; Imports<br>                       symbols:: =&gt; Symbols<br>                        max_id:: =&gt; MaxId<br>      $ion_shared_symbol_table:: =&gt; SharedSymbolTable<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h4 id="PHP.Annotations">PHP Annotations<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#PHP.Annotations">#</a>
+</h4><p>There are two handful of annotations used by PHP, which are centralized in the <a href="ion/Symbol/PHP">ion\Symbol\PHP</a> enumeration:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br><br></span><span style="color: inherit" class="keyword">foreach (</span><span style="color: inherit" class="default">ion\Symbol\PHP</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">cases</span><span style="color: inherit" class="keyword">() as </span><span style="color: inherit" class="default">$e</span><span style="color: inherit" class="keyword">) {<br>  </span><span style="color: inherit" class="default">printf</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"%3s:: =&gt; %s\n"</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="default">$e</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">value</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="default">$e</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">name</span><span style="color: inherit" class="keyword">);<br>}<br><br></span><span style="color: inherit" class="comment">/*<br>  PHP:: =&gt; PHP<br>    R:: =&gt; Reference<br>    r:: =&gt; Backref<br>    p:: =&gt; Property<br>    o:: =&gt; Object<br>    c:: =&gt; ClassObject<br>    O:: =&gt; MagicObject<br>    C:: =&gt; CustomObject<br>    E:: =&gt; Enum<br>    S:: =&gt; Serializable<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><hr><h2 id="Next.up">Next up<a class="permalink" href="ion/:%20Tutorial/:2.%20What%20is%20ion#Next.up">#</a>
+</h2><ul>
+<li>
+<a href="ion/:%20Tutorial/:3.%20Standard%20Datatypes">Standard Datatypes</a>
+</li>
+</ul>				
+			<div class="comments">
+										<style>.giscus-frame {min-height: 16em;}</style>
+	<script>
+		function giscus_load(button) {
+			let script = document.createElement("script");
+						script.setAttribute("data-repo", 'awesomized/ext-ion');
+						script.setAttribute("data-category", 'Comments on Docs');
+						script.setAttribute("data-repo-id", 'R_kgDOGfXEXw');
+						script.setAttribute("data-category-id", 'DIC_kwDOGfXEX84CBHuf');
+						script.setAttribute("data-mapping", 'og:title');
+						script.setAttribute("data-input-position", 'bottom');
+						script.setAttribute("data-reactions-enabled", false);
+						script.setAttribute("data-theme", 'light');
+						script.setAttribute("data-lang", 'en');
+			
+			script.src = "//giscus.app/client.js";
+			button.parentNode.replaceChild(script, button);
+		}
+	</script>
+	<button class="activator" onclick="giscus_load(this)">Show Comments from Github Discussions</button>
+				
+			</div>
+		
+			<footer>
+				
+<ul>
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
+</a></li>
+	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
+	<li>
+</li>
+</ul>
+
+			</footer>
+		
+			<script src="index.js" defer></script>
+		
+		</div>
+	</body>
+</html>

@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+							★3. Datatypes -
+						mdref
+		</title>
+		<meta property="og:title" content="ion/: Tutorial/:3. Datatypes">
+		<meta name="viewport" content="width=1200, initial-scale=0.5">
+					<base href="/ext-ion/v0.1/">
+			<meta http-equiv="Content-Location" content="/ext-ion/v0.1/ion/: Tutorial/:3. Datatypes">
+			<link rel="stylesheet" href="index.css">
+		
+		<link rel="shortcut icon" href="/ext-ion/v0.1/favicon.ico">
+	</head>
+	<body>
+		<div class="page">
+		
+<div class="sidebar">
+	
+	<div class="edit">
+		<a href="https://github.com/awesomized/ext-ion/edit/master/ion.stub.php">Edit</a>
+	</div>
+	
+	
+	<ul>
+		<li>&lsh; <a href="./">Home</a>
+			
+			<ul>
+				<li>
+											
+					&uarr; <a href="./ion">
+							ion
+						</a>
+						<ul>
+							<li>
+																	
+					&uarr; <a href="./ion/: Tutorial">
+							★ Tutorial
+						</a>
+						<ul>
+							<li>
+											
+							&circlearrowright; <strong><a href="./ion/: Tutorial/:3. Datatypes">★3. Datatypes</a></strong>
+
+							
+																																
+						</ul>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:1. Getting started">★1. Getting started</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:2. What is ion">★2. What is ion</a></li>
+																													
+						<li>&ldsh; <a href="./ion/: Tutorial/:3. Standard Datatypes">★3. Standard Datatypes</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:4. Special Datatypes">★4. Special Datatypes</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:4. Symbols, Tables and Catalogs">★4. Symbols, Tables and Catalogs</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:5. Symbols, Tables and Catalogs">★5. Symbols, Tables and Catalogs</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/Untitled">Untitled</a></li>
+																																																																																										
+					</ul>
+													
+				</li>
+			</ul>
+			
+		</li>
+	</ul>
+</div>
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#">#</a>Datatypes</h1><h2 id="Standard.datatypes">Standard datatypes<a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#Standard.datatypes">#</a>
+</h2><p>ION supports many of PHP's data types:</p><h3 id="NULL">
+<code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#NULL">#</a>
+</h3><p>Additonally to the plain and simple <code>NULL</code>, ION can attach a type to <code>NULL</code> values.</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br>$writer </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">ion\Writer\Stream\Writer</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">STDOUT</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeNull</span><span style="color: inherit" class="keyword">();<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeTypedNull</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\Type</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">Int</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeTypedNull</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\Type</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">String</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">flush</span><span style="color: inherit" class="keyword">();<br><br></span><span style="color: inherit" class="comment">/*<br>    null null.int null.string<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h2 id="Special.datatypes">Special datatypes<a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#Special.datatypes">#</a>
+</h2><p>There are a handful of data types treated in a specific way in PHP; consider the following examples:</p><h3 id="Deprecated.Serializable">Deprecated <code><a href="https://php.net/manual/en/class.serializable">Serializable</a></code><a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#Deprecated.Serializable">#</a>
+</h3><blockquote>
+<p><em><strong>NOTE:</strong></em><br>
+The <em>interface</em> <code><a href="https://php.net/manual/en/class.serializable">Serializable</a></code> has been deprecated in 8.1 and should be replaced with magic serialize methods.</p>
+</blockquote><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br></span><span style="color: inherit" class="keyword">class </span><span style="color: inherit" class="default">srlzbl </span><span style="color: inherit" class="keyword">implements </span><span style="color: inherit" class="default">\Serializable </span><span style="color: inherit" class="keyword">{<br>  private </span><span style="color: inherit" class="default">$data </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="string">"foo"</span><span style="color: inherit" class="keyword">;<br>  public function </span><span style="color: inherit" class="default">serialize</span><span style="color: inherit" class="keyword">() { <br>    return </span><span style="color: inherit" class="string">"bar"</span><span style="color: inherit" class="keyword">; <br>  }<br>  public function </span><span style="color: inherit" class="default">unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$data</span><span style="color: inherit" class="keyword">) { <br>    </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">data </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="default">$data</span><span style="color: inherit" class="keyword">; <br>  }<br>}<br><br></span><span style="color: inherit" class="default">$srlzbl </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">srlzbl</span><span style="color: inherit" class="keyword">;<br></span><span style="color: inherit" class="default">var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$srlzbl</span><span style="color: inherit" class="keyword">);<br><br></span><span style="color: inherit" class="default">$srlzd </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="default">ion\serialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$srlzbl</span><span style="color: inherit" class="keyword">);<br>echo </span><span style="color: inherit" class="default">$srlzd</span><span style="color: inherit" class="keyword">;<br><br></span><span style="color: inherit" class="comment">/*<br>    object(srlzbl)#4 (1) {<br>        ["data":"srlzbl":private]=&gt;<br>        string(3) "foo"<br>    }<br>    <br>    S::srlzbl::{{"bar"}}<br><br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><p>Everything as expected so far, <code><a href="https://php.net/manual/en/class.serializable">Serializable</a></code> return a <code><a href="https://php.net/manual/en/language.types.string">string</a></code>, but since it cannot indicate whether it's a valid UTF-8 <code><a href="https://php.net/manual/en/language.types.string">string</a></code>, a <a href="ion/Type#CLob">ion\Type::CLob</a> or <a href="ion/Type#BLob">ion\Type::BLob</a>, CLobs are assumed.</p><p>Unserialization does not offer any surprises, either:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php <br>  <br>var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$srlzd</span><span style="color: inherit" class="keyword">));<br><br></span><span style="color: inherit" class="comment">/*<br>  object(srlzbl)#4 (1) {<br>    ["data":"srlzbl":private]=&gt;<br>    string(3) "bar"<br>  }<br><br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h3 id="Magic.__serialize">Magic __serialize<a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#Magic.__serialize">#</a>
+</h3><p>Implementing serialization behavior with magic methods is the preferred way since 8.1:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br></span><span style="color: inherit" class="keyword">class </span><span style="color: inherit" class="default">magic </span><span style="color: inherit" class="keyword">{<br>  private </span><span style="color: inherit" class="default">string $foo </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="string">"foo"</span><span style="color: inherit" class="keyword">;<br>  function </span><span style="color: inherit" class="default">__serialize</span><span style="color: inherit" class="keyword">() : array {<br>    return [</span><span style="color: inherit" class="string">"foo" </span><span style="color: inherit" class="keyword">=&gt; </span><span style="color: inherit" class="string">"bar"</span><span style="color: inherit" class="keyword">];<br>  }<br>  function </span><span style="color: inherit" class="default">__unserialize</span><span style="color: inherit" class="keyword">(array </span><span style="color: inherit" class="default">$data</span><span style="color: inherit" class="keyword">) : </span><span style="color: inherit" class="default">void </span><span style="color: inherit" class="keyword">{<br>    foreach (</span><span style="color: inherit" class="default">$data </span><span style="color: inherit" class="keyword">as </span><span style="color: inherit" class="default">$k </span><span style="color: inherit" class="keyword">=&gt; </span><span style="color: inherit" class="default">$v</span><span style="color: inherit" class="keyword">) <br>      </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">$k </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="default">$v</span><span style="color: inherit" class="keyword">;<br>  }<br>}<br><br></span><span style="color: inherit" class="default">$magic </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">magic</span><span style="color: inherit" class="keyword">;<br></span><span style="color: inherit" class="default">var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$magic</span><span style="color: inherit" class="keyword">);<br><br></span><span style="color: inherit" class="default">$srlzd </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="default">ion\serialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$magic</span><span style="color: inherit" class="keyword">);<br>echo </span><span style="color: inherit" class="default">$srlzd</span><span style="color: inherit" class="keyword">;<br><br></span><span style="color: inherit" class="comment">/*<br>  object(magic)#6 (1) {<br>    ["foo":"magic":private]=&gt;<br>    string(3) "foo"<br>  }<br><br>  O::magic::{foo:"bar"}<br><br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><p>Again, unserialization yields the expected results:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br>var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$srlzd</span><span style="color: inherit" class="keyword">));<br><br></span><span style="color: inherit" class="comment">/*<br>  object(magic)#7 (1) {<br>    ["foo":"magic":private]=&gt;<br>    string(3) "bar"<br>  }<br><br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h3 id="Custom.serialize">Custom serialize<a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#Custom.serialize">#</a>
+</h3><p>Customly serializable objects work like magic serializable objects, with custom names for the magic methods.</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br></span><span style="color: inherit" class="keyword">class </span><span style="color: inherit" class="default">custom </span><span style="color: inherit" class="keyword">{<br>  private array </span><span style="color: inherit" class="default">$data</span><span style="color: inherit" class="keyword">;<br>  function </span><span style="color: inherit" class="default">init</span><span style="color: inherit" class="keyword">(array </span><span style="color: inherit" class="default">$data</span><span style="color: inherit" class="keyword">) : </span><span style="color: inherit" class="default">void </span><span style="color: inherit" class="keyword">{<br>    </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">data </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="default">$data</span><span style="color: inherit" class="keyword">;<br>  }<br>  function </span><span style="color: inherit" class="default">export</span><span style="color: inherit" class="keyword">() : array {<br>    return </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">data</span><span style="color: inherit" class="keyword">;<br>  }<br>}<br><br></span><span style="color: inherit" class="default">$custom </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">custom</span><span style="color: inherit" class="keyword">;<br></span><span style="color: inherit" class="default">$custom</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">init</span><span style="color: inherit" class="keyword">([</span><span style="color: inherit" class="string">"foo" </span><span style="color: inherit" class="keyword">=&gt; </span><span style="color: inherit" class="string">"bar"</span><span style="color: inherit" class="keyword">]);<br>echo </span><span style="color: inherit" class="default">$srlzd </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="default">ion\serialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$custom</span><span style="color: inherit" class="keyword">);<br><br></span><span style="color: inherit" class="comment">/*<br>    c::custom::{data:p::custom::{foo:"bar"}}<br>    <br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><p>The above is actually the result of serializing a plain old PHP object, because we didn't implement any serialization primitives and did neither specify a custom method to call. So let's just do that:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br>$srlzr </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">ion\Serializer\PHP</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">callCustomSerialize</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="string">"export"</span><span style="color: inherit" class="keyword">);<br>echo </span><span style="color: inherit" class="default">$srlzd </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="default">ion\serialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$custom</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="default">$srlzr</span><span style="color: inherit" class="keyword">);<br><br></span><span style="color: inherit" class="comment">/*<br>    C::custom::{foo:"bar"}<br><br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><p>Note how this output compares to the output of the standard magic serializable object.</p><p>Unserialization works as used to, except sepcifying thwe custom unserialization method to call:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br>$unsrlzr </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">ion\Unserializer\PHP</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">callCustomUnserialize</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="string">"init"</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$srlzd</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="default">$unsrlzr</span><span style="color: inherit" class="keyword">));<br><br></span><span style="color: inherit" class="comment">/*<br>    object(custom)#10 (1) {<br>    ["data":"custom":private]=&gt;<br>    array(1) {<br>      ["foo"]=&gt;<br>      string(3) "bar"<br>    }<br>  }<br><br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h3 id="Decimal">Decimal<a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#Decimal">#</a>
+</h3><h3 id="LOB">LOB<a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#LOB">#</a>
+</h3><h3 id="Symbol">Symbol<a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#Symbol">#</a>
+</h3><h3 id="Timestamp">Timestamp<a class="permalink" href="ion/:%20Tutorial/:3.%20Datatypes#Timestamp">#</a>
+</h3><p>Instances of <a href="ion/Timestamp">ion\Timestamp</a> are really just plain <code><a href="https://php.net/manual/en/class.datetime">\DateTime</a></code> objects augmented with <code><a href="https://php.net/manual/en/class.stringable">Stringable</a></code> and ION specific formatting.</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br></span><span style="color: inherit" class="keyword">new </span><span style="color: inherit" class="default">ion\Timestamp</span><span style="color: inherit" class="keyword">(<br>    </span><span style="color: inherit" class="default">precision</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="default">ion\Timestamp\Precision</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">FracTZ</span><span style="color: inherit" class="keyword">,<br>) <br>  <br>  </span><span style="color: inherit" class="comment">// 2022-02-25T16:11:54.118+00:00<br>  <br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br></span><span style="color: inherit" class="keyword">new </span><span style="color: inherit" class="default">ion\Timestamp</span><span style="color: inherit" class="keyword">(<br>    </span><span style="color: inherit" class="default">precision</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="default">ion\Timestamp\Precision</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">Day<br></span><span style="color: inherit" class="keyword">) <br>  <br>  </span><span style="color: inherit" class="comment">// 2022-02-25T<br>  <br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br></span><span style="color: inherit" class="keyword">new </span><span style="color: inherit" class="default">ion\Timestamp</span><span style="color: inherit" class="keyword">(<br>  </span><span style="color: inherit" class="default">precision</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="default">ion\Timestamp\Precision</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">MinTZ</span><span style="color: inherit" class="keyword">,<br>  </span><span style="color: inherit" class="default">format</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="default">ion\Timestamp\Format</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">Min</span><span style="color: inherit" class="keyword">,<br>  </span><span style="color: inherit" class="default">datetime</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="string">"2020-03-15T12:34"</span><span style="color: inherit" class="keyword">,<br>  </span><span style="color: inherit" class="default">timezone</span><span style="color: inherit" class="keyword">: new </span><span style="color: inherit" class="default">DateTimeZone</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"Europe/Vienna"</span><span style="color: inherit" class="keyword">)<br>) <br>  <br>  </span><span style="color: inherit" class="comment">// 2020-03-15T12:34+01:00<br>  <br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre>				
+			<div class="comments">
+										<style>.giscus-frame {min-height: 16em;}</style>
+	<script>
+		function giscus_load(button) {
+			let script = document.createElement("script");
+						script.setAttribute("data-repo", 'awesomized/ext-ion');
+						script.setAttribute("data-category", 'Comments on Docs');
+						script.setAttribute("data-repo-id", 'R_kgDOGfXEXw');
+						script.setAttribute("data-category-id", 'DIC_kwDOGfXEX84CBHuf');
+						script.setAttribute("data-mapping", 'og:title');
+						script.setAttribute("data-input-position", 'bottom');
+						script.setAttribute("data-reactions-enabled", false);
+						script.setAttribute("data-theme", 'light');
+						script.setAttribute("data-lang", 'en');
+			
+			script.src = "//giscus.app/client.js";
+			button.parentNode.replaceChild(script, button);
+		}
+	</script>
+	<button class="activator" onclick="giscus_load(this)">Show Comments from Github Discussions</button>
+				
+			</div>
+		
+			<footer>
+				
+<ul>
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
+</a></li>
+	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
+	<li>
+</li>
+</ul>
+
+			</footer>
+		
+			<script src="index.js" defer></script>
+		
+		</div>
+	</body>
+</html>

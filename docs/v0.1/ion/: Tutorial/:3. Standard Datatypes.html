@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+							★3. Standard Datatypes -
+						mdref
+		</title>
+		<meta property="og:title" content="ion/: Tutorial/:3. Standard Datatypes">
+		<meta name="viewport" content="width=1200, initial-scale=0.5">
+					<base href="/ext-ion/v0.1/">
+			<meta http-equiv="Content-Location" content="/ext-ion/v0.1/ion/: Tutorial/:3. Standard Datatypes">
+			<link rel="stylesheet" href="index.css">
+		
+		<link rel="shortcut icon" href="/ext-ion/v0.1/favicon.ico">
+	</head>
+	<body>
+		<div class="page">
+		
+<div class="sidebar">
+	
+	<div class="edit">
+		<a href="https://github.com/awesomized/ext-ion/edit/master/ion.stub.php">Edit</a>
+	</div>
+	
+	
+	<ul>
+		<li>&lsh; <a href="./">Home</a>
+			
+			<ul>
+				<li>
+											
+					&uarr; <a href="./ion">
+							ion
+						</a>
+						<ul>
+							<li>
+																	
+					&uarr; <a href="./ion/: Tutorial">
+							★ Tutorial
+						</a>
+						<ul>
+							<li>
+											
+							&circlearrowright; <strong><a href="./ion/: Tutorial/:3. Standard Datatypes">★3. Standard Datatypes</a></strong>
+
+							
+																																
+						</ul>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:1. Getting started">★1. Getting started</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:2. What is ion">★2. What is ion</a></li>
+																													
+						<li>&ldsh; <a href="./ion/: Tutorial/:4. Special Datatypes">★4. Special Datatypes</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:5. Symbols, Tables and Catalogs">★5. Symbols, Tables and Catalogs</a></li>
+																																																																																										
+					</ul>
+													
+				</li>
+			</ul>
+			
+		</li>
+	</ul>
+</div>
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#">#</a>Standard Datatypes</h1><p>ION supports many of PHP's data types:</p><h2 id="Nulls">Nulls<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Nulls">#</a>
+</h2><p>Additonally to the plain and simple <code>NULL</code>, ION can attach a type to <code>NULL</code> values.</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br>$writer </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">ion\Writer\Stream\Writer</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">STDOUT</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeNull</span><span style="color: inherit" class="keyword">();<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeTypedNull</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\Type</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">Int</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeTypedNull</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\Type</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">String</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">flush</span><span style="color: inherit" class="keyword">();<br><br></span><span style="color: inherit" class="comment">/*<br>    null<br>    null.int<br>    null.string<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h2 id="Booleans">Booleans<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Booleans">#</a>
+</h2><p>The <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> type does not need a lot of explanation:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br><br>$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeBool</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">true</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeBool</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">false</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">flush</span><span style="color: inherit" class="keyword">();<br><br></span><span style="color: inherit" class="comment">/*<br>    true<br>    false<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h2 id="Integers">Integers<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Integers">#</a>
+</h2><p>The <code><a href="https://php.net/manual/en/language.types.integer">int</a></code> type comprises signed integers of arbitrary size.</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br>$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeInt</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">123</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeInt</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"12345678901234567890"</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">flush</span><span style="color: inherit" class="keyword">();<br><br></span><span style="color: inherit" class="comment">/*<br>    123<br>    12345678901234567890<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><p>In ION-Text, underscores are allowed to separate digits:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br>$reader </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">ion\Reader\Buffer\Reader</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"-123_456_789"</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$reader</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">next</span><span style="color: inherit" class="keyword">();<br></span><span style="color: inherit" class="default">var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$reader</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">getType</span><span style="color: inherit" class="keyword">());<br></span><span style="color: inherit" class="default">var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$reader</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">readInt</span><span style="color: inherit" class="keyword">());<br><br></span><span style="color: inherit" class="comment">/*<br>    enum(ion\Type::Int)<br>    int(-123456789)<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><p>Hexadecimal as well as binary notation are supported, too:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br><br>$reader </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">ion\Reader\Buffer\Reader</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"0xdead_beef"</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$reader</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">next</span><span style="color: inherit" class="keyword">();<br></span><span style="color: inherit" class="default">var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$reader</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">readInt</span><span style="color: inherit" class="keyword">());<br><br></span><span style="color: inherit" class="comment">/*<br>    int(3735928559)<br>*/<br><br></span><span style="color: inherit" class="default">$reader </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">ion\Reader\Buffer\Reader</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"0b10000100_11001001"</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$reader</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">next</span><span style="color: inherit" class="keyword">();<br></span><span style="color: inherit" class="default">var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$reader</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">readInt</span><span style="color: inherit" class="keyword">());<br><br></span><span style="color: inherit" class="comment">/*<br>    int(33993)<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h2 id="Reals">Reals<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Reals">#</a>
+</h2><p>Ion supports both binary and lossless decimal encodings of <code><a href="https://php.net/manual/en/language.types.float">real</a></code> numbers as, respectively, types <code>float</code> and <code>decimal</code>. In the text format, <code>float</code> values are denoted much like the decimal formats in C or Java; <code>decimal</code> values use <code>d</code> instead of <code>e</code> to start the exponent.</p><p>Reals without an exponent are treated as decimal. As with JSON, extra leading zeros are not allowed. Digits may be separated with an underscore.</p><h3 id="Floats">Floats<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Floats">#</a>
+</h3><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br><br>var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\serialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">0.123</span><span style="color: inherit" class="keyword">));<br><br></span><span style="color: inherit" class="comment">/*<br>    string(25) "0.12299999999999999822e+0"<br>*/<br><br></span><span style="color: inherit" class="default">var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"[0.123e, 123e-3]"</span><span style="color: inherit" class="keyword">));<br><br></span><span style="color: inherit" class="comment">/*<br>  array(2) {<br>    [0]=&gt;<br>    float(0.123)<br>    [1]=&gt;<br>    float(0.123)<br>  }<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h3 id="Decimals">Decimals<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Decimals">#</a>
+</h3><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br><br>var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\serialize</span><span style="color: inherit" class="keyword">(new </span><span style="color: inherit" class="default">ion\Decimal</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"0.123"</span><span style="color: inherit" class="keyword">)));<br><br></span><span style="color: inherit" class="comment">/*<br>    string(5) "0.123"<br>*/<br><br></span><span style="color: inherit" class="default">var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"[0.123d0, 123d-3]"</span><span style="color: inherit" class="keyword">));<br><br></span><span style="color: inherit" class="comment">/*<br>  array(2) {<br>    [0]=&gt;<br>    object(ion\Decimal)#8 (2) {<br>      ["number"]=&gt;<br>      string(5) "0.123"<br>      // ...<br>    }<br>    [1]=&gt;<br>    object(ion\Decimal)#11 (2) {<br>      ["number"]=&gt;<br>      string(5) "0.123"<br>      // ...<br>    }<br>  }<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h2 id="Strings">Strings<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Strings">#</a>
+</h2><p>Ion strings are Unicode character sequences of arbitrary length.</p><p>In the text format, strings are delimited by <code><a href="https://php.net/manual/en/language.types.float">double</a></code>-quotes and follow common backslash-escape conventions (see <a href="https://amzn.github.io/ion-docs/docs/spec.html#escapess">official spec</a>). The binary format always uses UTF-8 encoding.</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br><br>ion\serialize</span><span style="color: inherit" class="keyword">([<br>  </span><span style="color: inherit" class="string">"abc"</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="string">"new<br>line"<br></span><span style="color: inherit" class="keyword">]);<br><br></span><span style="color: inherit" class="comment">/*<br>    ["abc", "new\nline"]<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h3 id="Long.Strings">Long Strings<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Long.Strings">#</a>
+</h3><p>The text format supports an alternate syntax for “long strings”, including those that break across lines. Sequences bounded by three single-quotes (''') can cross multiple lines and still count as a valid, single <code><a href="https://php.net/manual/en/language.types.string">string</a></code>. In addition, any number of adjacent triple-quoted strings are concatenated into a single value.</p><p>The concatenation happens within the Ion text parser and is neither detectable via the data model nor applicable to the binary format. Note that comments are always treated as whitespace, so concatenation still occurs when a comment falls between two <code><a href="https://php.net/manual/en/language.types.integer">long</a></code> strings.</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br>var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"<br>'''<br>  here are <br>  several new<br>  lines<br>'''<br>"</span><span style="color: inherit" class="keyword">));<br><br></span><span style="color: inherit" class="comment">/*<br>string(35) "<br>  here are <br>  several new<br>  lines<br>"<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h2 id="Containers">Containers<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Containers">#</a>
+</h2><p>Ion defines three container types: structures, lists, and S-expressions. These types are defined recursively and may contain values of any Ion type.</p><h3 id="Lists">Lists<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Lists">#</a>
+</h3><p>Lists are ordered collections of values. The contents of the list are heterogeneous (that is, each element can have a different type). In the text format, lists are bounded by square brackets and elements are separated by commas.</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br><br>ion\serialize</span><span style="color: inherit" class="keyword">([</span><span style="color: inherit" class="default">1</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="string">"yes"</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="default">null</span><span style="color: inherit" class="keyword">]);<br><br></span><span style="color: inherit" class="comment">/*<br>  [1,"yes",null]<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h3 id="Structures">Structures<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Structures">#</a>
+</h3><p>Structures are <em>unordered</em> collections of name/value pairs. The names are symbol tokens, and the values are unrestricted. Each name/value pair is called a field.</p><p>In the text format, structures are wrapped by curly braces, with a colon between each name and value, and a comma between the fields. For the purposes of JSON compatibility, it’s also legal to use strings for field names, but they are converted to symbol tokens by the parser.</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?=<br><br>ion\serialize</span><span style="color: inherit" class="keyword">([<br>  </span><span style="color: inherit" class="string">"outlaw"</span><span style="color: inherit" class="keyword">,<br>  </span><span style="color: inherit" class="string">"key" </span><span style="color: inherit" class="keyword">=&gt; </span><span style="color: inherit" class="string">"value"</span><span style="color: inherit" class="keyword">,<br>  </span><span style="color: inherit" class="string">"obj" </span><span style="color: inherit" class="keyword">=&gt; (object)[</span><span style="color: inherit" class="string">"key" </span><span style="color: inherit" class="keyword">=&gt; </span><span style="color: inherit" class="string">"value"</span><span style="color: inherit" class="keyword">]<br>]);<br><br></span><span style="color: inherit" class="comment">/*<br>    {'0':"outlaw",key:"value",obj:o::{key:"value"}}<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br><br>var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(<br>  </span><span style="color: inherit" class="string">'{\'0\':"outlaw",key:"value",obj:o::{key:"value"}}'<br></span><span style="color: inherit" class="keyword">));<br><br></span><span style="color: inherit" class="comment">/*<br>  array(3) {<br>    [0]=&gt;<br>    string(6) "outlaw"<br>    ["key"]=&gt;<br>    string(5) "value"<br>    ["obj"]=&gt;<br>    object(stdClass)#10 (1) {<br>      ["key"]=&gt;<br>      string(5) "value"<br>    }<br>  }<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><hr><h2 id="Next.up">Next up<a class="permalink" href="ion/:%20Tutorial/:3.%20Standard%20Datatypes#Next.up">#</a>
+</h2><ul>
+<li>
+<a href="ion/:%20Tutorial/:4.%20Special%20Datatypes">Special Datatypes</a>
+</li>
+</ul>				
+			<div class="comments">
+										<style>.giscus-frame {min-height: 16em;}</style>
+	<script>
+		function giscus_load(button) {
+			let script = document.createElement("script");
+						script.setAttribute("data-repo", 'awesomized/ext-ion');
+						script.setAttribute("data-category", 'Comments on Docs');
+						script.setAttribute("data-repo-id", 'R_kgDOGfXEXw');
+						script.setAttribute("data-category-id", 'DIC_kwDOGfXEX84CBHuf');
+						script.setAttribute("data-mapping", 'og:title');
+						script.setAttribute("data-input-position", 'bottom');
+						script.setAttribute("data-reactions-enabled", false);
+						script.setAttribute("data-theme", 'light');
+						script.setAttribute("data-lang", 'en');
+			
+			script.src = "//giscus.app/client.js";
+			button.parentNode.replaceChild(script, button);
+		}
+	</script>
+	<button class="activator" onclick="giscus_load(this)">Show Comments from Github Discussions</button>
+				
+			</div>
+		
+			<footer>
+				
+<ul>
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
+</a></li>
+	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
+	<li>
+</li>
+</ul>
+
+			</footer>
+		
+			<script src="index.js" defer></script>
+		
+		</div>
+	</body>
+</html>

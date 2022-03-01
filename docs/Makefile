@@ -5,7 +5,14 @@ TAG := $(shell (git describe --tags --match=v[0-9]*  2>/dev/null || git tag --so
 
 # ---
 
-SPECIAL_SRC := src/ion/\\\:\\\ Security.md src/ion/\\\:\\\ Contributing.md src/ion.md src/mdref.json
+SPECIAL_SRC := \
+  src/mdref.json \
+  src/ion.md \
+  src/ion/\\\:\\\ Contributing.md \
+  src/ion/\\\:\\\ Security.md \
+  tutorial
+
+# ---
 
 .PHONY: all
 all: latest
@@ -26,7 +33,7 @@ $(TAG): markdown | vendor/bin/ref2html
 markdown: src/ion.stub.php $(SPECIAL_SRC) | vendor/bin/stub2ref
 	$(PHP) $| ion $< src
 
-src src/ion:
+src src/ion src/ion/\\\:\\\ Tutorial:
 	-mkdir -p $@
 src/mdref.json: mdref.json
 	-test -e $@ || ln $^ $@
@@ -34,10 +41,14 @@ src/ion.stub.php: ../ion.stub.php | src
 	-test -e $@ || ln $^ $@
 src/ion.md: ../README.md | src
 	-test -e $@ || ln $^ $@
-src/ion/\\\:\\\ Security.md: ../SECURITY.md | src/ion
-	-test -e $@ || ln $^ $@
 src/ion/\\\:\\\ Contributing.md: ../CONTRIBUTING.md | src/ion
 	-test -e $@ || ln $^ $@
+src/ion/\\\:\\\ Security.md: ../SECURITY.md | src/ion
+	-test -e $@ || ln $^ $@
+
+.PHONY: tutorial
+tutorial: | src/ion
+	cp -R tutorial/* src/ion/
 
 vendor/%:
 	COMPOSER= $(COMPOSER) require m6w6/mdref:dev-master
@@ -51,5 +62,3 @@ docker:
 .PHONY: clean
 clean:
 	-rm -rf latest src vendor composer* .composer
-
-
