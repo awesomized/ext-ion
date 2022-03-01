@@ -1743,7 +1743,7 @@ static ZEND_FUNCTION(ion_unserialize)
 		php_ion_unserializer *ser = zo_ser ? &php_ion_obj(unserializer_php, zo_ser)->unserializer : NULL;
 		php_ion_unserialize(ser, data, return_value);
 	} else {
-		zend_call_method_with_1_params(zo_ser, NULL, NULL, "__invoke", return_value, data);
+		zend_call_method_with_1_params(zo_ser, NULL, NULL, "unserialize", return_value, data);
 	}
 }
 
