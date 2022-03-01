@@ -225,6 +225,7 @@ static zend_class_entry
 	*ce_Decimal,
 	*ce_Decimal_Context,
 	*ce_Decimal_Context_Rounding,
+	*ce_Exception,
 	*ce_LOB,
 	*ce_Reader,
 	*ce_Reader_Options,
@@ -405,7 +406,7 @@ LOCAL void *php_ion_obj_ex(void *obj, ptrdiff_t offset) {
 #define ION_CHECK_RETURN(r, err, ...) do { \
 	iERR __err = err; \
 	if (UNEXPECTED(__err)) { \
-		zend_throw_exception_ex(spl_ce_RuntimeException, __err, "%s: %s", ion_error_to_str(__err), #err); \
+		zend_throw_exception_ex(ce_Exception, __err, "%s: %s", ion_error_to_str(__err), #err); \
 		__VA_ARGS__; \
 		return r; \
 	} \
@@ -962,7 +963,7 @@ LOCAL ION_TIMESTAMP *ion_timestamp_from_php(ION_TIMESTAMP *buf, php_ion_timestam
 	int precision = Z_LVAL_P(zend_read_property(ts->std.ce, &ts->std, ZEND_STRL("precision"), 0, &tmp));
 
 	if (!precision || precision > (ION_TS_FRAC|0x80)) {
-		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
+		zend_throw_exception_ex(ce_Exception, IERR_INVALID_ARG,
 				"Invalid precision (%d) of ion\\Timestamp", precision);
 	} else switch ((buf->precision = precision) & 0x7f) {
 	case ION_TS_FRAC:
@@ -1621,7 +1622,7 @@ LOCAL void php_ion_serialize_object_iface(php_ion_serializer *ser, zend_object *
 		ION_CHECK(ion_writer_write_clob(ser->writer, buf, len));
 		efree(buf);
 	} else if (!EG(exception)){
-		zend_throw_exception_ex(spl_ce_UnexpectedValueException, IERR_INTERNAL_ERROR,
+		zend_throw_exception_ex(ce_Exception, IERR_INTERNAL_ERROR,
 				"Failed to serialize class %s", zobject->ce->name->val);
 	}
 }
@@ -1641,7 +1642,7 @@ LOCAL void php_ion_serialize_object_magic(php_ion_serializer *ser, zend_object *
 		php_ion_serialize_zval(ser, &rv);
 		zval_ptr_dtor(&rv);
 	} else {
-		zend_throw_exception_ex(spl_ce_UnexpectedValueException, IERR_INTERNAL_ERROR,
+		zend_throw_exception_ex(ce_Exception, IERR_INTERNAL_ERROR,
 				"%s serializer %s::%s did not return an array",
 				fn ? "Custom" : "Magic", zobject->ce->name->val,
 				fn ? fn->common.function_name->val : "__serialize");
@@ -1676,7 +1677,7 @@ LOCAL void php_ion_serialize_object_std(php_ion_serializer *ser, zend_object *zo
 		php_ion_serialize_struct(ser, props, true, true);
 		zend_release_properties(props);
 	} else {
-		zend_throw_exception_ex(spl_ce_UnexpectedValueException, IERR_INTERNAL_ERROR,
+		zend_throw_exception_ex(ce_Exception, IERR_INTERNAL_ERROR,
 				"Could not get properties for serialization of class %s",
 				zobject->ce->name->val);
 	}
@@ -1694,7 +1695,7 @@ LOCAL void php_ion_serialize_object_lob(php_ion_serializer *ser, zend_object *zo
 		ION_CHECK(ion_writer_write_clob(ser->writer, (BYTE *) Z_STRVAL_P(value), Z_STRLEN_P(value)));
 		break;
 	default:
-		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
+		zend_throw_exception_ex(ce_Exception, IERR_INVALID_ARG,
 				"Unsupported LOB type: ion\\Type::%s", Z_STRVAL_P(zend_enum_fetch_case_name(Z_OBJ_P(type))));
 		break;
 	}
@@ -1726,7 +1727,7 @@ LOCAL void php_ion_serialize_object(php_ion_serializer *ser, zend_object *zobjec
 	ZEND_ASSERT(ce);
 
 	if (ce->ce_flags & ZEND_ACC_NOT_SERIALIZABLE) {
-		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
+		zend_throw_exception_ex(ce_Exception, IERR_INVALID_ARG,
 				"Serializing %s is not allowed", ce->name->val);
 		return;
 	}
@@ -1854,7 +1855,7 @@ LOCAL void php_ion_serialize_zval(php_ion_serializer *ser, zval *zv)
 		php_ion_serialize_refcounted(ser, zv);
 		break;
 	default:
-		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
+		zend_throw_exception_ex(ce_Exception, IERR_INVALID_ARG,
 				"Failed to serialize value of type %s", zend_zval_type_name(zv));
 	}
 }
@@ -1870,7 +1871,7 @@ LOCAL void php_ion_serialize_ex(php_ion_serializer *ser, zval *zv)
 
 	if (ser->multi_seq) {
 		if (Z_TYPE_P(zv) != IS_ARRAY || !zend_array_is_list(Z_ARRVAL_P(zv))) {
-			zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
+			zend_throw_exception_ex(ce_Exception, IERR_INVALID_ARG,
 					"Expected a packed, consecutively numerically indexed array as argument to the multi sequence serializer");
 			return;
 		}
@@ -2007,7 +2008,7 @@ LOCAL zval *php_ion_unserialize_class(php_ion_unserializer *ser, zval *return_va
 		return zend_hash_next_index_insert(ser->ids, return_value);
 	}
 
-	zend_throw_exception_ex(spl_ce_RuntimeException, IERR_IMPORT_NOT_FOUND,
+	zend_throw_exception_ex(ce_Exception, IERR_IMPORT_NOT_FOUND,
 			"Could not find class %s", ser->annotations.object_class->val);
 	return NULL;
 }
@@ -2021,12 +2022,12 @@ LOCAL void php_ion_unserialize_object_enum(php_ion_unserializer *ser, zval *retu
 
 	zend_class_entry *ce = zend_lookup_class(ser->annotations.object_class);
 	if (!ce || !(ce->ce_flags & ZEND_ACC_ENUM)) {
-		zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_TOKEN,
+		zend_throw_exception_ex(ce_Exception, IERR_INVALID_TOKEN,
 				"Not a valid enum: %s", ser->annotations.object_class->val);
 		return;
 	}
 	if (!zend_hash_exists(CE_CONSTANTS_TABLE(ce), zs_case)) {
-		zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_TOKEN,
+		zend_throw_exception_ex(ce_Exception, IERR_INVALID_TOKEN,
 				"Not a valid enum case: %s::%s", ser->annotations.object_class->val, zs_case->val);
 		return;
 	}
@@ -2049,13 +2050,13 @@ LOCAL void php_ion_unserialize_object_iface(php_ion_unserializer *ser, zval *ret
 			zval_ptr_dtor(backref);
 			ZVAL_NULL(backref);
 			if (!EG(exception)) {
-				zend_throw_exception_ex(spl_ce_UnexpectedValueException, IERR_INTERNAL_ERROR,
+				zend_throw_exception_ex(ce_Exception, IERR_INTERNAL_ERROR,
 										"Failed to unserialize class %s", ce->name->val);
 			}
 		}
 		zend_string_release(s);
 	} else {
-		zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_TOKEN,
+		zend_throw_exception_ex(ce_Exception, IERR_INVALID_TOKEN,
 				"Class %s does not implement Serializable", ser->annotations.object_class->val);
 	}
 }
@@ -2194,21 +2195,21 @@ LOCAL void verify_unserializer(php_ion_unserializer *ser, zend_object *zobject, 
 
 	case 'C':
 		if (!can_call_custom_unserialize(ser, zobject, fn)) {
-			zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_TOKEN,
+			zend_throw_exception_ex(ce_Exception, IERR_INVALID_TOKEN,
 					"Could not find custom serializer method of %s", ser->annotations.object_class->val);
 		}
 		break;
 
 	case 'O':
 		if (!can_call_magic_unserialize(ser, zobject->ce)) {
-			zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_TOKEN,
+			zend_throw_exception_ex(ce_Exception, IERR_INVALID_TOKEN,
 					"Could not find method %s::__unserialize()", ser->annotations.object_class->val);
 		}
 		*fn = zobject->ce->__unserialize;
 		break;
 
 	default:
-		zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_TOKEN,
+		zend_throw_exception_ex(ce_Exception, IERR_INVALID_TOKEN,
 				"Invalid object type %c", ser->annotations.object_type);
 	}
 }
@@ -2274,7 +2275,7 @@ LOCAL void php_ion_unserialize_struct(php_ion_unserializer *ser, zval *return_va
 		object_init(return_value);
 		php_ion_unserialize_hash(ser, return_value);
 	} else {
-		zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_TOKEN,
+		zend_throw_exception_ex(ce_Exception, IERR_INVALID_TOKEN,
 				"Invalid object annotation %c::", ser->annotations.object_type);
 	}
 }
@@ -2377,7 +2378,7 @@ LOCAL void php_ion_unserialize_backref(php_ion_unserializer *ser, zval *return_v
 		ZVAL_COPY_VALUE(return_value, backref);
 		zend_hash_next_index_insert(ser->addref, return_value);
 	} else {
-		zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INTERNAL_ERROR,
+		zend_throw_exception_ex(ce_Exception, IERR_INTERNAL_ERROR,
 				"Could not find back reference " ZEND_LONG_FMT, Z_LVAL_P(return_value));
 	}
 }
@@ -2402,7 +2403,7 @@ LOCAL void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 		switch (*ann_str.value) {
 		case 'R':
 			if (ser->annotations.makeref) {
-				zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_SYNTAX,
+				zend_throw_exception_ex(ce_Exception, IERR_INVALID_SYNTAX,
 						"Invalid multiple reference annotations");
 				return;
 			}
@@ -2411,7 +2412,7 @@ LOCAL void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 
 		case 'r':
 			if (ser->annotations.backref) {
-				zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_SYNTAX,
+				zend_throw_exception_ex(ce_Exception, IERR_INVALID_SYNTAX,
 						"Invalid multiple back reference annotations");
 				return;
 			}
@@ -2420,7 +2421,7 @@ LOCAL void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 
 		case 'p':
 			if (ser->annotations.object_prop) {
-				zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_SYNTAX,
+				zend_throw_exception_ex(ce_Exception, IERR_INVALID_SYNTAX,
 						"Invalid multiple object property annotations");
 				return;
 			}
@@ -2442,7 +2443,7 @@ LOCAL void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 		case 'o':
 		case 'c':
 			if (ser->annotations.object_type) {
-				zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_SYNTAX,
+				zend_throw_exception_ex(ce_Exception, IERR_INVALID_SYNTAX,
 						"Invalid multiple object type annotations: %c::%c",
 						ser->annotations.object_type, *ann_str.value);
 				return;
@@ -2461,12 +2462,12 @@ LOCAL void php_ion_unserialize_annotations(php_ion_unserializer *ser)
 
 		// sanity checks
 		if (ser->annotations.object_type && ser->annotations.object_type != 'o' && !ser->annotations.object_class) {
-			zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_SYNTAX,
+			zend_throw_exception_ex(ce_Exception, IERR_INVALID_SYNTAX,
 					"Invalid object annotation without class name: %c::", ser->annotations.object_type);
 			return;
 		}
 		if (ser->annotations.object_type == 'o' && ser->annotations.object_class) {
-			zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_SYNTAX,
+			zend_throw_exception_ex(ce_Exception, IERR_INVALID_SYNTAX,
 					"Invalid object annotation with class name: o::%s", ser->annotations.object_class->val);
 			return;
 		}
@@ -2517,7 +2518,7 @@ LOCAL void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *return_valu
 		}
 		if (ser->annotations.object_type) {
 			if (!ser->annotations.backref) {
-				zend_throw_exception_ex(spl_ce_RuntimeException, IERR_INVALID_SYNTAX,
+				zend_throw_exception_ex(ce_Exception, IERR_INVALID_SYNTAX,
 						"Invalid object type annotation: %c::" ZEND_LONG_FMT,
 						ser->annotations.object_type, Z_LVAL_P(return_value));
 				return;
@@ -2652,7 +2653,7 @@ void php_ion_unserialize(php_ion_unserializer *ser, zval *zdata, zval *return_va
 		reader->type = BUFFER_READER;
 		reader->buffer = zval_get_string(zdata);
 	} else {
-		zend_throw_exception_ex(spl_ce_InvalidArgumentException, IERR_INVALID_ARG,
+		zend_throw_exception_ex(ce_Exception, IERR_INVALID_ARG,
 				"Invalid source to unserialize: expected string or resource, got %s",
 								zend_zval_type_name(zdata));
 		if (zo_ser) {

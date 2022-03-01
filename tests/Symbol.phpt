@@ -84,5 +84,5 @@ object(ion\Symbol)#%d (3) {
   ["importLocation"]=>
   NULL
 }
-caught RuntimeException: IERR_INVALID_SYMBOL: %s
+caught ion\Exception: IERR_INVALID_SYMBOL: %s
 DONE

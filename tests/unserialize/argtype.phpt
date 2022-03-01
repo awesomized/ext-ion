@@ -14,7 +14,7 @@ foreach ([&$a,  $a, (object) $a] as $s) {
 DONE
 --EXPECT--
 TEST
-caught InvalidArgumentException: Invalid source to unserialize: expected string or resource, got array
-caught InvalidArgumentException: Invalid source to unserialize: expected string or resource, got array
-caught InvalidArgumentException: Invalid source to unserialize: expected string or resource, got stdClass
+caught ion\Exception: Invalid source to unserialize: expected string or resource, got array
+caught ion\Exception: Invalid source to unserialize: expected string or resource, got array
+caught ion\Exception: Invalid source to unserialize: expected string or resource, got stdClass
 DONE

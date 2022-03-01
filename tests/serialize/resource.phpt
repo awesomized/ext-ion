@@ -14,5 +14,5 @@ try {
 DONE
 --EXPECTF--
 TEST
-caught InvalidArgumentException: Failed to serialize value of type resource
+caught ion\Exception: Failed to serialize value of type resource
 DONE

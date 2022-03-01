@@ -1825,6 +1825,9 @@ PHP_MINIT_FUNCTION(ion)
 	php_ion_register(decimal_ctx, Decimal_Context);
 	ce_Decimal_Context_Rounding = register_class_ion_Decimal_Context_Rounding();
 
+	// Exception
+	ce_Exception = register_class_ion_Exception(zend_ce_exception);
+
 	// LOB
 	ce_LOB = register_class_ion_LOB();
 
