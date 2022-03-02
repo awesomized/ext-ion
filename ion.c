@@ -1895,6 +1895,8 @@ PHP_MINFO_FUNCTION(ion)
 {
 	php_info_print_table_start();
 	php_info_print_table_header(2, "ion support", "enabled");
+	php_info_print_table_row(2, "ion version", PHP_ION_VERSION);
+	php_info_print_table_row(2, "ion-c version", "unknown");
 	php_info_print_table_end();
 }
 
