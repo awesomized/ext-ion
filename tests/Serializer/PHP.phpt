@@ -8,8 +8,15 @@ TEST
 $o1 = ion\serialize(["foo", ["p" => 1]]);
 $o2 = ion\serialize(["foo", ["p" => 1]], $s1 = new ion\Serializer\PHP);
 $o3 = ion\serialize(["foo", ["p" => 1]], $s2 = new ion\Serializer\PHP(new ion\Writer\Options));
+$o4 = ion\serialize(["foo", ["p" => 1]], ["writerOptions" => []]);
 if ($o1 !== $o2) {
 	var_dump($o1, $o2);
+}
+if ($o2 !== $o3) {
+	var_dump($o2, $o3);
+}
+if ($o3 !== $o4) {
+	var_dump($o3, $o4);
 }
 var_dump($s1);
 if ($s1 != $s2) {
