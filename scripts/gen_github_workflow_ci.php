@@ -86,8 +86,8 @@ foreach ($job as $id => $env) {
         if: success()
         run: |
           find . -name '*.gc*'
-          cd .libs
-          bash <(curl -s https://codecov.io/bash) -X xcode -X coveragepy
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          bash ./codecov
 <?php endif; ?>
 
 <?php
