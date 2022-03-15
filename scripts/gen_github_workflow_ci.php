@@ -87,7 +87,8 @@ foreach ($job as $id => $env) {
         run: |
           find . -name '*.gc*'
           curl -Os https://uploader.codecov.io/latest/linux/codecov
-          bash ./codecov
+          chomd +x codecov
+          ./codecov
 <?php endif; ?>
 
 <?php
