@@ -24,7 +24,7 @@ foreach (str_split($w->getBuffer(), 8) as $line) {
 }
 echo "\n";
 
-$u = new ion\Unserializer\PHP(multiSequence: true);
+$u = new ion\Unserializer\Unserializer(multiSequence: true);
 var_dump($u->unserialize($w->getBuffer()));
 
 ?>

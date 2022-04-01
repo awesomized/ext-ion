@@ -24,9 +24,9 @@ class custom {
 		}
 	}
 }
-$s = ion\serialize(new custom, new ion\Serializer\PHP(callCustomSerialize: "serialize"));
+$s = ion\serialize(new custom, new ion\Serializer\Serializer(callCustomSerialize: "serialize"));
 echo $s,"\n";
-var_dump(ion\unserialize($s, new ion\Unserializer\PHP(callCustomUnserialize: "unserialize")));
+var_dump(ion\unserialize($s, new ion\Unserializer\Unserializer(callCustomUnserialize: "unserialize")));
 ?>
 DONE
 --EXPECTF--

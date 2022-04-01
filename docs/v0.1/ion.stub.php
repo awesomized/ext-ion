@@ -28,7 +28,7 @@ namespace ion;
  *  * object (incl. \Serializable, and classes implementing magic and custom __serialize)
  *
  * @param mixed $data PHP value(s).
- * @param Serializer|array|null $serializer Custom serializer.
+ * @param Serializer|array|null $serializer Custom Serializer (options).
  * @return string serialized ION data
  * @throws \ion\Exception
  */
@@ -38,6 +38,7 @@ function serialize(mixed $data, Serializer|array|null $serializer = null) : stri
  * Unserialize ION data (stream) as PHP value(s).
  *
  * @param string|resource $data Serialized ION data, either as string buffer or stream.
+ * @param Unserializer|array|null $unserializer Custom Unserializer (options).
  * @return mixed unserialized PHP values
  * @throws \ion\Exception
  */
@@ -47,14 +48,14 @@ function unserialize($data, Unserializer|array|null $unserializer = null) : mixe
  * Serializer interface, used to customize ion\serialize()'s behavior.
  */
 interface Serializer {
-    public function serialize(mixed $data) : string;
+    public function serialize(mixed $data, \ion\Writer|\ion\Writer\Options|array|null $writer = null) : mixed;
 }
 
 /**
  * Unserializer interface, used to customize ion\unserialize()'s behavior.
  */
 interface Unserializer {
-    /** @param string|resource $data */
+    /** @param \ion\Reader|string|resource $data */
     public function unserialize($data) : mixed;
 }
 
@@ -837,11 +838,11 @@ class Reader extends \ion\Reader\Reader implements \ion\Reader\Buffer {
      * Create a new string buffer reader.
      *
      * @param string $buffer The buffer to read from.
-     * @param \ion\Reader\Options|null $options Reader options.
+     * @param \ion\Reader\Options|array|null $options Reader options.
      */
     public function __construct(
         string $buffer,
-        ?\ion\Reader\Options $options = null,
+        \ion\Reader\Options|array|null $options = null,
     ) {}
 
     public function getBuffer() : string {}
@@ -857,11 +858,11 @@ class Reader extends \ion\Reader\Reader implements \ion\Reader\Stream {
      * Create a new stream reader.
      *
      * @param resource $stream The stream to read from.
-     * @param \ion\Reader\Options|null $options Reader options.
+     * @param \ion\Reader\Options|array|null $options Reader options.
      */
     public function __construct(
         $stream,
-        ?\ion\Reader\Options $options = null,
+        \ion\Reader\Options|array|null $options = null,
     ) {}
 
     /**
@@ -1010,10 +1011,10 @@ class Writer extends \ion\Writer\Writer implements \ion\Writer\Buffer {
     /**
      * Create a new buffer writer.
      *
-     * @param \ion\Writer\Options|null $options Writer options.
+     * @param \ion\Writer\Options|array|null $options Writer options.
      */
     public function __construct(
-        ?\ion\Writer\Options $options = null,
+        \ion\Writer\Options|array|null $options = null,
     ) {}
 
     public function getBuffer() : string {}
@@ -1030,11 +1031,11 @@ class Writer extends \ion\Writer\Writer implements \ion\Writer\Stream {
      * Create a new stream writer.
      *
      * @param resource $stream The stream to write to.
-     * @param \ion\Writer\Options|null $options Writer options.
+     * @param \ion\Writer\Options|array|null $options Writer options.
      */
     public function __construct(
         $stream,
-        ?\ion\Writer\Options $options = null,
+        \ion\Writer\Options|array|null $options = null,
     ) {}
     /**
      * @return resource
@@ -1043,19 +1044,14 @@ class Writer extends \ion\Writer\Writer implements \ion\Writer\Stream {
 }
 
 namespace ion\Serializer;
-
 /**
- * Specialization of the serializer for PHP.
+ * Serializer implementation
  */
-class PHP implements \ion\Serializer {
+class Serializer implements \ion\Serializer {
     /**
-     * Create a new PHP ION serializer.
+     * Create a new ION serializer.
      */
     public function __construct(
-        /**
-         * Writer options.
-         */
-        public readonly \ion\Writer\Options|array|null $writerOptions = null,
         /**
          * Whether to write the top level array as multiple ION sequences.
          */
@@ -1070,23 +1066,19 @@ class PHP implements \ion\Serializer {
         public readonly ?string $callCustomSerialize = null,
     ) {}
 
-    public function serialize(mixed $data) : string {}
+    public function serialize(mixed $data, \ion\Writer|\ion\Writer\Options|array|null $writer = null) : mixed {}
 }
 
 namespace ion\Unserializer;
 
 /**
- * Specialization of the unserializer for PHP.
+ * Unserializer implementation
  */
-class PHP implements \ion\Unserializer {
+class Unserializer implements \ion\Unserializer {
     /**
-     * Create a new ION PHP unserializer.
+     * Create a new ION unserializer.
      */
     public function __construct(
-        /**
-         * Reader options.
-         */
-        public readonly \ion\Reader\Options|array|null $readerOptions = null,
         /**
          * Whether to continue reading multiple ION sequences after the first one.
          */
@@ -1101,6 +1093,6 @@ class PHP implements \ion\Unserializer {
         public readonly ?string $callCustomUnserialize = null,
     ){}
 
-    /** @param string|resource $data */
+    /** @param \ion\Reader|string|resource $data */
     public function unserialize($data) : mixed {}
 }

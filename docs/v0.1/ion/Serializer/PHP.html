@@ -57,6 +57,8 @@
 																																
 						</ul>
 																													
+						<li>&ldsh; <a href="./ion/Serializer/Serializer">Serializer</a></li>
+																			
 						<li>&ldsh; <a href="./ion/Serializer/serialize">Serializer::serialize</a></li>
 																																																																																										
 					</ul>
@@ -73,7 +75,7 @@
 </h2><p>None.</p><h2 id="Properties:">Properties:<a class="permalink" href="ion/Serializer/PHP#Properties:">#</a>
 </h2><ul>
 <li>
-<em>public</em> <a href="ion/Writer/Options">ion\Writer\Options</a>|<code><a href="https://php.net/manual/en/language.types.array">array</a></code>|<code><a href="https://php.net/manual/en/language.types.null">null</a></code> <span class="var" id="$writerOptions">$writerOptions<a class="permalink" href="ion/Serializer/PHP#%24writerOptions">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
+<em>public</em> ?<a href="ion/Writer/Options">ion\Writer\Options</a> <span class="var" id="$writerOptions">$writerOptions<a class="permalink" href="ion/Serializer/PHP#%24writerOptions">#</a></span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code><br>
 Writer options.</li>
 <li>
 <em>public</em> <code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var" id="$multiSequence">$multiSequence<a class="permalink" href="ion/Serializer/PHP#%24multiSequence">#</a></span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code><br>
@@ -93,7 +95,7 @@ Whether and which custom serialize method to call on objects to serialize.</li>
 </h3>
 		<p>Create a new PHP ION serializer.</p>
 
-		<p><code><a href="https://php.net/manual/en/language.types.declarations#language.types.declarations.void">void</a></code> <a href="ion/Serializer/PHP/__construct">ion\Serializer\PHP::__construct</a>([<a href="ion/Writer/Options">ion\Writer\Options</a>|<code><a href="https://php.net/manual/en/language.types.array">array</a></code>|<code><a href="https://php.net/manual/en/language.types.null">null</a></code> <span class="var">$writerOptions</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$multiSequence</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$callMagicSerialize</span> = <code><a href="https://php.net/manual/en/language.types.boolean">true</a></code>, [?<code><a href="https://php.net/manual/en/language.types.string">string</a></code> <span class="var">$callCustomSerialize</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>]]]])</p>
+		<p><code><a href="https://php.net/manual/en/language.types.declarations#language.types.declarations.void">void</a></code> <a href="ion/Serializer/PHP/__construct">ion\Serializer\PHP::__construct</a>([?<a href="ion/Writer/Options">ion\Writer\Options</a> <span class="var">$writerOptions</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$multiSequence</span> = <code><a href="https://php.net/manual/en/language.types.boolean">false</a></code>, [<code><a href="https://php.net/manual/en/language.types.boolean">bool</a></code> <span class="var">$callMagicSerialize</span> = <code><a href="https://php.net/manual/en/language.types.boolean">true</a></code>, [?<code><a href="https://php.net/manual/en/language.types.string">string</a></code> <span class="var">$callCustomSerialize</span> = <code><a href="https://php.net/manual/en/language.types.null">NULL</a></code>]]]])</p>
 	</li>
 	
 </ul>				

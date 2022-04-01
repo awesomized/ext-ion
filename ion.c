@@ -29,6 +29,25 @@
 #include "php_ion.h"
 #include "ion_private.h"
 
+#define Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(obj_dest, iface_ce, impl_ce, arr_dest) \
+	Z_PARAM_PROLOGUE(0,0) \
+	if (!zend_parse_arg_obj(_arg, &(obj_dest), iface_ce, true) && !zend_parse_arg_obj(_arg, &(obj_dest), impl_ce, true)) { \
+		if (UNEXPECTED(!zend_parse_arg_array(_arg, &(arr_dest), true, 0))) { \
+			_error = (iface_ce)->name->val; \
+			_error_code = ZPP_ERROR_WRONG_CLASS_OR_NULL; \
+			break; \
+		} \
+		zval tmp; \
+		object_init_ex(&tmp, impl_ce); \
+		*(&(obj_dest)) = Z_OBJ(tmp); \
+		zend_call_known_function((impl_ce)->constructor, obj_dest, impl_ce, \
+								 NULL, 0, NULL, Z_ARRVAL_P(arr_dest)); \
+		if (EG(exception)) { \
+			OBJ_RELEASE(obj_dest); \
+			return; \
+		} \
+	}
+
 static ZEND_METHOD(ion_Symbol_ImportLocation, __construct)
 {
 	php_ion_symbol_iloc *obj = php_ion_obj(symbol_iloc, Z_OBJ_P(ZEND_THIS));
@@ -1127,16 +1146,20 @@ static ZEND_METHOD(ion_Reader_Buffer_Reader, __construct)
 	PTR_CHECK(obj);
 
 	zend_string *zstr;
+	zval *za_opt = NULL;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(zstr)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->opt, ce_Reader_Options)
+		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(obj->opt, ce_Reader_Options, ce_Reader_Options, za_opt)
 	ZEND_PARSE_PARAMETERS_END();
 
 	obj->type = BUFFER_READER;
 	obj->buffer = zend_string_copy(zstr);
 
 	php_ion_reader_ctor(obj);
+	if (za_opt) {
+		OBJ_RELEASE(obj->opt);
+	}
 }
 static ZEND_METHOD(ion_Reader_Buffer_Reader, getBuffer)
 {
@@ -1152,17 +1175,20 @@ static ZEND_METHOD(ion_Reader_Stream_Reader, __construct)
 	php_ion_reader *obj = php_ion_obj(reader, Z_OBJ_P(ZEND_THIS));
 	PTR_CHECK(obj);
 
-	zval *zstream;
+	zval *zstream, *za_opt = NULL;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_RESOURCE(zstream)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->opt, ce_Reader_Options)
+		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(obj->opt, ce_Reader_Options, ce_Reader_Options, za_opt)
 	ZEND_PARSE_PARAMETERS_END();
 
 	obj->type = STREAM_READER;
 	php_stream_from_zval_no_verify(obj->stream.ptr, zstream);
 
 	php_ion_reader_ctor(obj);
+	if (za_opt) {
+		OBJ_RELEASE(obj->opt);
+	}
 }
 static ZEND_METHOD(ion_Reader_Stream_Reader, getStream)
 {
@@ -1598,13 +1624,17 @@ static ZEND_METHOD(ion_Writer_Buffer_Writer, __construct)
 	php_ion_writer *obj = php_ion_obj(writer, Z_OBJ_P(ZEND_THIS));
 	PTR_CHECK(obj);
 
+	zval *za_opt = NULL;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->opt, ce_Writer_Options)
+		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(obj->opt, ce_Writer_Options, ce_Writer_Options, za_opt)
 	ZEND_PARSE_PARAMETERS_END();
 
 	obj->type = BUFFER_WRITER;
 	php_ion_writer_ctor(obj);
+	if (za_opt) {
+		OBJ_RELEASE(obj->opt);
+	}
 }
 static ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer)
 {
@@ -1629,17 +1659,20 @@ static ZEND_METHOD(ion_Writer_Stream_Writer, __construct)
 	php_ion_writer *obj = php_ion_obj(writer, Z_OBJ_P(ZEND_THIS));
 	PTR_CHECK(obj);
 
-	zval *zstream;
+	zval *zstream, *za_opt = NULL;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_RESOURCE(zstream)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_OBJ_OF_CLASS_OR_NULL(obj->opt, ce_Writer_Options)
+		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(obj->opt, ce_Writer_Options, ce_Writer_Options, za_opt)
 	ZEND_PARSE_PARAMETERS_END();
 
 	obj->type = STREAM_WRITER;
 	php_stream_from_zval_no_verify(obj->stream.ptr, zstream);
 
 	php_ion_writer_ctor(obj);
+	if (za_opt) {
+		OBJ_RELEASE(obj->opt);
+	}
 }
 static ZEND_METHOD(ion_Writer_Stream_Writer, getStream)
 {
@@ -1653,56 +1686,135 @@ static ZEND_METHOD(ion_Writer_Stream_Writer, getStream)
 	RETURN_RES(obj->stream.ptr->res);
 }
 
-#define Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(obj_dest, iface_ce, impl_ce, arr_dest) \
-	Z_PARAM_PROLOGUE(0,0) \
-	if (!zend_parse_arg_obj(_arg, &(obj_dest), iface_ce, true)) {         \
-		if (UNEXPECTED(!zend_parse_arg_array(_arg, &(arr_dest), true, 0))) { \
-			_error = (iface_ce)->name->val; \
-			_error_code = ZPP_ERROR_WRONG_CLASS_OR_NULL; \
-			break; \
-		} \
-		zval tmp; \
-		object_init_ex(&tmp, impl_ce); \
-		*(&(obj_dest)) = Z_OBJ(tmp); \
-		zend_call_known_function((impl_ce)->constructor, obj_dest, impl_ce, \
-								 NULL, 0, NULL, Z_ARRVAL_P(arr_dest));                                       \
-		if (EG(exception)) { \
-			OBJ_RELEASE(obj_dest); \
-			return; \
-		} \
-	}
-
-static ZEND_METHOD(ion_Serializer_PHP, __construct)
+static ZEND_METHOD(ion_Serializer_Serializer, serializeNull)
 {
-	php_ion_serializer_php *obj = php_ion_obj(serializer_php, Z_OBJ_P(ZEND_THIS));
-	PTR_CHECK(obj);
+	php_ion_serializer *obj = php_ion_obj(serializer, Z_OBJ_P(ZEND_THIS));
+	OBJ_CHECK(obj);
 
-	obj->serializer.call_magic = true;
+	ZEND_PARSE_PARAMETERS_NONE();
 
-	zval *za_opt = NULL;
-	ZEND_PARSE_PARAMETERS_START(0, 4)
-		Z_PARAM_OPTIONAL
-		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(obj->opt, ce_Writer_Options, ce_Writer_Options, za_opt)
-		Z_PARAM_BOOL(obj->serializer.multi_seq)
-		Z_PARAM_BOOL(obj->serializer.call_magic)
-		Z_PARAM_STR_OR_NULL(obj->serializer.call_custom)
+	ION_CHECK(ion_writer_write_null(php_ion_obj(writer, obj->wri)->writer));
+}
+
+static ZEND_METHOD(ion_Serializer_Serializer, serializeBool)
+{
+	php_ion_serializer *obj = php_ion_obj(serializer, Z_OBJ_P(ZEND_THIS));
+	OBJ_CHECK(obj);
+
+	zend_bool b;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_BOOL(b)
 	ZEND_PARSE_PARAMETERS_END();
 
-	php_ion_serializer_php_ctor(obj);
-	if (za_opt) {
-		OBJ_RELEASE(obj->opt);
+	ION_CHECK(ion_writer_write_bool(php_ion_obj(writer, obj->wri)->writer, b));
+}
+
+static ZEND_METHOD(ion_Serializer_Serializer, serializeInt)
+{
+	php_ion_serializer *obj = php_ion_obj(serializer, Z_OBJ_P(ZEND_THIS));
+	OBJ_CHECK(obj);
+
+	zend_long l;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(l);
+	ZEND_PARSE_PARAMETERS_END();
+
+	ION_CHECK(ion_writer_write_int64(php_ion_obj(writer, obj->wri)->writer, l));
+}
+
+static ZEND_METHOD(ion_Serializer_Serializer, serializeFloat)
+{
+	php_ion_serializer *obj = php_ion_obj(serializer, Z_OBJ_P(ZEND_THIS));
+	OBJ_CHECK(obj);
+
+	double d;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_DOUBLE(d);
+	ZEND_PARSE_PARAMETERS_END();
+
+	ION_CHECK(ion_writer_write_double(php_ion_obj(writer, obj->wri)->writer, d));
+}
+
+static ZEND_METHOD(ion_Serializer_Serializer, serializeString)
+{
+	php_ion_serializer *obj = php_ion_obj(serializer, Z_OBJ_P(ZEND_THIS));
+	OBJ_CHECK(obj);
+
+	zend_string *zs;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(zs);
+	ZEND_PARSE_PARAMETERS_END();
+
+	ION_STRING is;
+	ION_CHECK(ion_writer_write_string(php_ion_obj(writer, obj->wri)->writer, ion_string_from_zend(&is, zs)));
+}
+
+static ZEND_METHOD(ion_Serializer_Serializer, serializeArray)
+{
+	php_ion_serializer *obj = php_ion_obj(serializer, Z_OBJ_P(ZEND_THIS));
+	OBJ_CHECK(obj);
+
+	zend_array *arr;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ARRAY_HT(arr)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (zend_array_is_list(arr)) {
+		php_ion_serialize_list(obj, arr);
+	} else {
+		php_ion_serialize_struct(obj, arr, false, false);
 	}
 }
-static ZEND_METHOD(ion_Serializer_PHP, serialize)
+
+static ZEND_METHOD(ion_Serializer_Serializer, serializeObject)
+{
+	php_ion_serializer *obj = php_ion_obj(serializer, Z_OBJ_P(ZEND_THIS));
+	OBJ_CHECK(obj);
+
+	zend_object *o;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_OBJ(o)
+	ZEND_PARSE_PARAMETERS_END();
+
+	php_ion_serialize_object(obj, o);
+}
+
+static ZEND_METHOD(ion_Serializer_Serializer, __construct)
+{
+	php_ion_serializer *obj = php_ion_obj(serializer, Z_OBJ_P(ZEND_THIS));
+	PTR_CHECK(obj);
+
+	obj->call_magic = true;
+
+	ZEND_PARSE_PARAMETERS_START(0, 3)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_BOOL(obj->multi_seq)
+		Z_PARAM_BOOL(obj->call_magic)
+		Z_PARAM_STR_OR_NULL(obj->call_custom)
+	ZEND_PARSE_PARAMETERS_END();
+
+	php_ion_serializer_ctor(obj);
+}
+static ZEND_METHOD(ion_Serializer_Serializer, serialize)
 {
 	zend_object *obj = Z_OBJ_P(ZEND_THIS);
 
-	zval *data;
-	ZEND_PARSE_PARAMETERS_START(1, 1)
+	zval *data, *za_opt = NULL;
+	zend_object *zo_wri = NULL;
+	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(data)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(zo_wri, ce_Writer, ce_Writer_Options, za_opt)
 	ZEND_PARSE_PARAMETERS_END();
 
-	php_ion_serialize(&php_ion_obj(serializer_php, obj)->serializer, data, return_value);
+	php_ion_serializer *ser = php_ion_obj(serializer, obj);
+	ser->wri = zo_wri;
+	php_ion_serialize(ser, data, return_value);
+	ser->wri = NULL;
+
+	if (za_opt) {
+		OBJ_RELEASE(zo_wri);
+	}
 }
 static ZEND_FUNCTION(ion_serialize)
 {
@@ -1711,12 +1823,12 @@ static ZEND_FUNCTION(ion_serialize)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(data)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(zo_ser, ce_Serializer, ce_Serializer_PHP, za_ser)
+		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(zo_ser, ce_Serializer, ce_Serializer_Serializer, za_ser)
 	ZEND_PARSE_PARAMETERS_END();
 
-	if (!zo_ser || zo_ser->ce == ce_Serializer_PHP) {
+	if (!zo_ser || zo_ser->ce == ce_Serializer_Serializer) {
 		// default, fast path
-		php_ion_serializer *ser = zo_ser ? &php_ion_obj(serializer_php, zo_ser)->serializer : NULL;
+		php_ion_serializer *ser = zo_ser ? php_ion_obj(serializer, zo_ser) : NULL;
 		php_ion_serialize(ser, data, return_value);
 	} else {
 		zend_call_method_with_1_params(zo_ser, NULL, NULL, "serialize", return_value, data);
@@ -1727,37 +1839,42 @@ static ZEND_FUNCTION(ion_serialize)
 	}
 }
 
-static ZEND_METHOD(ion_Unserializer_PHP, __construct)
+static ZEND_METHOD(ion_Unserializer_Unserializer, __construct)
 {
-	php_ion_unserializer_php *obj = php_ion_obj(unserializer_php, Z_OBJ_P(ZEND_THIS));
+	php_ion_unserializer *obj = php_ion_obj(unserializer, Z_OBJ_P(ZEND_THIS));
 	PTR_CHECK(obj);
 
-	obj->unserializer.call_magic = true;
+	obj->call_magic = true;
 
-	zval *za_opt = NULL;
-	ZEND_PARSE_PARAMETERS_START(0, 4)
+	ZEND_PARSE_PARAMETERS_START(0, 3)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(obj->opt, ce_Reader_Options, ce_Reader_Options, za_opt)
-		Z_PARAM_BOOL(obj->unserializer.multi_seq)
-		Z_PARAM_BOOL(obj->unserializer.call_magic)
-		Z_PARAM_STR_OR_NULL(obj->unserializer.call_custom)
+		Z_PARAM_BOOL(obj->multi_seq)
+		Z_PARAM_BOOL(obj->call_magic)
+		Z_PARAM_STR_OR_NULL(obj->call_custom)
 	ZEND_PARSE_PARAMETERS_END();
 
-	php_ion_unserializer_php_ctor(obj);
-	if (za_opt) {
-		OBJ_RELEASE(obj->opt);
-	}
+	php_ion_unserializer_ctor(obj);
 }
-static ZEND_METHOD(ion_Unserializer_PHP, unserialize)
+static ZEND_METHOD(ion_Unserializer_Unserializer, unserialize)
 {
 	zend_object *obj = Z_OBJ_P(ZEND_THIS);
 
-	zval *data;
-	ZEND_PARSE_PARAMETERS_START(1, 1)
+	zval *data, *za_opt = NULL;
+	zend_object *zo_rdr = NULL;
+	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(data)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(zo_rdr, ce_Reader, ce_Reader_Options, za_opt)
 	ZEND_PARSE_PARAMETERS_END();
 
-	php_ion_unserialize(&php_ion_obj(unserializer_php, obj)->unserializer, data, return_value);
+	php_ion_unserializer *ser = php_ion_obj(unserializer, obj);
+	ser->rdr = zo_rdr;
+	php_ion_unserialize(ser, data, return_value);
+	ser->rdr = NULL;
+
+	if (za_opt) {
+		OBJ_RELEASE(zo_rdr);
+	}
 }
 static ZEND_FUNCTION(ion_unserialize)
 {
@@ -1766,12 +1883,12 @@ static ZEND_FUNCTION(ion_unserialize)
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(data)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(zo_ser, ce_Unserializer, ce_Unserializer_PHP, za_ser)
+		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(zo_ser, ce_Unserializer, ce_Unserializer_Unserializer, za_ser)
 	ZEND_PARSE_PARAMETERS_END();
 
-	if (!zo_ser || zo_ser->ce == ce_Unserializer_PHP) {
+	if (!zo_ser || zo_ser->ce == ce_Unserializer_Unserializer) {
 		// default, fast path
-		php_ion_unserializer *ser = zo_ser ? &php_ion_obj(unserializer_php, zo_ser)->unserializer : NULL;
+		php_ion_unserializer *ser = zo_ser ? php_ion_obj(unserializer, zo_ser) : NULL;
 		php_ion_unserialize(ser, data, return_value);
 	} else {
 		zend_call_method_with_1_params(zo_ser, NULL, NULL, "unserialize", return_value, data);
@@ -1842,7 +1959,7 @@ PHP_MINIT_FUNCTION(ion)
 
 	// Serializer
 	ce_Serializer = register_class_ion_Serializer();
-	php_ion_register(serializer_php, Serializer_PHP, ce_Serializer);
+	php_ion_register(serializer, Serializer_Serializer, ce_Serializer);
 
 	// Symbol
 	php_ion_register(symbol, Symbol);
@@ -1877,7 +1994,7 @@ PHP_MINIT_FUNCTION(ion)
 
 	// Unserializer
 	ce_Unserializer = register_class_ion_Unserializer();
-	php_ion_register(unserializer_php, Unserializer_PHP, ce_Unserializer);
+	php_ion_register(unserializer, Unserializer_Unserializer, ce_Unserializer);
 
 	return SUCCESS;
 }

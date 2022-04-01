@@ -26,7 +26,7 @@ foreach (str_split($w->getBuffer(), 8) as $line) {
 }
 echo "\n";
 
-$u = new ion\Unserializer\PHP(multiSequence: true);
+$u = new ion\Unserializer\Unserializer(multiSequence: true);
 var_dump($s = $u->unserialize($w->getBuffer()));
 
 foreach ($s as $sym) {
@@ -37,11 +37,11 @@ foreach ($s as $sym) {
 		$sym->importLocation->location);
 }
 
-$u = new ion\Unserializer\PHP(multiSequence: true,
-	readerOptions: new ion\Reader\Options(
-		catalog: $c,
-		onContextChange: fn(ion\Reader $r) => print("on_context_change\n")));
-var_dump($u->unserialize($w->getBuffer()));
+$u = new ion\Unserializer\Unserializer(multiSequence: true);
+var_dump($u->unserialize(new ion\Reader\Buffer\Reader($w->getBuffer(), [
+		"catalog" => $c,
+		"onContextChange" => fn(ion\Reader $r) => print("on_context_change\n")
+])));
 
 ?>
 DONE

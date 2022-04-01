@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 7fcf22ba2096fdecb7319e7a399dbccbb21f89d9 */
+ * Stub hash: 771b0ba1db693b7506ff427a667d029630caca09 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -11,8 +11,9 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_unserialize, 0, 1, IS_MIXED,
 	ZEND_ARG_OBJ_TYPE_MASK(0, unserializer, ion\\Unserializer, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Serializer_serialize, 0, 1, IS_STRING, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Serializer_serialize, 0, 1, IS_MIXED, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
+	ZEND_ARG_OBJ_TYPE_MASK(0, writer, ion\\Writer|ion\\Writer\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Unserializer_unserialize, 0, 1, IS_MIXED, 0)
@@ -411,14 +412,14 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Buffer_Reader___construct, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, buffer, IS_STRING, 0)
-	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, options, ion\\Reader\\Options, 1, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, options, ion\\Reader\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_Buffer_Reader_getBuffer arginfo_class_ion_Symbol___toString
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Stream_Reader___construct, 0, 0, 1)
 	ZEND_ARG_INFO(0, stream)
-	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, options, ion\\Reader\\Options, 1, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, options, ion\\Reader\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_Stream_Reader_getStream arginfo_class_ion_Catalog___construct
@@ -491,7 +492,7 @@ ZEND_END_ARG_INFO()
 #define arginfo_class_ion_Writer_Stream_getStream arginfo_class_ion_Catalog___construct
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Buffer_Writer___construct, 0, 0, 0)
-	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, options, ion\\Writer\\Options, 1, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, options, ion\\Writer\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_Buffer_Writer_getBuffer arginfo_class_ion_Symbol___toString
@@ -500,28 +501,26 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Stream_Writer___construct, 0, 0, 1)
 	ZEND_ARG_INFO(0, stream)
-	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, options, ion\\Writer\\Options, 1, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, options, ion\\Writer\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_Stream_Writer_getStream arginfo_class_ion_Catalog___construct
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Serializer_PHP___construct, 0, 0, 0)
-	ZEND_ARG_OBJ_TYPE_MASK(0, writerOptions, ion\\Writer\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Serializer_Serializer___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiSequence, _IS_BOOL, 0, "false")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callMagicSerialize, _IS_BOOL, 0, "true")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callCustomSerialize, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Serializer_PHP_serialize arginfo_class_ion_Serializer_serialize
+#define arginfo_class_ion_Serializer_Serializer_serialize arginfo_class_ion_Serializer_serialize
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Unserializer_PHP___construct, 0, 0, 0)
-	ZEND_ARG_OBJ_TYPE_MASK(0, readerOptions, ion\\Reader\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Unserializer_Unserializer___construct, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, multiSequence, _IS_BOOL, 0, "false")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callMagicUnserialize, _IS_BOOL, 0, "true")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, callCustomUnserialize, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
-#define arginfo_class_ion_Unserializer_PHP_unserialize arginfo_class_ion_Unserializer_unserialize
+#define arginfo_class_ion_Unserializer_Unserializer_unserialize arginfo_class_ion_Unserializer_unserialize
 
 
 static ZEND_FUNCTION(ion_serialize);
@@ -623,10 +622,10 @@ static ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer);
 static ZEND_METHOD(ion_Writer_Buffer_Writer, resetBuffer);
 static ZEND_METHOD(ion_Writer_Stream_Writer, __construct);
 static ZEND_METHOD(ion_Writer_Stream_Writer, getStream);
-static ZEND_METHOD(ion_Serializer_PHP, __construct);
-static ZEND_METHOD(ion_Serializer_PHP, serialize);
-static ZEND_METHOD(ion_Unserializer_PHP, __construct);
-static ZEND_METHOD(ion_Unserializer_PHP, unserialize);
+static ZEND_METHOD(ion_Serializer_Serializer, __construct);
+static ZEND_METHOD(ion_Serializer_Serializer, serialize);
+static ZEND_METHOD(ion_Unserializer_Unserializer, __construct);
+static ZEND_METHOD(ion_Unserializer_Unserializer, unserialize);
 
 
 static const zend_function_entry ext_functions[] = {
@@ -984,16 +983,16 @@ static const zend_function_entry class_ion_Writer_Stream_Writer_methods[] = {
 };
 
 
-static const zend_function_entry class_ion_Serializer_PHP_methods[] = {
-	ZEND_ME(ion_Serializer_PHP, __construct, arginfo_class_ion_Serializer_PHP___construct, ZEND_ACC_PUBLIC)
-	ZEND_ME(ion_Serializer_PHP, serialize, arginfo_class_ion_Serializer_PHP_serialize, ZEND_ACC_PUBLIC)
+static const zend_function_entry class_ion_Serializer_Serializer_methods[] = {
+	ZEND_ME(ion_Serializer_Serializer, __construct, arginfo_class_ion_Serializer_Serializer___construct, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Serializer_Serializer, serialize, arginfo_class_ion_Serializer_Serializer_serialize, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
 
-static const zend_function_entry class_ion_Unserializer_PHP_methods[] = {
-	ZEND_ME(ion_Unserializer_PHP, __construct, arginfo_class_ion_Unserializer_PHP___construct, ZEND_ACC_PUBLIC)
-	ZEND_ME(ion_Unserializer_PHP, unserialize, arginfo_class_ion_Unserializer_PHP_unserialize, ZEND_ACC_PUBLIC)
+static const zend_function_entry class_ion_Unserializer_Unserializer_methods[] = {
+	ZEND_ME(ion_Unserializer_Unserializer, __construct, arginfo_class_ion_Unserializer_Unserializer___construct, ZEND_ACC_PUBLIC)
+	ZEND_ME(ion_Unserializer_Unserializer, unserialize, arginfo_class_ion_Unserializer_Unserializer_unserialize, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
@@ -1883,20 +1882,13 @@ static zend_class_entry *register_class_ion_Writer_Stream_Writer(zend_class_entr
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Serializer_PHP(zend_class_entry *class_entry_ion_Serializer)
+static zend_class_entry *register_class_ion_Serializer_Serializer(zend_class_entry *class_entry_ion_Serializer)
 {
 	zend_class_entry ce, *class_entry;
 
-	INIT_NS_CLASS_ENTRY(ce, "ion\\Serializer", "PHP", class_ion_Serializer_PHP_methods);
+	INIT_NS_CLASS_ENTRY(ce, "ion\\Serializer", "Serializer", class_ion_Serializer_Serializer_methods);
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
 	zend_class_implements(class_entry, 1, class_entry_ion_Serializer);
-
-	zend_string *property_writerOptions_class_ion_Writer_Options = zend_string_init("ion\\Writer\\Options", sizeof("ion\\Writer\\Options")-1, 1);
-	zval property_writerOptions_default_value;
-	ZVAL_UNDEF(&property_writerOptions_default_value);
-	zend_string *property_writerOptions_name = zend_string_init("writerOptions", sizeof("writerOptions") - 1, 1);
-	zend_declare_typed_property(class_entry, property_writerOptions_name, &property_writerOptions_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_writerOptions_class_ion_Writer_Options, 0, MAY_BE_ARRAY|MAY_BE_NULL));
-	zend_string_release(property_writerOptions_name);
 
 	zval property_multiSequence_default_value;
 	ZVAL_UNDEF(&property_multiSequence_default_value);
@@ -1919,20 +1911,13 @@ static zend_class_entry *register_class_ion_Serializer_PHP(zend_class_entry *cla
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Unserializer_PHP(zend_class_entry *class_entry_ion_Unserializer)
+static zend_class_entry *register_class_ion_Unserializer_Unserializer(zend_class_entry *class_entry_ion_Unserializer)
 {
 	zend_class_entry ce, *class_entry;
 
-	INIT_NS_CLASS_ENTRY(ce, "ion\\Unserializer", "PHP", class_ion_Unserializer_PHP_methods);
+	INIT_NS_CLASS_ENTRY(ce, "ion\\Unserializer", "Unserializer", class_ion_Unserializer_Unserializer_methods);
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
 	zend_class_implements(class_entry, 1, class_entry_ion_Unserializer);
-
-	zend_string *property_readerOptions_class_ion_Reader_Options = zend_string_init("ion\\Reader\\Options", sizeof("ion\\Reader\\Options")-1, 1);
-	zval property_readerOptions_default_value;
-	ZVAL_UNDEF(&property_readerOptions_default_value);
-	zend_string *property_readerOptions_name = zend_string_init("readerOptions", sizeof("readerOptions") - 1, 1);
-	zend_declare_typed_property(class_entry, property_readerOptions_name, &property_readerOptions_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_readerOptions_class_ion_Reader_Options, 0, MAY_BE_ARRAY|MAY_BE_NULL));
-	zend_string_release(property_readerOptions_name);
 
 	zval property_multiSequence_default_value;
 	ZVAL_UNDEF(&property_multiSequence_default_value);

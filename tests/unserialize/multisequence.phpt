@@ -5,7 +5,7 @@ ion
 --FILE--
 TEST
 <?php
-var_dump(ion\unserialize("1 2 3", new \ion\Unserializer\PHP(multiSequence: true)));
+var_dump(ion\unserialize("1 2 3", new \ion\Unserializer\Unserializer(multiSequence: true)));
 ?>
 DONE
 --EXPECT--

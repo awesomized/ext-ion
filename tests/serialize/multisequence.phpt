@@ -5,7 +5,7 @@ ion
 --FILE--
 TEST
 <?php
-echo ion\serialize([1,2,3], new \ion\Serializer\PHP(multiSequence: true)), "\n";
+echo ion\serialize([1,2,3], new \ion\Serializer\Serializer(multiSequence: true)), "\n";
 ?>
 DONE
 --EXPECT--
