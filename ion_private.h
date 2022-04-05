@@ -88,6 +88,13 @@ static void g_sym_map_add(int sid, const char *str, size_t len)
 	zend_hash_str_add(&g_sym_map, str, len, &zv);
 }
 
+static void g_sym_dtor(void)
+{
+	ion_symbol_table_close(g_sym_tab_php);
+	zend_hash_destroy(&g_sym_map);
+	zend_hash_destroy(&g_sym_hash);
+}
+
 static int g_sym_init(void)
 {
 	zend_hash_init(&g_sym_hash, 0, NULL, NULL, 1);

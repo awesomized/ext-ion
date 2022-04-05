@@ -1152,14 +1152,15 @@ static ZEND_METHOD(ion_Reader_Buffer_Reader, __construct)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(obj->opt, ce_Reader_Options, ce_Reader_Options, za_opt)
 	ZEND_PARSE_PARAMETERS_END();
+	if (za_opt) {
+		update_property_obj_ex(ce_Reader_Reader, &obj->std, ZEND_STRL("options"), obj->opt);
+		OBJ_RELEASE(obj->opt);
+	}
 
 	obj->type = BUFFER_READER;
 	obj->buffer = zend_string_copy(zstr);
 
 	php_ion_reader_ctor(obj);
-	if (za_opt) {
-		OBJ_RELEASE(obj->opt);
-	}
 }
 static ZEND_METHOD(ion_Reader_Buffer_Reader, getBuffer)
 {
@@ -1181,14 +1182,15 @@ static ZEND_METHOD(ion_Reader_Stream_Reader, __construct)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_OBJ_OF_CLASS_OR_NAMED_OR_NULL(obj->opt, ce_Reader_Options, ce_Reader_Options, za_opt)
 	ZEND_PARSE_PARAMETERS_END();
+	if (za_opt) {
+		update_property_obj_ex(ce_Reader_Reader, &obj->std, ZEND_STRL("options"), obj->opt);
+		OBJ_RELEASE(obj->opt);
+	}
 
 	obj->type = STREAM_READER;
 	php_stream_from_zval_no_verify(obj->stream.ptr, zstream);
 
 	php_ion_reader_ctor(obj);
-	if (za_opt) {
-		OBJ_RELEASE(obj->opt);
-	}
 }
 static ZEND_METHOD(ion_Reader_Stream_Reader, getStream)
 {
@@ -1908,10 +1910,7 @@ PHP_MINIT_FUNCTION(ion)
 
 PHP_MSHUTDOWN_FUNCTION(ion)
 {
-	if (g_sym_tab_php) {
-		ion_symbol_table_close(g_sym_tab_php);
-	}
-	zend_hash_destroy(&g_sym_hash);
+	g_sym_dtor();
 	return SUCCESS;
 }
 
