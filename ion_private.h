@@ -372,7 +372,7 @@ static void *php_ion_obj_ex(void *obj, ptrdiff_t offset) {
 	return NULL;
 }
 
-#define php_ion_decl(type, cname) \
+#define php_ion_decl_noclone(type, cname) \
 	static zend_object_handlers oh_ ## cname; \
 	static zend_object *create_ion_ ## cname(zend_class_entry *ce) \
 	{ \
@@ -388,7 +388,9 @@ static void *php_ion_obj_ex(void *obj, ptrdiff_t offset) {
 		php_ion_ ## type *obj = php_ion_obj(type, std); \
 		php_ion_ ## type ## _dtor(obj); \
 		zend_object_std_dtor(std); \
-	} \
+	}
+#define php_ion_decl(type, cname) \
+    php_ion_decl_noclone(type, cname) \
 	static zend_object *clone_ion_ ## cname(zend_object *std) \
 	{ \
 		php_ion_ ## type *old_obj = php_ion_obj(type, std), \
@@ -1304,7 +1306,7 @@ static void php_ion_reader_dtor(php_ion_reader *obj)
 }
 
 #define php_ion_reader_copy(n,o)
-php_ion_decl(reader, Reader_Reader);
+php_ion_decl_noclone(reader, Reader_Reader);
 #define clone_ion_Reader_Reader NULL
 
 typedef struct php_ion_writer_options {
@@ -1326,13 +1328,6 @@ static void php_ion_writer_options_dtor(php_ion_writer_options *obj)
 }
 
 php_ion_decl(writer_options, Writer_Options);
-
-static zend_object *php_ion_writer_options_new(void)
-{
-	zend_object *obj = create_ion_Writer_Options(NULL);
-	zend_call_known_instance_method_with_0_params(obj->ce->constructor, obj, NULL);
-	return obj;
-}
 
 typedef struct php_ion_writer {
 	ION_WRITER *writer;
@@ -1524,7 +1519,7 @@ static void php_ion_writer_dtor(php_ion_writer *obj)
 }
 
 #define php_ion_writer_copy(o,n)
-php_ion_decl(writer, Writer_Writer);
+php_ion_decl_noclone(writer, Writer_Writer);
 #define clone_ion_Writer_Writer NULL
 
 static bool can_serialize_fast(php_ion_serializer *ser)
