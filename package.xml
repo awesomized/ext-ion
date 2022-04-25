@@ -81,9 +81,6 @@ https://awesomized.github.io/ext-ion/
      <file role="test" name="Options.phpt"/>
      <file role="test" name="RecursiveIterator.phpt"/>
      </dir>
-    <dir name="Serializer">
-     <file role="test" name="PHP.phpt"/>
-     </dir>
     <file role="test" name="Symbol.phpt"/>
     <dir name="Symbol">
      <file role="test" name="Enum.phpt"/>
@@ -112,9 +109,7 @@ https://awesomized.github.io/ext-ion/
      <file role="test" name="serializable.phpt"/>
      <file role="test" name="basic.phpt"/>
     </dir>
-    <dir name="Unserializer">
-     <file role="test" name="PHP.phpt"/>
-    </dir>
+    <file role="test" name="serialize.phpt"/>
     <dir name="unserialize">
      <file role="test" name="multifield.phpt"/>
      <file role="test" name="argtype.phpt"/>
@@ -123,6 +118,7 @@ https://awesomized.github.io/ext-ion/
      <file role="test" name="multisequence.phpt"/>
      <file role="test" name="stream.phpt"/>
     </dir>
+    <file role="test" name="unserialize.phpt"/>
     <file role="test" name="Writer.phpt"/>
     <dir name="Writer">
      <file role="test" name="Buffer.phpt"/>
