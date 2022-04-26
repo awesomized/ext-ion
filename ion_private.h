@@ -1950,7 +1950,9 @@ static void php_ion_serialize_string(php_ion_serializer *ser, zend_string *str)
 		ION_STRING is;
 		ION_CHECK(ion_writer_write_string(php_ion_obj(writer, ser->wri)->writer, ion_string_from_zend(&is, str)));
 	} else {
-
+		zval zs;
+		ZVAL_STR(&zs, str);
+		zend_call_method_with_1_params(ser->wri, NULL, NULL, "writeString", NULL, &zs);
 	}
 }
 

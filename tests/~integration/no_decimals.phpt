@@ -1,12 +1,12 @@
 --TEST--
-integration: do not write decimals but native floats only
+integration: custom serializer which does not write decimals but native floats only
 --EXTENSIONS--
 ion
 --FILE--
 TEST
 <?php
 
-class NoDecimals  extends ion\Serializer\Serializer {
+class NoDecimals extends ion\Serializer\Serializer {
 	public function serialize(mixed $data, \ion\Writer\Options|\ion\Writer|array|null $writer = null): mixed {
 		return parent::serialize($data, new class extends \ion\Writer\Buffer\Writer {
 			public function writeDecimal(\ion\Decimal|string $value): void {
