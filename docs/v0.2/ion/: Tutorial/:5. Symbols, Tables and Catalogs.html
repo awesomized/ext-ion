@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+							★5. Symbols, Tables and Catalogs -
+						mdref
+		</title>
+		<meta property="og:title" content="ion/: Tutorial/:5. Symbols, Tables and Catalogs">
+		<meta name="viewport" content="width=1200, initial-scale=0.5">
+					<base href="/ext-ion/v0.2/">
+			<meta http-equiv="Content-Location" content="/ext-ion/v0.2/ion/: Tutorial/:5. Symbols, Tables and Catalogs">
+			<link rel="stylesheet" href="index.css">
+		
+		<link rel="shortcut icon" href="/ext-ion/v0.2/favicon.ico">
+	</head>
+	<body>
+		<div class="page">
+		
+<div class="sidebar">
+	
+	<div class="edit">
+		<a href="https://github.com/awesomized/ext-ion/edit/master/ion.stub.php">Edit</a>
+	</div>
+	
+	
+	<ul>
+		<li>&lsh; <a href="./">Home</a>
+			
+			<ul>
+				<li>
+											
+					&uarr; <a href="./ion">
+							ion
+						</a>
+						<ul>
+							<li>
+																	
+					&uarr; <a href="./ion/: Tutorial">
+							★ Tutorial
+						</a>
+						<ul>
+							<li>
+											
+							&circlearrowright; <strong><a href="./ion/: Tutorial/:5. Symbols, Tables and Catalogs">★5. Symbols, Tables and Catalogs</a></strong>
+
+							
+																																
+						</ul>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:1. Getting started">★1. Getting started</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:2. What is ion">★2. What is ion</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:3. Standard Datatypes">★3. Standard Datatypes</a></li>
+																			
+						<li>&ldsh; <a href="./ion/: Tutorial/:4. Special Datatypes">★4. Special Datatypes</a></li>
+																																																																																																				
+					</ul>
+													
+				</li>
+			</ul>
+			
+		</li>
+	</ul>
+</div>
+					<meta charset="utf-8"><h1>
+<a class="permalink" href="ion/:%20Tutorial/:5.%20Symbols,%20Tables%20and%20Catalogs#">#</a>Symbols, Tables and Catalogs</h1><h2 id="Schematic.Overview">Schematic Overview<a class="permalink" href="ion/:%20Tutorial/:5.%20Symbols,%20Tables%20and%20Catalogs#Schematic.Overview">#</a>
+</h2><pre><code><span style="color: inherit" class="html">
+  +---------+<br>  | Catalog |<br>  +----+----+-------------------------------+<br>  |    |                                    |<br>  |    |    +-------------+                 |<br>  |    +---&gt;| SymbolTable |                 |<br>  |    |    +---+---------+---------------+ |<br>  |    |    |   |                         | |<br>  |    |    |   |     +-------------------+ |<br>  |    |    |   |     | Symbol (ID, Text) | |<br>  |    |    |   +----&gt;| Symbol (ID, Text) | |<br>  |    |    |         | ...               | |<br>  |    |    +---------+-------------------+ |<br>  |    |                                    |<br>  |    |    +-------------+                 |<br>  |    +---&gt;| SymbolTable |                 |<br>  |    |    +---+---------+---------------+ |<br>  |    |    |   |                         | |<br>  |    .    |   |     +-------------------+ |<br>  |    .    |   +----&gt;| Symbol (ID, Text) | |<br>  |    .    |         | ...               | |<br>  |    .    +---------+-------------------+ |<br>  |    .                                    |<br>  +-----------------------------------------+<br></span>
+</code></pre><h2 id="Catalog">Catalog<a class="permalink" href="ion/:%20Tutorial/:5.%20Symbols,%20Tables%20and%20Catalogs#Catalog">#</a>
+</h2><p>The Catalog holds a collection of <a href="ion/Symbol/Table">ion\Symbol\Table</a> instances queried from <a href="ion/Reader">ion\Reader</a> and <a href="ion/Writer">ion\Writer</a> instances.</p><p>See also <a href="https://amzn.github.io/ion-docs/docs/symbols.html#the-catalog">the ION spec's symbol guide chapter on catalogs</a>.</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>$catalog </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">ion\Catalog</span><span style="color: inherit" class="keyword">;<br></span><span style="color: inherit" class="default">$symtab </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="default">ion\Symbol\PHP</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">asTable</span><span style="color: inherit" class="keyword">();<br></span><span style="color: inherit" class="default">$catalog</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">add</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$symtab</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><h2 id="Symbol.Table">Symbol Table<a class="permalink" href="ion/:%20Tutorial/:5.%20Symbols,%20Tables%20and%20Catalogs#Symbol.Table">#</a>
+</h2><p>There are three types of symbol tables:</p><ul>
+<li>Local</li>
+<li>Shared</li>
+<li>System (a special shared symbol table)</li>
+</ul><p>Local symbol tables do not have names, while shared symbol tables require them; only shared symbol tables may be added to a catalog or to a writer’s list of imports.</p><p>Local symbol tables are managed internally by Ion readers and writers. No application configuration is required to tell Ion readers or writers that local symbol tables should be used.</p><h3 id="Using.a.shared.symbol.table">Using a shared symbol table<a class="permalink" href="ion/:%20Tutorial/:5.%20Symbols,%20Tables%20and%20Catalogs#Using.a.shared.symbol.table">#</a>
+</h3><p>Using local symbol tables requires the local symbol table (including all of its symbols) to be written at the beginning of the value stream. Consider an Ion stream that represents CSV data with many columns. Although local symbol tables will optimize writing and reading each value, including the entire symbol table itself in the value stream adds overhead that increases with the number of columns.</p><p>If it is feasible for the writers and readers of the stream to agree on a pre-defined shared symbol table, this overhead can be reduced.</p><p>Consider the following CSV in a file called <code>test.csv</code>.</p><pre><code><span style="color: inherit" class="html">
+ id,type,state<br> 1,foo,false<br> 2,bar,true<br> 3,baz,true<br> ...<br></span>
+</code></pre><p>An application that wishes to convert this data into the Ion format can generate a symbol table containing the column names. This reduces encoding size and improves read efficiency.</p><p>Consider the following shared symbol table that declares the column names of <code>test.csv</code> as symbols. Note that the shared symbol table may have been generated by hand or programmatically.</p><pre><code><span style="color: inherit" class="html">
+ $ion_shared_symbol_table::{<br>   name: "test.csv.columns",<br>   version: 1,<br>   symbols: ["id", "type", "state"],<br> }<br></span>
+</code></pre><p>This shared symbol table can be stored in a file (or in a database, etc.) to be resurrected into a symbol table at runtime.</p><p>Because the value stream written using the shared symbol table does not contain the symbol mappings, a reader of the stream needs to access the shared symbol table using a catalog.</p><p>Consider the following complete example:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br><br></span><span style="color: inherit" class="comment">/**<br> * Representing a CSV row<br> */<br></span><span style="color: inherit" class="keyword">class </span><span style="color: inherit" class="default">Row </span><span style="color: inherit" class="keyword">{<br>  public function </span><span style="color: inherit" class="default">__construct</span><span style="color: inherit" class="keyword">(<br>    public readonly </span><span style="color: inherit" class="default">int $id</span><span style="color: inherit" class="keyword">,<br>    public readonly </span><span style="color: inherit" class="default">string $type</span><span style="color: inherit" class="keyword">,<br>    public readonly </span><span style="color: inherit" class="default">bool $state </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="default">true<br>  </span><span style="color: inherit" class="keyword">) {}<br>}<br><br></span><span style="color: inherit" class="comment">/* Fetch the shared symbol table from file, db, etc. */<br></span><span style="color: inherit" class="default">$symtab </span><span style="color: inherit" class="keyword">= </span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(&lt;&lt;&lt;'SymbolTable'<br></span><span style="color: inherit" class="string"> $ion_shared_symbol_table::{<br>   name: "test.csv.columns",<br>   version: 1,<br>   symbols: ["id", "type", "state"],<br> }<br></span><span style="color: inherit" class="keyword">SymbolTable<br>);<br><br></span><span style="color: inherit" class="comment">/* Add the shared symbol table to a catalog */<br></span><span style="color: inherit" class="default">$catalog </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">ion\Catalog</span><span style="color: inherit" class="keyword">;<br></span><span style="color: inherit" class="default">$catalog</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">add</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$symtab</span><span style="color: inherit" class="keyword">);<br><br></span><span style="color: inherit" class="comment">/* Use the catalog when writing the data */<br></span><span style="color: inherit" class="default">$writer </span><span style="color: inherit" class="keyword">= new class(<br>  </span><span style="color: inherit" class="default">catalog</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="default">$catalog</span><span style="color: inherit" class="keyword">,<br>  </span><span style="color: inherit" class="default">outputBinary</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="default">true<br></span><span style="color: inherit" class="keyword">) extends </span><span style="color: inherit" class="default">ion\Writer\Buffer\Writer </span><span style="color: inherit" class="keyword">{<br>  public function </span><span style="color: inherit" class="default">writeRow</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">Row $row</span><span style="color: inherit" class="keyword">) : </span><span style="color: inherit" class="default">void </span><span style="color: inherit" class="keyword">{<br>    </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">startContainer</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\Type</span><span style="color: inherit" class="keyword">::</span><span style="color: inherit" class="default">Struct</span><span style="color: inherit" class="keyword">);<br>    <br>    </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeFieldname</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"id"</span><span style="color: inherit" class="keyword">);<br>    </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeInt</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$row</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">id</span><span style="color: inherit" class="keyword">);<br>    <br>    </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeFieldName</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"type"</span><span style="color: inherit" class="keyword">);<br>    </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeString</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$row</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">type</span><span style="color: inherit" class="keyword">);<br>    <br>    </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeFieldName</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"state"</span><span style="color: inherit" class="keyword">);<br>    </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeBool</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$row</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">state</span><span style="color: inherit" class="keyword">);<br>    <br>    </span><span style="color: inherit" class="default">$this</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">finishContainer</span><span style="color: inherit" class="keyword">();<br>  }<br>};<br><br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeRow</span><span style="color: inherit" class="keyword">(new </span><span style="color: inherit" class="default">Row</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">1</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="string">"foo"</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="default">false</span><span style="color: inherit" class="keyword">));<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeRow</span><span style="color: inherit" class="keyword">(new </span><span style="color: inherit" class="default">Row</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">2</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="string">"bar"</span><span style="color: inherit" class="keyword">));<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">writeRow</span><span style="color: inherit" class="keyword">(new </span><span style="color: inherit" class="default">Row</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">3</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="string">"baz"</span><span style="color: inherit" class="keyword">));<br></span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">flush</span><span style="color: inherit" class="keyword">();<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><p>Let's inspect the binary ION stream and verify that  the column names are actually replaced by SymbolIDs:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br>  <br></span><span style="color: inherit" class="keyword">foreach (</span><span style="color: inherit" class="default">str_split</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">getBuffer</span><span style="color: inherit" class="keyword">(), </span><span style="color: inherit" class="default">8</span><span style="color: inherit" class="keyword">) as </span><span style="color: inherit" class="default">$line</span><span style="color: inherit" class="keyword">) {<br>    </span><span style="color: inherit" class="default">printf</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="string">"%-26s"</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="default">chunk_split</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">bin2hex</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$line</span><span style="color: inherit" class="keyword">), </span><span style="color: inherit" class="default">2</span><span style="color: inherit" class="keyword">, </span><span style="color: inherit" class="string">" "</span><span style="color: inherit" class="keyword">));<br>    foreach (</span><span style="color: inherit" class="default">str_split</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$line</span><span style="color: inherit" class="keyword">) as </span><span style="color: inherit" class="default">$byte</span><span style="color: inherit" class="keyword">) {<br>        echo </span><span style="color: inherit" class="default">$byte </span><span style="color: inherit" class="keyword">&gt;= </span><span style="color: inherit" class="string">' ' </span><span style="color: inherit" class="keyword">&amp;&amp; </span><span style="color: inherit" class="default">$byte </span><span style="color: inherit" class="keyword">&lt;= </span><span style="color: inherit" class="string">'~' </span><span style="color: inherit" class="keyword">? </span><span style="color: inherit" class="default">$byte </span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="string">"."</span><span style="color: inherit" class="keyword">;<br>    }<br>    echo </span><span style="color: inherit" class="string">"\n"</span><span style="color: inherit" class="keyword">;<br>}<br>echo </span><span style="color: inherit" class="string">"\n"</span><span style="color: inherit" class="keyword">;<br><br></span><span style="color: inherit" class="comment">/*<br>  e0 01 00 ea ee a2 81 83   ........  \ <br>  de 9e 86 be 9b de 99 84   ........   |<br>  8e 90 74 65 73 74 2e 63   ..test.c    &gt; here's ION symbol table metadata<br>  73 76 2e 63 6f 6c 75 6d   sv.colum   |<br>  6e 73 85 21 01 88 21 03   ns.!..!.  &lt;<br>  da 8a 21 01 8b 83 66 6f   ..!...fo   |<br>  6f 8c 11 da 8a 21 02 8b   o....!..    &gt; here's the actual data<br>  83 62 61 72 8c 11 da 8a   .bar....   |<br>  21 03 8b 83 62 61 7a 8c   !...baz.  /<br>  11                        .<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><p>When unserializing without knowing the used symbols, our column name will actually be just symbol IDs <code>$&lt;SID&gt;</code>:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br><br>var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">ion\unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">getBuffer</span><span style="color: inherit" class="keyword">(), [<br>  </span><span style="color: inherit" class="string">"multiSequence" </span><span style="color: inherit" class="keyword">=&gt; </span><span style="color: inherit" class="default">true</span><span style="color: inherit" class="keyword">,<br>]));<br><br></span><span style="color: inherit" class="comment">/*<br>array(3) {<br>  [0]=&gt;<br>  array(3) {<br>    ["$10"]=&gt;<br>    int(1)<br>    ["$11"]=&gt;<br>    string(3) "foo"<br>    ["$12"]=&gt;<br>    bool(false)<br>  }<br>  [1]=&gt;<br>  array(3) {<br>    ["$10"]=&gt;<br>    int(2)<br>    ["$11"]=&gt;<br>    string(3) "bar"<br>    ["$12"]=&gt;<br>    bool(true)<br>  }<br>  [2]=&gt;<br>  array(3) {<br>    ["$10"]=&gt;<br>    int(3)<br>    ["$11"]=&gt;<br>    string(3) "baz"<br>    ["$12"]=&gt;<br>    bool(true)<br>  }<br>}<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre><p>When unserializing with known symbols, the symbol IDs will be resolved when using the catatalog with the appropriate symbol tables:</p><pre><code><span style="color: inherit" class="html">
+<span style="color: inherit" class="default">&lt;?php<br><br>$reader </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">\ion\Reader\Buffer\Reader</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$writer</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">getBuffer</span><span style="color: inherit" class="keyword">(),<br>    </span><span style="color: inherit" class="default">catalog</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="default">$catalog<br></span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">$unser </span><span style="color: inherit" class="keyword">= new </span><span style="color: inherit" class="default">ion\Unserializer\Unserializer</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">multiSequence</span><span style="color: inherit" class="keyword">: </span><span style="color: inherit" class="default">true</span><span style="color: inherit" class="keyword">);<br></span><span style="color: inherit" class="default">var_dump</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$unser</span><span style="color: inherit" class="keyword">-&gt;</span><span style="color: inherit" class="default">unserialize</span><span style="color: inherit" class="keyword">(</span><span style="color: inherit" class="default">$reader</span><span style="color: inherit" class="keyword">));<br><br></span><span style="color: inherit" class="comment">/*<br>  array(3) {<br>    [0]=&gt;<br>    array(3) {<br>      ["id"]=&gt;<br>      int(1)<br>      ["type"]=&gt;<br>      string(3) "foo"<br>      ["state"]=&gt;<br>      bool(false)<br>    }<br>    [1]=&gt;<br>    array(3) {<br>      ["id"]=&gt;<br>      int(2)<br>      ["type"]=&gt;<br>      string(3) "bar"<br>      ["state"]=&gt;<br>      bool(true)<br>    }<br>    [2]=&gt;<br>    array(3) {<br>      ["id"]=&gt;<br>      int(3)<br>      ["type"]=&gt;<br>      string(3) "baz"<br>      ["state"]=&gt;<br>      bool(true)<br>    }<br>  }<br>*/<br><br></span><span style="color: inherit" class="default">?&gt;<br></span>
+</span>
+</code></pre>				
+			<div class="comments">
+										<style>.giscus-frame {min-height: 16em;}</style>
+	<script>
+		function giscus_load(button) {
+			let script = document.createElement("script");
+						script.setAttribute("data-repo", 'awesomized/ext-ion');
+						script.setAttribute("data-category", 'Comments on Docs');
+						script.setAttribute("data-repo-id", 'R_kgDOGfXEXw');
+						script.setAttribute("data-category-id", 'DIC_kwDOGfXEX84CBHuf');
+						script.setAttribute("data-mapping", 'og:title');
+						script.setAttribute("data-input-position", 'bottom');
+						script.setAttribute("data-reactions-enabled", false);
+						script.setAttribute("data-theme", 'light');
+						script.setAttribute("data-lang", 'en');
+			
+			script.src = "//giscus.app/client.js";
+			button.parentNode.replaceChild(script, button);
+		}
+	</script>
+	<button class="activator" onclick="giscus_load(this)">Show Comments from Github Discussions</button>
+				
+			</div>
+		
+			<footer>
+				
+<ul>
+	<li><a href="https://github.com/m6w6/mdref">mdref-v3.0
+</a></li>
+	<li><a href="LICENSE">&copy; 2013-2022		All rights reserved.</a></li>
+	<li>
+</li>
+</ul>
+
+			</footer>
+		
+			<script src="index.js" defer></script>
+		
+		</div>
+	</body>
+</html>

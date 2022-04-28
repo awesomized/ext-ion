@@ -78,7 +78,6 @@ https://awesomized.github.io/ext-ion/
      <file role="test" name="Buffer.phpt"/>
      <file role="test" name="Stream.phpt"/>
      <file role="test" name="Iterator.phpt"/>
-     <file role="test" name="Options.phpt"/>
      <file role="test" name="RecursiveIterator.phpt"/>
      </dir>
     <file role="test" name="Symbol.phpt"/>
@@ -96,6 +95,9 @@ https://awesomized.github.io/ext-ion/
       </dir>
      </dir>
     <file role="test" name="Timestamp.phpt"/>
+    <dir name="Timestamp">
+     <file role="test" name="stringTZ.phpt"/>
+    </dir>
     <file role="test" name="Type.phpt"/>
     <dir name="serialize">
      <file role="test" name="popo.phpt"/>
@@ -123,7 +125,10 @@ https://awesomized.github.io/ext-ion/
     <dir name="Writer">
      <file role="test" name="Buffer.phpt"/>
      <file role="test" name="Stream.phpt"/>
-     <file role="test" name="Options.phpt"/>
+    </dir>
+    <dir name="~integration">
+     <file role="test" name="detect_utf8.phpt"/>
+     <file role="test" name="no_decimals.phpt"/>
     </dir>
    </dir>
    <dir name="scripts">
