@@ -7,7 +7,7 @@ TEST
 <?php
 
 class AutoUtf8 extends ion\Serializer\Serializer {
-	public function serialize(mixed $data, \ion\Writer\Options|\ion\Writer|array|null $writer = null): mixed {
+	public function serialize(mixed $data, \ion\Writer|array|null $writer = null): mixed {
 		return parent::serialize($data, new class extends \ion\Writer\Buffer\Writer {
 			private function iterate(string $s) : Generator {
 				for ($i = 0; $i < grapheme_strlen($s); ++$i) {

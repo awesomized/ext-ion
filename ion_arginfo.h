@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 771b0ba1db693b7506ff427a667d029630caca09 */
+ * Stub hash: 8b6aeb4c5c0a8a5af0f5a55cbf09fb2846032c07 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_ion_serialize, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
@@ -13,7 +13,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Serializer_serialize, 0, 1, IS_MIXED, 0)
 	ZEND_ARG_TYPE_INFO(0, data, IS_MIXED, 0)
-	ZEND_ARG_OBJ_TYPE_MASK(0, writer, ion\\Writer|ion\\Writer\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
+	ZEND_ARG_OBJ_TYPE_MASK(0, writer, ion\\Writer, MAY_BE_ARRAY|MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Unserializer_unserialize, 0, 1, IS_MIXED, 0)
@@ -313,7 +313,8 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_class_ion_Decimal_Context_DecMax,
 	ZEND_ARG_OBJ_TYPE_MASK(0, round, ion\\Decimal\\Context\\Rounding, MAY_BE_LONG, "ion\\Decimal\\Context\\Rounding::HalfEven")
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Options___construct, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Reader___construct, 0, 0, 1)
+	ZEND_ARG_INFO(0, data)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, catalog, ion\\Catalog, 1, "null")
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, decimalContext, ion\\Decimal\\Context, 1, "null")
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, onContextChange, Closure, 1, "null")
@@ -410,17 +411,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_ion_Reader_Stream_resetStr
 	ZEND_ARG_TYPE_INFO(0, length, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Buffer_Reader___construct, 0, 0, 1)
-	ZEND_ARG_TYPE_INFO(0, buffer, IS_STRING, 0)
-	ZEND_ARG_OBJ_TYPE_MASK(0, options, ion\\Reader\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
-ZEND_END_ARG_INFO()
-
 #define arginfo_class_ion_Reader_Buffer_Reader_getBuffer arginfo_class_ion_Symbol___toString
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Reader_Stream_Reader___construct, 0, 0, 1)
-	ZEND_ARG_INFO(0, stream)
-	ZEND_ARG_OBJ_TYPE_MASK(0, options, ion\\Reader\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
-ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_Stream_Reader_getStream arginfo_class_ion_Catalog___construct
 
@@ -428,7 +419,7 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Reader_Stream_Reader_resetStreamWithLength arginfo_class_ion_Reader_Stream_resetStreamWithLength
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Options___construct, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Writer___construct, 0, 0, 0)
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, catalog, ion\\Catalog, 1, "null")
 	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, decimalContext, ion\\Decimal\\Context, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, outputBinary, _IS_BOOL, 0, "false")
@@ -491,17 +482,24 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_Stream_getStream arginfo_class_ion_Catalog___construct
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Buffer_Writer___construct, 0, 0, 0)
-	ZEND_ARG_OBJ_TYPE_MASK(0, options, ion\\Writer\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
-ZEND_END_ARG_INFO()
-
 #define arginfo_class_ion_Writer_Buffer_Writer_getBuffer arginfo_class_ion_Symbol___toString
 
 #define arginfo_class_ion_Writer_Buffer_Writer_resetBuffer arginfo_class_ion_Writer_writeNull
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_ion_Writer_Stream_Writer___construct, 0, 0, 1)
 	ZEND_ARG_INFO(0, stream)
-	ZEND_ARG_OBJ_TYPE_MASK(0, options, ion\\Writer\\Options, MAY_BE_ARRAY|MAY_BE_NULL, "null")
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, catalog, ion\\Catalog, 1, "null")
+	ZEND_ARG_OBJ_INFO_WITH_DEFAULT_VALUE(0, decimalContext, ion\\Decimal\\Context, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, outputBinary, _IS_BOOL, 0, "false")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, compactFloats, _IS_BOOL, 0, "false")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, escapeNonAscii, _IS_BOOL, 0, "false")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, prettyPrint, _IS_BOOL, 0, "false")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, indentTabs, _IS_BOOL, 0, "true")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, indentSize, IS_LONG, 0, "2")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flushEveryValue, _IS_BOOL, 0, "false")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, maxContainerDepth, IS_LONG, 0, "10")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, maxAnnotations, IS_LONG, 0, "10")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, tempBufferSize, IS_LONG, 0, "0x4000")
 ZEND_END_ARG_INFO()
 
 #define arginfo_class_ion_Writer_Stream_Writer_getStream arginfo_class_ion_Catalog___construct
@@ -553,7 +551,7 @@ static ZEND_METHOD(ion_Decimal_Context, Dec32);
 static ZEND_METHOD(ion_Decimal_Context, Dec64);
 static ZEND_METHOD(ion_Decimal_Context, Dec128);
 static ZEND_METHOD(ion_Decimal_Context, DecMax);
-static ZEND_METHOD(ion_Reader_Options, __construct);
+static ZEND_METHOD(ion_Reader_Reader, __construct);
 static ZEND_METHOD(ion_Reader_Reader, hasChildren);
 static ZEND_METHOD(ion_Reader_Reader, getChildren);
 static ZEND_METHOD(ion_Reader_Reader, rewind);
@@ -589,13 +587,11 @@ static ZEND_METHOD(ion_Reader_Reader, getDepth);
 static ZEND_METHOD(ion_Reader_Reader, seek);
 static ZEND_METHOD(ion_Reader_Reader, getValueOffset);
 static ZEND_METHOD(ion_Reader_Reader, getValueLength);
-static ZEND_METHOD(ion_Reader_Buffer_Reader, __construct);
 static ZEND_METHOD(ion_Reader_Buffer_Reader, getBuffer);
-static ZEND_METHOD(ion_Reader_Stream_Reader, __construct);
 static ZEND_METHOD(ion_Reader_Stream_Reader, getStream);
 static ZEND_METHOD(ion_Reader_Stream_Reader, resetStream);
 static ZEND_METHOD(ion_Reader_Stream_Reader, resetStreamWithLength);
-static ZEND_METHOD(ion_Writer_Options, __construct);
+static ZEND_METHOD(ion_Writer_Writer, __construct);
 static ZEND_METHOD(ion_Writer_Writer, writeNull);
 static ZEND_METHOD(ion_Writer_Writer, writeTypedNull);
 static ZEND_METHOD(ion_Writer_Writer, writeBool);
@@ -617,7 +613,6 @@ static ZEND_METHOD(ion_Writer_Writer, writeAnnotation);
 static ZEND_METHOD(ion_Writer_Writer, getDepth);
 static ZEND_METHOD(ion_Writer_Writer, flush);
 static ZEND_METHOD(ion_Writer_Writer, finish);
-static ZEND_METHOD(ion_Writer_Buffer_Writer, __construct);
 static ZEND_METHOD(ion_Writer_Buffer_Writer, getBuffer);
 static ZEND_METHOD(ion_Writer_Buffer_Writer, resetBuffer);
 static ZEND_METHOD(ion_Writer_Stream_Writer, __construct);
@@ -847,13 +842,8 @@ static const zend_function_entry class_ion_Timestamp_Format_methods[] = {
 };
 
 
-static const zend_function_entry class_ion_Reader_Options_methods[] = {
-	ZEND_ME(ion_Reader_Options, __construct, arginfo_class_ion_Reader_Options___construct, ZEND_ACC_PUBLIC)
-	ZEND_FE_END
-};
-
-
 static const zend_function_entry class_ion_Reader_Reader_methods[] = {
+	ZEND_ME(ion_Reader_Reader, __construct, arginfo_class_ion_Reader_Reader___construct, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Reader_Reader, hasChildren, arginfo_class_ion_Reader_Reader_hasChildren, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Reader_Reader, getChildren, arginfo_class_ion_Reader_Reader_getChildren, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Reader_Reader, rewind, arginfo_class_ion_Reader_Reader_rewind, ZEND_ACC_PUBLIC)
@@ -908,14 +898,12 @@ static const zend_function_entry class_ion_Reader_Stream_methods[] = {
 
 
 static const zend_function_entry class_ion_Reader_Buffer_Reader_methods[] = {
-	ZEND_ME(ion_Reader_Buffer_Reader, __construct, arginfo_class_ion_Reader_Buffer_Reader___construct, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Reader_Buffer_Reader, getBuffer, arginfo_class_ion_Reader_Buffer_Reader_getBuffer, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
 
 static const zend_function_entry class_ion_Reader_Stream_Reader_methods[] = {
-	ZEND_ME(ion_Reader_Stream_Reader, __construct, arginfo_class_ion_Reader_Stream_Reader___construct, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Reader_Stream_Reader, getStream, arginfo_class_ion_Reader_Stream_Reader_getStream, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Reader_Stream_Reader, resetStream, arginfo_class_ion_Reader_Stream_Reader_resetStream, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Reader_Stream_Reader, resetStreamWithLength, arginfo_class_ion_Reader_Stream_Reader_resetStreamWithLength, ZEND_ACC_PUBLIC)
@@ -923,13 +911,8 @@ static const zend_function_entry class_ion_Reader_Stream_Reader_methods[] = {
 };
 
 
-static const zend_function_entry class_ion_Writer_Options_methods[] = {
-	ZEND_ME(ion_Writer_Options, __construct, arginfo_class_ion_Writer_Options___construct, ZEND_ACC_PUBLIC)
-	ZEND_FE_END
-};
-
-
 static const zend_function_entry class_ion_Writer_Writer_methods[] = {
+	ZEND_ME(ion_Writer_Writer, __construct, arginfo_class_ion_Writer_Writer___construct, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Writer_Writer, writeNull, arginfo_class_ion_Writer_Writer_writeNull, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Writer_Writer, writeTypedNull, arginfo_class_ion_Writer_Writer_writeTypedNull, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Writer_Writer, writeBool, arginfo_class_ion_Writer_Writer_writeBool, ZEND_ACC_PUBLIC)
@@ -969,7 +952,6 @@ static const zend_function_entry class_ion_Writer_Stream_methods[] = {
 
 
 static const zend_function_entry class_ion_Writer_Buffer_Writer_methods[] = {
-	ZEND_ME(ion_Writer_Buffer_Writer, __construct, arginfo_class_ion_Writer_Buffer_Writer___construct, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Writer_Buffer_Writer, getBuffer, arginfo_class_ion_Writer_Buffer_Writer_getBuffer, ZEND_ACC_PUBLIC)
 	ZEND_ME(ion_Writer_Buffer_Writer, resetBuffer, arginfo_class_ion_Writer_Buffer_Writer_resetBuffer, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
@@ -1612,12 +1594,14 @@ static zend_class_entry *register_class_ion_Timestamp_Format(void)
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Reader_Options(void)
+static zend_class_entry *register_class_ion_Reader_Reader(zend_class_entry *class_entry_ion_Reader)
 {
 	zend_class_entry ce, *class_entry;
 
-	INIT_NS_CLASS_ENTRY(ce, "ion\\Reader", "Options", class_ion_Reader_Options_methods);
+	INIT_NS_CLASS_ENTRY(ce, "ion\\Reader", "Reader", class_ion_Reader_Reader_methods);
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
+	class_entry->ce_flags |= ZEND_ACC_ABSTRACT;
+	zend_class_implements(class_entry, 1, class_entry_ion_Reader);
 
 	zend_string *property_catalog_class_ion_Catalog = zend_string_init("ion\\Catalog", sizeof("ion\\Catalog")-1, 1);
 	zval property_catalog_default_value;
@@ -1679,25 +1663,6 @@ static zend_class_entry *register_class_ion_Reader_Options(void)
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Reader_Reader(zend_class_entry *class_entry_ion_Reader)
-{
-	zend_class_entry ce, *class_entry;
-
-	INIT_NS_CLASS_ENTRY(ce, "ion\\Reader", "Reader", class_ion_Reader_Reader_methods);
-	class_entry = zend_register_internal_class_ex(&ce, NULL);
-	class_entry->ce_flags |= ZEND_ACC_ABSTRACT;
-	zend_class_implements(class_entry, 1, class_entry_ion_Reader);
-
-	zend_string *property_options_class_ion_Reader_Options = zend_string_init("ion\\Reader\\Options", sizeof("ion\\Reader\\Options")-1, 1);
-	zval property_options_default_value;
-	ZVAL_UNDEF(&property_options_default_value);
-	zend_string *property_options_name = zend_string_init("options", sizeof("options") - 1, 1);
-	zend_declare_typed_property(class_entry, property_options_name, &property_options_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_options_class_ion_Reader_Options, 0, MAY_BE_NULL));
-	zend_string_release(property_options_name);
-
-	return class_entry;
-}
-
 static zend_class_entry *register_class_ion_Reader_Buffer(zend_class_entry *class_entry_ion_Reader)
 {
 	zend_class_entry ce, *class_entry;
@@ -1742,12 +1707,14 @@ static zend_class_entry *register_class_ion_Reader_Stream_Reader(zend_class_entr
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Writer_Options(void)
+static zend_class_entry *register_class_ion_Writer_Writer(zend_class_entry *class_entry_ion_Writer)
 {
 	zend_class_entry ce, *class_entry;
 
-	INIT_NS_CLASS_ENTRY(ce, "ion\\Writer", "Options", class_ion_Writer_Options_methods);
+	INIT_NS_CLASS_ENTRY(ce, "ion\\Writer", "Writer", class_ion_Writer_Writer_methods);
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
+	class_entry->ce_flags |= ZEND_ACC_ABSTRACT;
+	zend_class_implements(class_entry, 1, class_entry_ion_Writer);
 
 	zend_string *property_catalog_class_ion_Catalog = zend_string_init("ion\\Catalog", sizeof("ion\\Catalog")-1, 1);
 	zval property_catalog_default_value;
@@ -1826,18 +1793,6 @@ static zend_class_entry *register_class_ion_Writer_Options(void)
 	return class_entry;
 }
 
-static zend_class_entry *register_class_ion_Writer_Writer(zend_class_entry *class_entry_ion_Writer)
-{
-	zend_class_entry ce, *class_entry;
-
-	INIT_NS_CLASS_ENTRY(ce, "ion\\Writer", "Writer", class_ion_Writer_Writer_methods);
-	class_entry = zend_register_internal_class_ex(&ce, NULL);
-	class_entry->ce_flags |= ZEND_ACC_ABSTRACT;
-	zend_class_implements(class_entry, 1, class_entry_ion_Writer);
-
-	return class_entry;
-}
-
 static zend_class_entry *register_class_ion_Writer_Buffer(zend_class_entry *class_entry_ion_Writer)
 {
 	zend_class_entry ce, *class_entry;
@@ -1878,6 +1833,80 @@ static zend_class_entry *register_class_ion_Writer_Stream_Writer(zend_class_entr
 	INIT_NS_CLASS_ENTRY(ce, "ion\\Writer\\Stream", "Writer", class_ion_Writer_Stream_Writer_methods);
 	class_entry = zend_register_internal_class_ex(&ce, class_entry_ion_Writer_Writer);
 	zend_class_implements(class_entry, 1, class_entry_ion_Writer_Stream);
+
+	zend_string *property_catalog_class_ion_Catalog = zend_string_init("ion\\Catalog", sizeof("ion\\Catalog")-1, 1);
+	zval property_catalog_default_value;
+	ZVAL_UNDEF(&property_catalog_default_value);
+	zend_string *property_catalog_name = zend_string_init("catalog", sizeof("catalog") - 1, 1);
+	zend_declare_typed_property(class_entry, property_catalog_name, &property_catalog_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_catalog_class_ion_Catalog, 0, MAY_BE_NULL));
+	zend_string_release(property_catalog_name);
+
+	zend_string *property_decimalContext_class_ion_Decimal_Context = zend_string_init("ion\\Decimal\\Context", sizeof("ion\\Decimal\\Context")-1, 1);
+	zval property_decimalContext_default_value;
+	ZVAL_UNDEF(&property_decimalContext_default_value);
+	zend_string *property_decimalContext_name = zend_string_init("decimalContext", sizeof("decimalContext") - 1, 1);
+	zend_declare_typed_property(class_entry, property_decimalContext_name, &property_decimalContext_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_CLASS(property_decimalContext_class_ion_Decimal_Context, 0, MAY_BE_NULL));
+	zend_string_release(property_decimalContext_name);
+
+	zval property_outputBinary_default_value;
+	ZVAL_UNDEF(&property_outputBinary_default_value);
+	zend_string *property_outputBinary_name = zend_string_init("outputBinary", sizeof("outputBinary") - 1, 1);
+	zend_declare_typed_property(class_entry, property_outputBinary_name, &property_outputBinary_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
+	zend_string_release(property_outputBinary_name);
+
+	zval property_compactFloats_default_value;
+	ZVAL_UNDEF(&property_compactFloats_default_value);
+	zend_string *property_compactFloats_name = zend_string_init("compactFloats", sizeof("compactFloats") - 1, 1);
+	zend_declare_typed_property(class_entry, property_compactFloats_name, &property_compactFloats_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
+	zend_string_release(property_compactFloats_name);
+
+	zval property_escapeNonAscii_default_value;
+	ZVAL_UNDEF(&property_escapeNonAscii_default_value);
+	zend_string *property_escapeNonAscii_name = zend_string_init("escapeNonAscii", sizeof("escapeNonAscii") - 1, 1);
+	zend_declare_typed_property(class_entry, property_escapeNonAscii_name, &property_escapeNonAscii_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
+	zend_string_release(property_escapeNonAscii_name);
+
+	zval property_prettyPrint_default_value;
+	ZVAL_UNDEF(&property_prettyPrint_default_value);
+	zend_string *property_prettyPrint_name = zend_string_init("prettyPrint", sizeof("prettyPrint") - 1, 1);
+	zend_declare_typed_property(class_entry, property_prettyPrint_name, &property_prettyPrint_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
+	zend_string_release(property_prettyPrint_name);
+
+	zval property_indentTabs_default_value;
+	ZVAL_UNDEF(&property_indentTabs_default_value);
+	zend_string *property_indentTabs_name = zend_string_init("indentTabs", sizeof("indentTabs") - 1, 1);
+	zend_declare_typed_property(class_entry, property_indentTabs_name, &property_indentTabs_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
+	zend_string_release(property_indentTabs_name);
+
+	zval property_indentSize_default_value;
+	ZVAL_UNDEF(&property_indentSize_default_value);
+	zend_string *property_indentSize_name = zend_string_init("indentSize", sizeof("indentSize") - 1, 1);
+	zend_declare_typed_property(class_entry, property_indentSize_name, &property_indentSize_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_indentSize_name);
+
+	zval property_flushEveryValue_default_value;
+	ZVAL_UNDEF(&property_flushEveryValue_default_value);
+	zend_string *property_flushEveryValue_name = zend_string_init("flushEveryValue", sizeof("flushEveryValue") - 1, 1);
+	zend_declare_typed_property(class_entry, property_flushEveryValue_name, &property_flushEveryValue_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_BOOL));
+	zend_string_release(property_flushEveryValue_name);
+
+	zval property_maxContainerDepth_default_value;
+	ZVAL_UNDEF(&property_maxContainerDepth_default_value);
+	zend_string *property_maxContainerDepth_name = zend_string_init("maxContainerDepth", sizeof("maxContainerDepth") - 1, 1);
+	zend_declare_typed_property(class_entry, property_maxContainerDepth_name, &property_maxContainerDepth_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_maxContainerDepth_name);
+
+	zval property_maxAnnotations_default_value;
+	ZVAL_UNDEF(&property_maxAnnotations_default_value);
+	zend_string *property_maxAnnotations_name = zend_string_init("maxAnnotations", sizeof("maxAnnotations") - 1, 1);
+	zend_declare_typed_property(class_entry, property_maxAnnotations_name, &property_maxAnnotations_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_maxAnnotations_name);
+
+	zval property_tempBufferSize_default_value;
+	ZVAL_UNDEF(&property_tempBufferSize_default_value);
+	zend_string *property_tempBufferSize_name = zend_string_init("tempBufferSize", sizeof("tempBufferSize") - 1, 1);
+	zend_declare_typed_property(class_entry, property_tempBufferSize_name, &property_tempBufferSize_default_value, ZEND_ACC_PUBLIC|ZEND_ACC_READONLY, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_LONG));
+	zend_string_release(property_tempBufferSize_name);
 
 	return class_entry;
 }

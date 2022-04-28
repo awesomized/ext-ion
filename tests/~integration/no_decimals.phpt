@@ -7,7 +7,7 @@ TEST
 <?php
 
 class NoDecimals extends ion\Serializer\Serializer {
-	public function serialize(mixed $data, \ion\Writer\Options|\ion\Writer|array|null $writer = null): mixed {
+	public function serialize(mixed $data, \ion\Writer|array|null $writer = null): mixed {
 		return parent::serialize($data, new class extends \ion\Writer\Buffer\Writer {
 			public function writeDecimal(\ion\Decimal|string $value): void {
 				if ($value instanceof \ion\Decimal) {

@@ -8,8 +8,7 @@ date.timezone=UTC
 TEST
 <?php
 
-$w = new ion\Writer\Stream\Writer(STDOUT,
-	new ion\Writer\Options(flushEveryValue: true));
+$w = new ion\Writer\Stream\Writer(STDOUT, flushEveryValue: true);
 
 $w->writeNull();
 echo "\n";

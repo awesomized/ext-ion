@@ -48,14 +48,14 @@ function unserialize($data, Unserializer|array|null $unserializer = null) : mixe
  * Serializer interface, used to customize ion\serialize()'s behavior.
  */
 interface Serializer {
-    public function serialize(mixed $data, \ion\Writer|\ion\Writer\Options|array|null $writer = null) : mixed;
+    public function serialize(mixed $data, Writer|array|null $writer = null) : mixed;
 }
 
 /**
  * Unserializer interface, used to customize ion\unserialize()'s behavior.
  */
 interface Unserializer {
-    /** @param \ion\Reader|string|resource $data */
+    /** @param Reader|string|resource $data */
     public function unserialize($data) : mixed;
 }
 
@@ -689,10 +689,14 @@ enum Format : string {
 namespace ion\Reader;
 
 /**
- * Reader options.
+ * Base implementation of ION readers.
  */
-class Options {
+abstract class Reader implements \ion\Reader {
+    /**
+     * @param string|resource $data The string or resource to read from.
+     */
     public function __construct(
+        $data,
         /**
          * ION catalog to use for symbol lookup.
          */
@@ -730,16 +734,6 @@ class Options {
          */
         public readonly bool $skipCharacterValidation = false,
     ) {}
-}
-
-/**
- * Base implementation of ION readers.
- */
-abstract class Reader implements \ion\Reader {
-    /**
-     * Reader options.
-     */
-    public readonly ?Options $options;
 
     public function hasChildren() : bool {}
     public function getChildren() : \ion\Reader {}
@@ -794,7 +788,7 @@ abstract class Reader implements \ion\Reader {
  */
 interface Buffer extends \ion\Reader {
     /**
-     * Get the buffer read from.
+     * Get the buffer being read from.
      *
      * @return string The buffer read from.
      */
@@ -806,7 +800,7 @@ interface Buffer extends \ion\Reader {
  */
 interface Stream extends \ion\Reader {
     /**
-     * Get the stream read from.
+     * Get the stream being read from.
      *
      * @return resource The stream read from.
      */
@@ -834,16 +828,6 @@ namespace ion\Reader\Buffer;
  * ION buffer reader.
  */
 class Reader extends \ion\Reader\Reader implements \ion\Reader\Buffer {
-    /**
-     * Create a new string buffer reader.
-     *
-     * @param string $buffer The buffer to read from.
-     * @param \ion\Reader\Options|array|null $options Reader options.
-     */
-    public function __construct(
-        string $buffer,
-        \ion\Reader\Options|array|null $options = null,
-    ) {}
 
     public function getBuffer() : string {}
 }
@@ -854,16 +838,6 @@ namespace ion\Reader\Stream;
  * ION stream reader.
  */
 class Reader extends \ion\Reader\Reader implements \ion\Reader\Stream {
-    /**
-     * Create a new stream reader.
-     *
-     * @param resource $stream The stream to read from.
-     * @param \ion\Reader\Options|array|null $options Reader options.
-     */
-    public function __construct(
-        $stream,
-        \ion\Reader\Options|array|null $options = null,
-    ) {}
 
     /**
      * Get the stream read from.
@@ -881,11 +855,11 @@ class Reader extends \ion\Reader\Reader implements \ion\Reader\Stream {
 namespace ion\Writer;
 
 /**
- * ION writer options.
+ * Base implementation of common functionality of ION writers.
  */
-class Options {
+abstract class Writer implements \ion\Writer {
     /**
-     * Create custom ION writer options.
+     * Create custom ION writer.
      */
     public function __construct(
         /**
@@ -937,12 +911,7 @@ class Options {
          */
         public readonly int $tempBufferSize = 0x4000,
     ) {}
-}
 
-/**
- * Base implementation of common functionality of ION writers.
- */
-abstract class Writer implements \ion\Writer {
     public function writeNull() : void {}
     public function writeTypedNull(\ion\Type $type) : void {}
     public function writeBool(bool $value) : void {}
@@ -1005,17 +974,9 @@ interface Stream extends \ion\Writer {
 namespace ion\Writer\Buffer;
 
 /**
- * IO buffer writer.
+ * ION buffer writer.
  */
 class Writer extends \ion\Writer\Writer implements \ion\Writer\Buffer {
-    /**
-     * Create a new buffer writer.
-     *
-     * @param \ion\Writer\Options|array|null $options Writer options.
-     */
-    public function __construct(
-        \ion\Writer\Options|array|null $options = null,
-    ) {}
 
     public function getBuffer() : string {}
     public function resetBuffer() : void {}
@@ -1031,11 +992,57 @@ class Writer extends \ion\Writer\Writer implements \ion\Writer\Stream {
      * Create a new stream writer.
      *
      * @param resource $stream The stream to write to.
-     * @param \ion\Writer\Options|array|null $options Writer options.
      */
     public function __construct(
         $stream,
-        \ion\Writer\Options|array|null $options = null,
+        /**
+         * ION catalog to use for symbol lookup.
+         */
+        public readonly ?\ion\Catalog $catalog = null,
+        /**
+         * Decimal context to use.
+         */
+        public readonly ?\ion\Decimal\Context $decimalContext = null,
+        /**
+         * Whether to output binary ION.
+         */
+        public readonly bool $outputBinary = false,
+        /**
+         * Whether to write doubles which fit in 32 bits as floats.
+         */
+        public readonly bool $compactFloats = false,
+        /**
+         * Whether to slash-escape all non ASCII bytes.
+         */
+        public readonly bool $escapeNonAscii = false,
+        /**
+         * Whether to produce pretty-printed output.
+         */
+        public readonly bool $prettyPrint = false,
+        /**
+         * Whether to indent with tabs, when pretty-printing.
+         */
+        public readonly bool $indentTabs = true,
+        /**
+         * The number of spaces to use for indentation instead of tabs, when pretty-printing.
+         */
+        public readonly int $indentSize = 2,
+        /**
+         * Whether to immediately flush every value written.
+         */
+        public readonly bool $flushEveryValue = false,
+        /**
+         * Maximum depth of nested containers.
+         */
+        public readonly int $maxContainerDepth = 10,
+        /**
+         * The maximum number of annotations allowed on a single value.
+         */
+        public readonly int $maxAnnotations = 10,
+        /**
+         * Temporary buffer size.
+         */
+        public readonly int $tempBufferSize = 0x4000,
     ) {}
     /**
      * @return resource
@@ -1066,7 +1073,7 @@ class Serializer implements \ion\Serializer {
         public readonly ?string $callCustomSerialize = null,
     ) {}
 
-    public function serialize(mixed $data, \ion\Writer|\ion\Writer\Options|array|null $writer = null) : mixed {}
+    public function serialize(mixed $data, \ion\Writer|array|null $writer = null) : mixed {}
 }
 
 namespace ion\Unserializer;

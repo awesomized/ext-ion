@@ -8,7 +8,7 @@ TEST
 
 $c = new ion\Catalog;
 $c->add(new ion\Symbol\Table\Shared("shared", 1, ["shared1", "shared2"]));
-$w = new ion\Writer\Buffer\Writer(new ion\Writer\Options(catalog: $c, outputBinary: true));
+$w = new ion\Writer\Buffer\Writer(catalog: $c, outputBinary: true);
 
 $w->writeSymbol("shared1");
 $w->writeSymbol("shared1");
@@ -38,10 +38,10 @@ foreach ($s as $sym) {
 }
 
 $u = new ion\Unserializer\Unserializer(multiSequence: true);
-var_dump($u->unserialize(new ion\Reader\Buffer\Reader($w->getBuffer(), [
-		"catalog" => $c,
-		"onContextChange" => fn(ion\Reader $r) => print("on_context_change\n")
-])));
+var_dump($u->unserialize(new ion\Reader\Buffer\Reader($w->getBuffer(),
+		catalog: $c,
+		onContextChange: fn(ion\Reader $r) => print("on_context_change\n")
+)));
 
 ?>
 DONE

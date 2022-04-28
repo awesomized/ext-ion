@@ -231,7 +231,6 @@ static zend_class_entry
 	*ce_Exception,
 	*ce_LOB,
 	*ce_Reader,
-	*ce_Reader_Options,
 	*ce_Reader_Reader,
 	*ce_Reader_Buffer,
 	*ce_Reader_Stream,
@@ -254,7 +253,6 @@ static zend_class_entry
 	*ce_Unserializer,
 	*ce_Unserializer_Unserializer,
 	*ce_Writer,
-	*ce_Writer_Options,
 	*ce_Writer_Buffer,
 	*ce_Writer_Buffer_Writer,
 	*ce_Writer_Stream,
@@ -1158,25 +1156,13 @@ static void php_ion_catalog_symbol_table_zval(php_ion_catalog *obj, ION_SYMBOL_T
 
 php_ion_decl(catalog, Catalog);
 
-typedef struct php_ion_reader_options_ccn_ctx {
+typedef struct php_ion_reader_ccn_ctx {
 	zend_object *obj;
 	zend_fcall_info fci;
 	zend_fcall_info_cache fcc;
-} php_ion_reader_options_ccn_ctx;
+} php_ion_reader_ccn_ctx;
 
-typedef struct php_ion_reader_options {
-	ION_READER_OPTIONS opt;
-	php_ion_reader_options_ccn_ctx ccn;
-	zend_object *cat, *dec_ctx, *cb, std;
-} php_ion_reader_options;
-
-static void php_ion_reader_options_dtor(php_ion_reader_options *obj)
-{
-	if (obj->cb) {
-		zend_fcall_info_args_clear(&obj->ccn.fci, true);
-	}
-}
-
+/*
 static void php_ion_reader_options_copy(php_ion_reader_options *new_obj, php_ion_reader_options *old_obj)
 {
 	zend_objects_clone_members(&new_obj->std, &old_obj->std);
@@ -1192,8 +1178,7 @@ static void php_ion_reader_options_copy(php_ion_reader_options *new_obj, php_ion
 		new_obj->opt.context_change_notifier.context = &new_obj->ccn;
 	}
 }
-
-php_ion_decl(reader_options, Reader_Options);
+*/
 
 typedef struct php_ion_reader {
 	ION_READER *reader;
@@ -1209,7 +1194,10 @@ typedef struct php_ion_reader {
 			ION_STRING buf;
 		} stream;
 	};
-	zend_object *opt, std;
+
+	ION_READER_OPTIONS options;
+	php_ion_reader_ccn_ctx ccn;
+	zend_object *cat, *dec_ctx, *cb, std;
 } php_ion_reader;
 
 static iERR php_ion_reader_stream_handler(struct _ion_user_stream *user)
@@ -1243,7 +1231,7 @@ static iERR on_context_change(void *context, ION_COLLECTION *imports)
 	iERR e = IERR_OK;
 
 	if (context) {
-		php_ion_reader_options_ccn_ctx *ctx = context;
+		php_ion_reader_ccn_ctx *ctx = context;
 
 		zval zobj;
 		ZVAL_OBJ(&zobj, ctx->obj);
@@ -1259,27 +1247,50 @@ static iERR on_context_change(void *context, ION_COLLECTION *imports)
 static void php_ion_reader_ctor(php_ion_reader *obj)
 {
 	iERR err;
-	php_ion_reader_options *opt = php_ion_obj(reader_options, obj->opt);
 
-	if (!opt) {
-		obj->opt = object_construct(ce_Reader_Options, 0, NULL, NULL);
-		update_property_obj_ex(ce_Reader_Reader, &obj->std, ZEND_STRL("options"), obj->opt);
-		OBJ_RELEASE(obj->opt);
-	} else if (opt->opt.context_change_notifier.context) {
-		php_ion_reader_options_ccn_ctx *ctx = opt->opt.context_change_notifier.context;
-		ctx->obj = &obj->std;
-		opt->opt.context_change_notifier.notify = on_context_change;
-	}
-	if (obj->type == STREAM_READER) {
-		PTR_CHECK(obj->stream.ptr);
-		GC_ADDREF(obj->stream.ptr->res);
-
-		obj->stream.buf.length = opt && opt->opt.chunk_threshold ? opt->opt.chunk_threshold : 0x4000;
-		obj->stream.buf.value = emalloc(obj->stream.buf.length);
-		err = ion_reader_open_stream(&obj->reader, obj, php_ion_reader_stream_handler, opt ? &opt->opt : NULL);
-
+	if (obj->cb) {
+		zval zcb;
+		ZVAL_OBJ(&zcb, obj->cb);
+		zend_fcall_info_init(&zcb, 0, &obj->ccn.fci, &obj->ccn.fcc, NULL, NULL);
+		obj->ccn.obj = &obj->std;
+		obj->options.context_change_notifier.context = &obj->ccn;
+		obj->options.context_change_notifier.notify = on_context_change;
+		update_property_obj_ex(ce_Reader_Reader,&obj->std, ZEND_STRL("onContextChange"), obj->cb);
 	} else {
-		err = ion_reader_open_buffer(&obj->reader, (BYTE *) obj->buffer->val, (SIZE) obj->buffer->len, opt ? &opt->opt : NULL);
+		zend_update_property_null(ce_Reader_Reader, &obj->std, ZEND_STRL("onContextChange"));
+	}
+	if (obj->cat) {
+		update_property_obj_ex(ce_Reader_Reader,&obj->std, ZEND_STRL("catalog"), obj->cat);
+		obj->options.pcatalog = php_ion_obj(catalog, obj->cat)->cat;
+	} else {
+		zend_update_property_null(ce_Reader_Reader, &obj->std, ZEND_STRL("catalog"));
+	}
+	if (obj->dec_ctx) {
+		update_property_obj_ex(ce_Reader_Reader,&obj->std, ZEND_STRL("decimalContext"), obj->dec_ctx);
+		obj->options.decimal_context = &php_ion_obj(decimal_ctx, obj->dec_ctx)->ctx;
+	} else {
+		zend_update_property_null(ce_Reader_Reader, &obj->std, ZEND_STRL("decimalContext"));
+	}
+
+	zend_update_property_bool(ce_Reader_Reader, &obj->std, ZEND_STRL("returnSystemValues"),
+							  obj->options.return_system_values);
+	zend_update_property_long(ce_Reader_Reader, &obj->std, ZEND_STRL("maxContainerDepth"),
+							  obj->options.max_container_depth);
+	zend_update_property_long(ce_Reader_Reader, &obj->std, ZEND_STRL("maxAnnotations"),
+							  obj->options.max_annotation_count);
+	zend_update_property_long(ce_Reader_Reader, &obj->std, ZEND_STRL("annotationBufferSize"),
+							  obj->options.max_annotation_buffered);
+	zend_update_property_long(ce_Reader_Reader, &obj->std, ZEND_STRL("tempBufferSize"),
+							  obj->options.chunk_threshold);
+	zend_update_property_bool(ce_Reader_Reader, &obj->std, ZEND_STRL("skipCharacterValidation"),
+							  obj->options.skip_character_validation);
+	
+	if (obj->type == STREAM_READER) {
+		obj->stream.buf.length = obj->options.chunk_threshold ? obj->options.chunk_threshold : 0x4000;
+		obj->stream.buf.value = emalloc(obj->stream.buf.length);
+		err = ion_reader_open_stream(&obj->reader, obj, php_ion_reader_stream_handler, &obj->options);
+	} else {
+		err = ion_reader_open_buffer(&obj->reader, (BYTE *) obj->buffer->val, (SIZE) obj->buffer->len, &obj->options);
 	}
 
 	ION_CHECK(err);
@@ -1290,6 +1301,9 @@ static void php_ion_reader_dtor(php_ion_reader *obj)
 {
 	if (obj->reader) {
 		ion_reader_close(obj->reader);
+	}
+	if (obj->cb) {
+		zend_fcall_info_args_clear(&obj->ccn.fci, true);
 	}
 	if (obj->type == STREAM_READER) {
 		if (obj->stream.buf.value) {
@@ -1309,26 +1323,6 @@ static void php_ion_reader_dtor(php_ion_reader *obj)
 php_ion_decl_noclone(reader, Reader_Reader);
 #define clone_ion_Reader_Reader NULL
 
-typedef struct php_ion_writer_options {
-	ION_WRITER_OPTIONS opt;
-	zend_object *cat, *dec_ctx, std;
-} php_ion_writer_options;
-
-static void php_ion_writer_options_copy(php_ion_writer_options *new_obj, php_ion_writer_options *old_obj)
-{
-	zend_objects_clone_members(&new_obj->std, &old_obj->std);
-
-	new_obj->opt = old_obj->opt;
-	new_obj->cat = old_obj->cat;
-	new_obj->dec_ctx = old_obj->dec_ctx;
-}
-
-static void php_ion_writer_options_dtor(php_ion_writer_options *obj)
-{
-}
-
-php_ion_decl(writer_options, Writer_Options);
-
 typedef struct php_ion_writer {
 	ION_WRITER *writer;
 	enum {
@@ -1345,7 +1339,9 @@ typedef struct php_ion_writer {
 			php_stream *ptr;
 		} stream;
 	};
-	zend_object *opt, std;
+
+	ION_WRITER_OPTIONS options;
+	zend_object *cat, *dec_ctx, std;
 
 } php_ion_writer;
 
@@ -1364,12 +1360,9 @@ static iERR php_ion_writer_stream_handler(struct _ion_user_stream *user)
 	return IERR_OK;
 }
 
-static void php_ion_writer_stream_init(php_ion_writer *obj, php_ion_writer_options *opt)
+static void php_ion_writer_stream_init(php_ion_writer *obj)
 {
-	PTR_CHECK(obj->stream.ptr);
-	GC_ADDREF(obj->stream.ptr->res);
-
-	obj->stream.buf.length = opt ? opt->opt.temp_buffer_size : 0x1000;
+	obj->stream.buf.length = obj->options.temp_buffer_size ? obj->options.temp_buffer_size : 0x1000;
 	obj->stream.buf.value = emalloc(obj->stream.buf.length);
 }
 
@@ -1441,12 +1434,12 @@ static iERR php_ion_writer_buffer_handler(struct _ion_user_stream *user)
 	return IERR_OK;
 }
 
-static void php_ion_writer_options_init_shared_imports(php_ion_writer_options *opt)
+static void php_ion_writer_init_shared_imports(php_ion_writer *obj)
 {
-	php_ion_catalog *cat = php_ion_obj(catalog, opt->cat);
+	php_ion_catalog *cat = php_ion_obj(catalog, obj->cat);
 	OBJ_CHECK(cat);
 
-	ION_CHECK(ion_writer_options_initialize_shared_imports(&opt->opt));
+	ION_CHECK(ion_writer_options_initialize_shared_imports(&obj->options));
 
 	ION_COLLECTION *col = php_ion_catalog_collection(cat);
 	if (!ION_COLLECTION_IS_EMPTY(col)) {
@@ -1457,7 +1450,7 @@ static void php_ion_writer_options_init_shared_imports(php_ion_writer_options *o
 			ION_SYMBOL_TABLE **ptr;
 			ION_COLLECTION_NEXT(cur, ptr);
 			if (*ptr) {
-				ION_CHECK(ion_writer_options_add_shared_imports_symbol_tables(&opt->opt, ptr, 1));
+				ION_CHECK(ion_writer_options_add_shared_imports_symbol_tables(&obj->options, ptr, 1));
 			}
 		}
 	}
@@ -1465,30 +1458,51 @@ static void php_ion_writer_options_init_shared_imports(php_ion_writer_options *o
 
 static void php_ion_writer_ctor(php_ion_writer *obj)
 {
-	php_ion_writer_options *opt = NULL;
-
-	if (obj->opt) {
-		update_property_obj(&obj->std, ZEND_STRL("options"), obj->opt);
-		opt = php_ion_obj(writer_options, obj->opt);
-		if (opt->cat) {
-			php_ion_writer_options_init_shared_imports(opt);
-		}
+	if (obj->dec_ctx) {
+		update_property_obj_ex(ce_Writer_Writer, &obj->std, ZEND_STRL("decimalContext"), obj->dec_ctx);
+		obj->options.decimal_context = &php_ion_obj(decimal_ctx, obj->dec_ctx)->ctx;
 	} else {
-		obj->opt = object_construct(ce_Writer_Options, 0, NULL, NULL);
-		update_property_obj_ex(ce_Writer_Options, &obj->std, ZEND_STRL("options"), obj->opt);
-		OBJ_RELEASE(obj->opt);
+		zend_update_property_null(ce_Writer_Writer, &obj->std, ZEND_STRL("decimalContext"));
 	}
+	if (obj->cat) {
+		update_property_obj_ex(ce_Writer_Writer, &obj->std, ZEND_STRL("catalog"), obj->cat);
+		obj->options.pcatalog = php_ion_obj(catalog, obj->cat)->cat;
+		php_ion_writer_init_shared_imports(obj);
+	} else {
+		zend_update_property_null(ce_Writer_Writer, &obj->std, ZEND_STRL("catalog"));
+	}
+
+	zend_update_property_bool(ce_Writer_Writer, &obj->std, ZEND_STRL("outputBinary"),
+							  obj->options.output_as_binary);
+	zend_update_property_bool(ce_Writer_Writer, &obj->std, ZEND_STRL("compactFloats"),
+							  obj->options.compact_floats);
+	zend_update_property_bool(ce_Writer_Writer, &obj->std, ZEND_STRL("escapeNonAscii"),
+							  obj->options.escape_all_non_ascii);
+	zend_update_property_bool(ce_Writer_Writer, &obj->std, ZEND_STRL("prettyPrint"),
+							  obj->options.pretty_print);
+	zend_update_property_bool(ce_Writer_Writer, &obj->std, ZEND_STRL("indentTabs"),
+							  obj->options.indent_with_tabs);
+	zend_update_property_long(ce_Writer_Writer, &obj->std, ZEND_STRL("indentSize"),
+							  obj->options.indent_size);
+	zend_update_property_bool(ce_Writer_Writer, &obj->std, ZEND_STRL("flushEveryValue"),
+							  obj->options.flush_every_value);
+	zend_update_property_long(ce_Writer_Writer, &obj->std, ZEND_STRL("maxContainerDepth"),
+							  obj->options.max_container_depth);
+	zend_update_property_long(ce_Writer_Writer, &obj->std, ZEND_STRL("maxAnnotations"),
+							  obj->options.max_annotation_count);
+	zend_update_property_long(ce_Writer_Writer, &obj->std, ZEND_STRL("tempBufferSize"),
+							  obj->options.temp_buffer_size);
 
 	ION_STREAM_HANDLER h;
 	if (obj->type == STREAM_WRITER) {
 		h = php_ion_writer_stream_handler;
-		php_ion_writer_stream_init(obj, opt);
+		php_ion_writer_stream_init(obj);
 	} else {
 		h = php_ion_writer_buffer_handler;
 		php_ion_writer_buffer_init(obj);
 	}
 
-	ION_CHECK(ion_writer_open_stream(&obj->writer, h, obj, opt ? &opt->opt : NULL));
+	ION_CHECK(ion_writer_open_stream(&obj->writer, h, obj, &obj->options));
 	OBJ_CHECK(obj);
 }
 
@@ -1497,11 +1511,8 @@ static void php_ion_writer_dtor(php_ion_writer *obj)
 	if (obj->writer) {
 		ion_writer_close(obj->writer);
 	}
-	if (obj->opt) {
-		php_ion_writer_options *opt = php_ion_obj(writer_options, obj->opt);
-		if (opt->cat) {
-			ion_writer_options_close_shared_imports(&opt->opt);
-		}
+	if (obj->cat) {
+		ion_writer_options_close_shared_imports(&obj->options);
 	}
 	if (obj->type == STREAM_WRITER) {
 		if (obj->stream.buf.value) {
@@ -1869,7 +1880,7 @@ static void php_ion_serialize_object(php_ion_serializer *ser, zend_object *zobje
 			} else if (special_ce == ce_Timestamp) {
 				ION_TIMESTAMP its;
 				php_ion_timestamp *pts = php_ion_obj(timestamp, zobject);
-				decContext *ctx = php_ion_obj(writer_options, php_ion_obj(writer, ser->wri)->opt)->opt.decimal_context;
+				decContext *ctx = php_ion_obj(writer, ser->wri)->options.decimal_context;
 				ION_CHECK(ion_writer_write_timestamp(php_ion_obj(writer, ser->wri)->writer, ion_timestamp_from_php(&its, pts, ctx)));
 			} else {
 			 	assert(special_ce == ce_LOB);
@@ -2112,20 +2123,13 @@ void php_ion_serialize(php_ion_serializer *ser, zval *zv, zval *return_value)
 		ION_CATCH();
 	}
 
-	if (!ser->wri || !instanceof_function(ser->wri->ce, ce_Writer)) {
+	if (!ser->wri) {
 		zo_wri = create_ion_Writer_Writer(ce_Writer_Buffer_Writer);
-		php_ion_writer *wri = php_ion_obj(writer, zo_wri);
-		wri->type = BUFFER_WRITER;
-		if (ser->wri && instanceof_function(ser->wri->ce, ce_Writer_Options)) {
-			wri->opt = ser->wri;
-		}
-		php_ion_writer_ctor(wri);
+		php_ion_writer_ctor(php_ion_obj(writer, zo_wri));
 		ser->wri = zo_wri;
 	}
 
-	if (!EG(exception)) {
-		php_ion_serialize_ex(ser, zv);
-	}
+	php_ion_serialize_ex(ser, zv);
 
 	/* make sure to flush when done, else str.s might not contain everything until the writer is closed */
 	if (can_serialize_fast(ser)) {
@@ -2137,6 +2141,7 @@ void php_ion_serialize(php_ion_serializer *ser, zval *zv, zval *return_value)
 
 	if (zo_wri) {
 		OBJ_RELEASE(zo_wri);
+		ser->wri = NULL;
 	}
 	if (zo_ser) {
 		OBJ_RELEASE(zo_ser);
@@ -2862,7 +2867,7 @@ static void php_ion_unserialize_zval(php_ion_unserializer *ser, zval *return_val
 	case tid_TIMESTAMP_INT:
 		if (can_unserialize_fast(ser)) {
 			php_ion_reader *reader = php_ion_obj(reader, ser->rdr);
-			php_ion_reader_read_timestamp(reader->reader, &php_ion_obj(reader_options, reader->opt)->opt, return_value);
+			php_ion_reader_read_timestamp(reader->reader, &reader->options, return_value);
 		} else {
 			zend_call_method_with_0_params(&ser->std, NULL, NULL, "readTimestamp", return_value);
 		}
@@ -2967,35 +2972,46 @@ static void php_ion_unserialize_ex(php_ion_unserializer *ser, zval *return_value
 
 static php_ion_reader *create_unserialize_reader(zval *zdata)
 {
-	zend_object *zo_reader;
-	php_ion_reader *reader = NULL;
 	ZVAL_DEREF(zdata);
 
-	if (Z_TYPE_P(zdata) == IS_RESOURCE) {
-		zo_reader = create_ion_Reader_Reader(ce_Reader_Stream_Reader);
-		reader = php_ion_obj(reader, zo_reader);
-		reader->type = STREAM_READER;
-		php_stream_from_zval_no_verify(reader->stream.ptr, zdata);
-	} else if (Z_TYPE_P(zdata) <= IS_STRING) {
-		zo_reader = create_ion_Reader_Reader(ce_Reader_Buffer_Reader);
-		reader = php_ion_obj(reader, zo_reader);
-		reader->type = BUFFER_READER;
-		reader->buffer = zval_get_string(zdata);
-	} else if (Z_TYPE_P(zdata) == IS_OBJECT && instanceof_function(Z_OBJCE_P(zdata), ce_Reader)) {
+	if (Z_TYPE_P(zdata) == IS_OBJECT && instanceof_function(Z_OBJCE_P(zdata), ce_Reader)) {
 		Z_ADDREF_P(zdata);
-		reader = php_ion_obj(reader, Z_OBJ_P(zdata));
+		return php_ion_obj(reader, Z_OBJ_P(zdata));
 	} else {
-		zend_throw_exception_ex(ce_Exception, IERR_INVALID_ARG,
-								"Invalid source to unserialize: expected string or resource, got %s",
-								zend_zval_type_name(zdata));
-	}
+		zend_object *zo_reader = NULL;
+		php_ion_reader *reader = NULL;
 
-	return reader;
+		if (Z_TYPE_P(zdata) == IS_RESOURCE) {
+			zo_reader = create_ion_Reader_Reader(ce_Reader_Stream_Reader);
+			reader = php_ion_obj(reader, zo_reader);
+			reader->type = STREAM_READER;
+			php_stream_from_zval_no_verify(reader->stream.ptr, zdata);
+			PTR_CHECK_RETURN(NULL, reader->stream.ptr, OBJ_RELEASE(zo_reader));
+			GC_ADDREF(reader->stream.ptr->res);
+			php_ion_reader_ctor(reader);
+		} else if (Z_TYPE_P(zdata) <= IS_STRING) {
+			zo_reader = create_ion_Reader_Reader(ce_Reader_Buffer_Reader);
+			reader = php_ion_obj(reader, zo_reader);
+			reader->type = BUFFER_READER;
+			reader->buffer = zval_get_string(zdata);
+			ION_CATCH_RETURN(NULL, OBJ_RELEASE(zo_reader));
+			php_ion_reader_ctor(reader);
+		} else {
+			zend_throw_exception_ex(ce_Exception, IERR_INVALID_ARG,
+									"Invalid source to unserialize: expected string or resource, got %s",
+									zend_zval_type_name(zdata));
+		}
+
+		ION_CATCH_RETURN(NULL, if (zo_reader) {
+			OBJ_RELEASE(zo_reader);
+		});
+		return reader;
+	}
 }
 
 void php_ion_unserialize(php_ion_unserializer *ser, zval *zdata, zval *return_value)
 {
-	zend_object *zo_opt = NULL, *zo_ser = NULL;
+	zend_object *zo_ser = NULL;
 
 	if (!ser) {
 		zo_ser = create_ion_Unserializer_Unserializer(NULL);
@@ -3008,20 +3024,14 @@ void php_ion_unserialize(php_ion_unserializer *ser, zval *zdata, zval *return_va
 
 	php_ion_reader *reader = create_unserialize_reader(zdata);
 	if (reader) {
-		if (ser->rdr && instanceof_function(ser->rdr->ce, ce_Reader_Options)) {
-			zo_opt = reader->opt = ser->rdr;
-		}
-		php_ion_reader_ctor(reader);
 		ser->rdr = &reader->std;
 		if (!EG(exception)) {
 			php_ion_unserialize_ex(ser, return_value);
 		}
 		OBJ_RELEASE(&reader->std);
+		ser->rdr = NULL;
 	}
 
-	if (zo_opt)  {
-		OBJ_RELEASE(zo_opt);
-	}
 	if (zo_ser) {
 		OBJ_RELEASE(zo_ser);
 	}

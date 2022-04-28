@@ -6,7 +6,7 @@ ion
 TEST
 <?php
 
-$w = new ion\Writer\Buffer\Writer(new ion\Writer\Options(outputBinary: true));
+$w = new ion\Writer\Buffer\Writer(outputBinary: true);
 
 $w->writeSymbol("local1");
 $w->writeSymbol("local1");
