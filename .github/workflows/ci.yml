@@ -39,6 +39,7 @@ jobs:
     name: "cur-0 (8.1)"
     env:
       PHP: "8.1"
+      enable_intl: "yes"
       enable_debug: "yes"
       enable_zts: "yes"
     runs-on: ubuntu-20.04
@@ -66,6 +67,7 @@ jobs:
     name: "cur-1 (8.1)"
     env:
       PHP: "8.1"
+      enable_intl: "yes"
       enable_debug: "no"
       enable_zts: "yes"
     runs-on: ubuntu-20.04
@@ -93,6 +95,7 @@ jobs:
     name: "cur-2 (8.1)"
     env:
       PHP: "8.1"
+      enable_intl: "yes"
       enable_debug: "yes"
       enable_zts: "no"
     runs-on: ubuntu-20.04
@@ -120,6 +123,7 @@ jobs:
     name: "cur-3 (8.1)"
     env:
       PHP: "8.1"
+      enable_intl: "yes"
       enable_debug: "no"
       enable_zts: "no"
     runs-on: ubuntu-20.04
@@ -149,6 +153,7 @@ jobs:
       CFLAGS: "-O0 -g --coverage"
       CXXFLAGS: "-O0 -g --coverage"
       PHP: "8.1"
+      enable_intl: "yes"
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2

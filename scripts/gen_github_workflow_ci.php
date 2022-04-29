@@ -42,6 +42,7 @@ $cur = "8.1";
 $job = $gen->github([
 "cur" => [
     "PHP" => $cur,
+    "enable_intl" => "yes",
     "enable_debug",
     "enable_zts",
 ],
@@ -49,6 +50,7 @@ $job = $gen->github([
     "CFLAGS" => "-O0 -g --coverage",
     "CXXFLAGS" => "-O0 -g --coverage",
     "PHP" => $cur,
+    "enable_intl" => "yes",
 ]]);
 foreach ($job as $id => $env) {
     printf("  %s:\n", $id);

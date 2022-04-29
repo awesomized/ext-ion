@@ -2,6 +2,7 @@
 integration: custom serializer which naïvly decides to write strings/clobs/blobs
 --EXTENSIONS--
 ion
+intl
 --FILE--
 TEST
 <?php
