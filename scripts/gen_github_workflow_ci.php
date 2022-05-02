@@ -88,6 +88,7 @@ foreach ($job as $id => $env) {
         if: success()
         run: |
           find . -name '*.gc*'
+          cd .libs
           curl -Os https://uploader.codecov.io/latest/linux/codecov
           chmod +x codecov
           ./codecov
