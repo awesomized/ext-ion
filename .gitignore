@@ -50,3 +50,4 @@ docs/vendor
 docs/src
 docs/*composer*
 *.tgz
+vendor/
