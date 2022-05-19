@@ -2410,6 +2410,7 @@ static void php_ion_unserialize_hash(php_ion_unserializer *ser, zval *return_val
 		ION_CATCH();
 
 		zval zvalue;
+		ZVAL_UNDEF(&zvalue);
 		php_ion_unserialize_zval(ser, &zvalue, &typ);
 		ION_CATCH(zend_string_release(key));
 
