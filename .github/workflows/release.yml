@@ -34,6 +34,7 @@ jobs:
               repo: context.repo.repo,
               release_id: release.data.id,
               body: context.payload.head_commit.message,
-              data: require("fs").readFileSync(phar_file)
+              data: require("fs").readFileSync(phar_file),
+              name: phar_file
             });
 
