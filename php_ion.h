@@ -16,7 +16,7 @@
 extern zend_module_entry ion_module_entry;
 # define phpext_ion_ptr &ion_module_entry
 
-# define PHP_ION_VERSION "0.3.0dev"
+# define PHP_ION_VERSION "0.2.1"
 
 # if defined(ZTS) && defined(COMPILE_DL_ION)
 ZEND_TSRMLS_CACHE_EXTERN()

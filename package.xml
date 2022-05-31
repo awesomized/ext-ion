@@ -20,9 +20,9 @@ https://awesomized.github.io/ext-ion/
   <email>mike@php.net</email>
   <active>yes</active>
  </lead>
- <date>2022-05-13</date>
+ <date>2022-05-31</date>
  <version>
-  <release>0.2.0</release>
+  <release>0.2.1</release>
   <api>0.2.0</api>
  </version>
  <stability>
@@ -31,20 +31,7 @@ https://awesomized.github.io/ext-ion/
  </stability>
  <license uri="http://copyfree.org/content/standard/licenses/2bsd/license.txt">BSD-2-Clause</license>
  <notes><![CDATA[
-* Improved documentation.
-* Upgrade bundled ion-c library.
-* Fix gh-issue #5: ion\Timestamp crashes with string timezones.
-* Add ion\Exception.
-* Refactor (un)serialization facilities:
-  * Removed ion\Reader\Options class and moved the options to the ion\Reader constructor.
-  * Removed ion\Writer\Options class and moved the options to the ion\Writer constructor.
-  * Renamed ion\Serializer\PHP to ion\Serializer\Serializer.
-  * Renamed ion\Unserializer\PHP to ion\Unserializer\Unserializer.
-  * Changed ion\Serializer::serialize(mixed $data) to
-    ion\Serializer::serialize(mixed $data, ion\Writer|array|null $writer = null).
-  * Changed ion\Unserializer::unserialize(string|resource $data) to
-    ion\Unserializer::unserialize(ion\Reader|string|resource $data)
-* Add support for custom (un)serializers.
+* Fix possible crash on unserializing uninitialized properties.
 
 ]]></notes>
  <contents>
@@ -128,7 +115,8 @@ https://awesomized.github.io/ext-ion/
     <file role="test" name="serialize.phpt"/>
     <dir name="unserialize">
      <file role="test" name="multifield.phpt"/>
-     <file role="test" name="argtype.phpt"/>
+	 <file role="test" name="argtype.phpt"/>
+	 <file role="test" name="executor_globals.phpt"/>
      <file role="test" name="sid.phpt"/>
      <file role="test" name="invalid_annotation.phpt"/>
      <file role="test" name="multisequence.phpt"/>
