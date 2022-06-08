@@ -188,9 +188,9 @@ typedef struct php_ion_unserializer {
 
 	ION_TYPE type; // FIXME: there's already `php_ion_obj(reader, rdr)->state`
 	php_ion_annotations annotations;
-	
+
 	zend_object *rdr, std;
-	
+
 } php_ion_unserializer;
 
 ZEND_BEGIN_MODULE_GLOBALS(ion)
@@ -1284,7 +1284,7 @@ static void php_ion_reader_ctor(php_ion_reader *obj)
 							  obj->options.chunk_threshold);
 	zend_update_property_bool(ce_Reader_Reader, &obj->std, ZEND_STRL("skipCharacterValidation"),
 							  obj->options.skip_character_validation);
-	
+
 	if (obj->type == STREAM_READER) {
 		obj->stream.buf.length = obj->options.chunk_threshold ? obj->options.chunk_threshold : 0x4000;
 		obj->stream.buf.value = emalloc(obj->stream.buf.length);
@@ -1861,17 +1861,7 @@ static void php_ion_serialize_object(php_ion_serializer *ser, zend_object *zobje
 		return;
 	}
 
-	if (can_call_magic_serialize(ser, ce)) {
-		php_ion_serialize_object_magic(ser, zobject, NULL);
-	} else if (can_call_iface_serialize(ser, ce)) {
-		php_ion_serialize_object_iface(ser, zobject);
-	} else if (can_call_custom_serialize(ser, zobject, &fn)) {
-		php_ion_serialize_object_magic(ser, zobject, fn);
-	} else if (zobject->ce->ce_flags & ZEND_ACC_ENUM) {
-		php_ion_serialize_object_enum(ser, zobject);
-	} else if (!is_special_class(ce, &special_ce)) {
-		php_ion_serialize_object_std(ser, zobject);
-	} else {
+	 if (is_special_class(ce, &special_ce)) {
 		if (can_serialize_fast(ser) || special_ce == ce_LOB) {
 			if (special_ce == ce_Symbol) {
 				ION_CHECK(ion_writer_write_ion_symbol(php_ion_obj(writer, ser->wri)->writer, &php_ion_obj(symbol, zobject)->sym));
@@ -1902,6 +1892,16 @@ static void php_ion_serialize_object(php_ion_serializer *ser, zend_object *zobje
 			}
 			zend_call_method(ser->wri, NULL, NULL, method, strlen(method), NULL, 1, &z_param, NULL);
 		}
+	} else if (can_call_magic_serialize(ser, ce)) {
+		php_ion_serialize_object_magic(ser, zobject, NULL);
+	} else if (can_call_iface_serialize(ser, ce)) {
+		php_ion_serialize_object_iface(ser, zobject);
+	} else if (can_call_custom_serialize(ser, zobject, &fn)) {
+		php_ion_serialize_object_magic(ser, zobject, fn);
+	} else if (zobject->ce->ce_flags & ZEND_ACC_ENUM) {
+		php_ion_serialize_object_enum(ser, zobject);
+	} else {
+		php_ion_serialize_object_std(ser, zobject);
 	}
 }
 
